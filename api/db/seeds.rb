@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+task1 = Task.create(title: 'Double-click this to-do')
+task2 = Task.create(title: 'Double-click this completed to-do', completed: true)
