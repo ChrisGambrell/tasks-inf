@@ -7,8 +7,14 @@ import './index.css'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
-		queries: { onError: (error) => window.alert(error) },
-		mutations: { onError: (error) => window.alert(error) },
+		queries: {
+			onError: (error) =>
+				window.alert(error.response?.data?.errors || error),
+		},
+		mutations: {
+			onError: (error) =>
+				window.alert(error.response?.data?.errors || error),
+		},
 	},
 })
 
