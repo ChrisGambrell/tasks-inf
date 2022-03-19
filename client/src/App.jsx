@@ -89,8 +89,7 @@ const App = () => {
 									}
 									trigger={['contextMenu']}>
 									<div>
-										<input
-											type='checkbox'
+										<Checkbox
 											checked={task.completed}
 											onChange={() =>
 												editTask({
