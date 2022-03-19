@@ -6,8 +6,8 @@ const useCreateTask = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation(
-		(title) =>
-			axios.post(BASE_URL + '/tasks/', { title }).then((res) => res.data),
+		(data) =>
+			axios.post(BASE_URL + '/tasks/', data).then((res) => res.data),
 		{
 			onSuccess: (task) => {
 				queryClient.setQueryData(['tasks', task.id], task)

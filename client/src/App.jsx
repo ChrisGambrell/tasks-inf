@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
-import { Card, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
+import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons'
 import './App.min.css'
 
 const App = () => {
@@ -9,14 +10,18 @@ const App = () => {
 	const deleteTask = useDeleteTask().mutate
 	const editTask = useEditTask().mutate
 
+	const [showAddingTask, setShowAddingTask] = useState(false)
 	const [selectedTask, setSelectedTask] = useState(-1)
 	const [title, setTitle] = useState('')
+	const [completed, setCompleted] = useState(false)
 
 	const handleCreateTask = async (e) => {
 		e.preventDefault()
 
-		await createTask(title)
+		await createTask({ title, completed })
+		setShowAddingTask(false)
 		setTitle('')
+		setCompleted(false)
 	}
 
 	return (
@@ -28,28 +33,47 @@ const App = () => {
 						<Menu.Item key='1'>Tasks</Menu.Item>
 					</Menu>
 				</Col>
-				<Col sm={19} style={{ maxWidth: 600, margin: '0 auto' }}>
+				<Col
+					sm={19}
+					style={{
+						maxWidth: 600,
+						margin: '0 auto',
+					}}>
 					<ul style={{ listStyle: 'none' }}>
+						{showAddingTask && (
+							<li className='task-item active'>
+								<Form onSubmitCapture={handleCreateTask}>
+									<Checkbox
+										checked={completed}
+										onChange={() =>
+											setCompleted(!completed)
+										}
+									/>
+									<Input
+										type='text'
+										placeholder='New task'
+										value={title}
+										onChange={(e) =>
+											setTitle(e.target.value)
+										}
+										bordered={false}
+										style={{ width: 'calc(100% - 25px)' }}
+									/>
+								</Form>
+							</li>
+						)}
 						{tasks?.map((task) => (
 							<li
-								className='task-item'
+								className={`task-item ${
+									selectedTask === task.id ? 'active' : ''
+								}`}
 								key={task.id}
-								onDoubleClick={() => setSelectedTask(task.id)}
-								onContextMenu={(e) => e.preventDefault()}
-								style={{
-									margin:
-										selectedTask === task.id ? '25px 0' : 0,
-									padding:
-										selectedTask === task.id
-											? 15
-											: '5px 10px',
-									borderRadius: 5,
-									boxShadow:
-										selectedTask === task.id
-											? '0 1px 2px -2px rgba(0,0,0,.16),0 3px 6px 0 rgba(0,0,0,.12),0 5px 12px 4px rgba(0,0,0,.09)'
-											: 'none',
-									transition: 'all 0.2s',
-								}}>
+								onDoubleClick={() =>
+									setSelectedTask(
+										selectedTask === task.id ? -1 : task.id
+									)
+								}
+								onContextMenu={(e) => e.preventDefault()}>
 								<Dropdown
 									overlay={
 										<Menu>
@@ -85,14 +109,27 @@ const App = () => {
 							</li>
 						))}
 					</ul>
-					<Form onSubmitCapture={handleCreateTask}>
+					<div className='toolbar'>
+						<Button
+							type='text'
+							onClick={() => setShowAddingTask(!showAddingTask)}>
+							{showAddingTask ? (
+								<CloseOutlined />
+							) : (
+								<PlusOutlined />
+							)}
+						</Button>
+					</div>
+					{/* <Form
+						onSubmitCapture={handleCreateTask}
+						style={{ position: 'fixed', bottom: 0 }}>
 						<Input
 							type='text'
 							placeholder='New task'
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
 						/>
-					</Form>
+					</Form> */}
 				</Col>
 			</Row>
 		</div>
