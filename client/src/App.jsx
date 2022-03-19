@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { useCreateTask, useEditTask, useTasks } from './hooks'
-import { Form, Input } from 'antd'
+import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
+import { Dropdown, Form, Input, Menu } from 'antd'
+import './App.min.css'
 
-function App() {
+const App = () => {
 	const { data: tasks } = useTasks()
 	const createTask = useCreateTask().mutate
+	const deleteTask = useDeleteTask().mutate
 	const editTask = useEditTask().mutate
 
 	const [title, setTitle] = useState('')
@@ -24,22 +26,42 @@ function App() {
 			<ul style={{ listStyle: 'none' }}>
 				{tasks?.map((task) => (
 					<li
+						className='task-item'
 						key={task.id}
+						onDoubleClick={() => deleteTask(task.id)}
+						onContextMenu={(e) => e.preventDefault()}
 						style={{
 							padding: '5px 10px',
 						}}>
-						<input
-							type='checkbox'
-							checked={task.completed}
-							onChange={() =>
-								editTask({
-									taskId: task.id,
-									data: { completed: !task.completed },
-								})
+						<Dropdown
+							overlay={
+								<Menu>
+									<Menu.Item
+										key='delete'
+										danger
+										onClick={() => deleteTask(task.id)}>
+										Delete task
+									</Menu.Item>
+								</Menu>
 							}
-							style={{ marginRight: 10 }}
-						/>
-						{task.title}
+							trigger={['contextMenu']}>
+							<div>
+								<input
+									type='checkbox'
+									checked={task.completed}
+									onChange={() =>
+										editTask({
+											taskId: task.id,
+											data: {
+												completed: !task.completed,
+											},
+										})
+									}
+									style={{ marginRight: 10 }}
+								/>
+								{task.title}
+							</div>
+						</Dropdown>
 					</li>
 				))}
 			</ul>
