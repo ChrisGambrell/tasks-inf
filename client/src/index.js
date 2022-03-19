@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import App from './App'
+import 'antd/dist/antd.min.css'
 import './index.css'
 
 const queryClient = new QueryClient({
