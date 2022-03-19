@@ -119,16 +119,6 @@ const App = () => {
 							)}
 						</Button>
 					</div>
-					{/* <Form
-						onSubmitCapture={handleCreateTask}
-						style={{ position: 'fixed', bottom: 0 }}>
-						<Input
-							type='text'
-							placeholder='New task'
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-						/>
-					</Form> */}
 				</Col>
 			</Row>
 		</div>
