@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
 import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons'
@@ -14,6 +14,22 @@ const App = () => {
 	const [selectedTask, setSelectedTask] = useState(-1)
 	const [title, setTitle] = useState('')
 	const [completed, setCompleted] = useState(false)
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			switch (e.keyCode) {
+				case 27:
+					setSelectedTask(-1)
+					break
+				default:
+					break
+			}
+		}
+		document.addEventListener('keydown', handleKeyDown)
+		return function cleanup() {
+			document.removeEventListener('keydown', handleKeyDown)
+		}
+	}, [])
 
 	const handleCreateTask = async (e) => {
 		e.preventDefault()
@@ -68,11 +84,7 @@ const App = () => {
 									selectedTask === task.id ? 'active' : ''
 								}`}
 								key={task.id}
-								onDoubleClick={() =>
-									setSelectedTask(
-										selectedTask === task.id ? -1 : task.id
-									)
-								}
+								onDoubleClick={() => setSelectedTask(task.id)}
 								onContextMenu={(e) => e.preventDefault()}>
 								<Dropdown
 									overlay={
