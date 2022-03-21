@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
-import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row, TextArea } from 'antd'
+import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import './App.min.css'
 
@@ -14,6 +14,7 @@ const App = () => {
 	const [selectedTask, setSelectedTask] = useState(-1)
 
 	const [title, setTitle] = useState('')
+	const [notes, setNotes] = useState('')
 	const [completed, setCompleted] = useState(false)
 
 	const [editTitle, setEditTitle] = useState('')
@@ -34,9 +35,10 @@ const App = () => {
 	const handleCreateTask = async (e) => {
 		e.preventDefault()
 
-		await createTask({ title, completed })
+		await createTask({ title, notes, completed })
 		setShowAddingTask(false)
 		setTitle('')
+		setNotes('')
 		setCompleted(false)
 	}
 
@@ -106,17 +108,39 @@ const App = () => {
 					<ul style={{ listStyle: 'none' }}>
 						{showAddingTask && (
 							<li className='task-item active'>
-								<Form onSubmitCapture={handleCreateTask}>
-									<Checkbox checked={completed} onChange={() => setCompleted(!completed)} />
-									<Input
-										type='text'
-										placeholder='New task'
-										value={title}
-										onChange={(e) => setTitle(e.target.value)}
-										bordered={false}
-										style={{ width: 'calc(100% - 25px)' }}
-									/>
-								</Form>
+								<Row>
+									<Col span={1}>
+										<Checkbox checked={completed} onChange={() => setCompleted(!completed)} />
+									</Col>
+									<Col span={23} style={{ paddingLeft: 3 }}>
+										<Form onSubmitCapture={handleCreateTask}>
+											<Input
+												type='text'
+												size='small'
+												placeholder='New task'
+												value={title}
+												onChange={(e) => setTitle(e.target.value)}
+												bordered={false}
+											/>
+											<Input.TextArea
+												placeholder='Notes'
+												value={notes}
+												allowClear
+												onChange={(e) => setNotes(e.target.value)}
+												bordered={false}
+											/>
+											<Button
+												htmlType='submit'
+												type='primary'
+												size='small'
+												style={{
+													marginTop: 10,
+												}}>
+												Save
+											</Button>
+										</Form>
+									</Col>
+								</Row>
 							</li>
 						)}
 						{tasks?.map((task) => (
@@ -149,12 +173,12 @@ const App = () => {
 												}
 											/>
 										</Col>
-										{selectedTask === task.id ? (
-											<Col
-												span={23}
-												style={{
-													paddingLeft: 3,
-												}}>
+										<Col
+											span={23}
+											style={{
+												paddingLeft: 3,
+											}}>
+											{selectedTask === task.id ? (
 												<Form onSubmitCapture={handleEditTask}>
 													<Input
 														type='text'
@@ -181,18 +205,10 @@ const App = () => {
 														Save
 													</Button>
 												</Form>
-											</Col>
-										) : (
-											<Col span={23} style={{ paddingLeft: 3 }}>
-												{task.title}
-												{selectedTask === task.id && task.notes && (
-													<>
-														<br />
-														{task.notes}
-													</>
-												)}
-											</Col>
-										)}
+											) : (
+												task.title
+											)}
+										</Col>
 									</Row>
 								</Dropdown>
 							</li>
