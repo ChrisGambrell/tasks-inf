@@ -1,71 +1,29 @@
 import { useEffect, useState } from 'react'
-import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
-import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
+import { useDeleteTask, useEditTask, useTasks } from './hooks'
+import { Button, Checkbox, Col, Dropdown, Menu, Row } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+
+import { TaskForm } from './components'
 import './App.min.css'
 
 const App = () => {
 	const { data: tasks } = useTasks()
-	const createTask = useCreateTask().mutate
 	const deleteTask = useDeleteTask().mutate
 	const editTask = useEditTask().mutate
 
 	const [showAddingTask, setShowAddingTask] = useState(false)
 	const [selectedTask, setSelectedTask] = useState(-1)
 
-	const [title, setTitle] = useState('')
-	const [notes, setNotes] = useState('')
-	const [completed, setCompleted] = useState(false)
-
-	const [editTitle, setEditTitle] = useState('')
-	const [editNotes, setEditNotes] = useState('')
-
-	const handleSelectTask = (task) => {
-		setEditTitle(task.title)
-		setEditNotes(task.notes)
-		setSelectedTask(task.id)
-	}
-
-	const handleDeselectTask = () => {
-		setEditTitle('')
-		setEditNotes('')
-		setSelectedTask(-1)
-	}
-
-	const handleCreateTask = async (e) => {
-		e.preventDefault()
-
-		await createTask({ title, notes, completed })
-		setShowAddingTask(false)
-		setTitle('')
-		setNotes('')
-		setCompleted(false)
-	}
-
-	const handleEditTask = (e) => {
-		e.preventDefault()
-		editTask({
-			taskId: selectedTask,
-			data: { title: editTitle, notes: editNotes },
-		})
-	}
-
 	const handleDeleteTask = async (taskId = selectedTask) => {
 		await deleteTask(taskId)
-		handleDeselectTask()
-	}
-
-	const handleCloseAddTask = () => {
-		setShowAddingTask(false)
-		setTitle('')
-		setCompleted(false)
+		setSelectedTask(-1)
 	}
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			switch (e.keyCode) {
 				case 27:
-					handleDeselectTask()
+					setSelectedTask(-1)
 					break
 				default:
 					break
@@ -79,7 +37,7 @@ const App = () => {
 				if (currElement.id === 'toolbar' || Number(currElement.id) === selectedTask) return
 			}
 
-			handleDeselectTask()
+			setSelectedTask(-1)
 		}
 
 		document.addEventListener('keydown', handleKeyDown)
@@ -108,39 +66,7 @@ const App = () => {
 					<ul style={{ listStyle: 'none' }}>
 						{showAddingTask && (
 							<li className='task-item active'>
-								<Row>
-									<Col span={1}>
-										<Checkbox checked={completed} onChange={() => setCompleted(!completed)} />
-									</Col>
-									<Col span={23} style={{ paddingLeft: 3 }}>
-										<Form onSubmitCapture={handleCreateTask}>
-											<Input
-												type='text'
-												size='small'
-												placeholder='New task'
-												value={title}
-												onChange={(e) => setTitle(e.target.value)}
-												bordered={false}
-											/>
-											<Input.TextArea
-												placeholder='Notes'
-												value={notes}
-												allowClear
-												onChange={(e) => setNotes(e.target.value)}
-												bordered={false}
-											/>
-											<Button
-												htmlType='submit'
-												type='primary'
-												size='small'
-												style={{
-													marginTop: 10,
-												}}>
-												Save
-											</Button>
-										</Form>
-									</Col>
-								</Row>
+								<TaskForm type='create' setShowAddingTask={setShowAddingTask} />
 							</li>
 						)}
 						{tasks?.map((task) => (
@@ -148,7 +74,7 @@ const App = () => {
 								className={`task-item ${selectedTask === task.id ? 'active' : ''}`}
 								key={task.id}
 								id={task.id}
-								onDoubleClick={() => handleSelectTask(task)}
+								onDoubleClick={() => setSelectedTask(task.id)}
 								onContextMenu={(e) => e.preventDefault()}>
 								<Dropdown
 									overlay={
@@ -159,57 +85,23 @@ const App = () => {
 										</Menu>
 									}
 									trigger={['contextMenu']}>
-									<Row>
-										<Col span={1}>
-											<Checkbox
-												checked={task.completed}
-												onChange={() =>
-													editTask({
-														taskId: task.id,
-														data: {
-															completed: !task.completed,
-														},
-													})
-												}
-											/>
-										</Col>
-										<Col
-											span={23}
-											style={{
-												paddingLeft: 3,
-											}}>
-											{selectedTask === task.id ? (
-												<Form onSubmitCapture={handleEditTask}>
-													<Input
-														type='text'
-														size='small'
-														placeholder='New task'
-														value={editTitle}
-														onChange={(e) => setEditTitle(e.target.value)}
-														bordered={false}
+									<div>
+										{selectedTask === task.id ? (
+											<TaskForm type='edit' task={task} />
+										) : (
+											<Row>
+												<Col span={1}>
+													<Checkbox
+														checked={task.completed}
+														onChange={() => editTask({ taskId: task.id, data: { completed: !task.completed } })}
 													/>
-													<Input.TextArea
-														placeholder='Notes'
-														value={editNotes}
-														allowClear
-														onChange={(e) => setEditNotes(e.target.value)}
-														bordered={false}
-													/>
-													<Button
-														htmlType='submit'
-														type='primary'
-														size='small'
-														style={{
-															marginTop: 10,
-														}}>
-														Save
-													</Button>
-												</Form>
-											) : (
-												task.title
-											)}
-										</Col>
-									</Row>
+												</Col>
+												<Col span={23} style={{ paddingLeft: 3 }}>
+													{task.title}
+												</Col>
+											</Row>
+										)}
+									</div>
 								</Dropdown>
 							</li>
 						))}
@@ -219,7 +111,7 @@ const App = () => {
 							<Button
 								type='text'
 								onClick={() => {
-									if (showAddingTask) handleCloseAddTask()
+									if (showAddingTask) setShowAddingTask(false)
 									else handleDeleteTask()
 								}}>
 								<DeleteOutlined />
