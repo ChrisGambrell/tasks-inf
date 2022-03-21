@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useDeleteTask, useEditTask, useTasks } from './hooks'
-import { Button, Checkbox, Col, Dropdown, Menu, Row } from 'antd'
+import { useDeleteTask } from './hooks'
+import { Button, Col, Menu, Row } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 
-import { TaskForm } from './components'
+import { TaskList } from './components'
 import './App.min.css'
 
 const App = () => {
-	const { data: tasks } = useTasks()
 	const deleteTask = useDeleteTask().mutate
-	const editTask = useEditTask().mutate
 
 	const [showAddingTask, setShowAddingTask] = useState(false)
 	const [selectedTask, setSelectedTask] = useState(-1)
@@ -63,49 +61,12 @@ const App = () => {
 						maxWidth: 600,
 						margin: '0 auto',
 					}}>
-					<ul style={{ listStyle: 'none' }}>
-						{showAddingTask && (
-							<li className='task-item active'>
-								<TaskForm type='create' setShowAddingTask={setShowAddingTask} />
-							</li>
-						)}
-						{tasks?.map((task) => (
-							<li
-								className={`task-item ${selectedTask === task.id ? 'active' : ''}`}
-								key={task.id}
-								id={task.id}
-								onDoubleClick={() => setSelectedTask(task.id)}
-								onContextMenu={(e) => e.preventDefault()}>
-								<Dropdown
-									overlay={
-										<Menu>
-											<Menu.Item key='delete' danger onClick={() => handleDeleteTask(task.id)}>
-												Delete task
-											</Menu.Item>
-										</Menu>
-									}
-									trigger={['contextMenu']}>
-									<div>
-										{selectedTask === task.id ? (
-											<TaskForm type='edit' task={task} />
-										) : (
-											<Row>
-												<Col span={1}>
-													<Checkbox
-														checked={task.completed}
-														onChange={() => editTask({ taskId: task.id, data: { completed: !task.completed } })}
-													/>
-												</Col>
-												<Col span={23} style={{ paddingLeft: 3 }}>
-													{task.title}
-												</Col>
-											</Row>
-										)}
-									</div>
-								</Dropdown>
-							</li>
-						))}
-					</ul>
+					<TaskList
+						selectedTask={selectedTask}
+						showAddingTask={showAddingTask}
+						setSelectedTask={setSelectedTask}
+						setShowAddingTask={setShowAddingTask}
+					/>
 					<div className='toolbar' id='toolbar'>
 						{selectedTask > -1 || showAddingTask ? (
 							<Button
