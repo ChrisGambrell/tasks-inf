@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
 import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import './App.min.css'
 
 const App = () => {
@@ -25,11 +25,19 @@ const App = () => {
 					break
 			}
 		}
+
+		const handleMouseDown = (e) => {
+			if (Number(e.srcElement.parentElement?.id) != selectedTask)
+				setSelectedTask(-1)
+		}
+
 		document.addEventListener('keydown', handleKeyDown)
+		document.addEventListener('mousedown', handleMouseDown)
 		return function cleanup() {
 			document.removeEventListener('keydown', handleKeyDown)
+			document.removeEventListener('mousedown', handleMouseDown)
 		}
-	}, [])
+	}, [selectedTask])
 
 	const handleCreateTask = async (e) => {
 		e.preventDefault()
@@ -84,6 +92,7 @@ const App = () => {
 									selectedTask === task.id ? 'active' : ''
 								}`}
 								key={task.id}
+								id={task.id}
 								onDoubleClick={() => setSelectedTask(task.id)}
 								onContextMenu={(e) => e.preventDefault()}>
 								<Dropdown
@@ -120,17 +129,17 @@ const App = () => {
 							</li>
 						))}
 					</ul>
-					<div className='toolbar'>
+					{/* <div className='toolbar'>
 						<Button
 							type='text'
 							onClick={() => setShowAddingTask(!showAddingTask)}>
 							{showAddingTask ? (
-								<CloseOutlined />
+								<DeleteOutlined />
 							) : (
 								<PlusOutlined />
 							)}
 						</Button>
-					</div>
+					</div> */}
 				</Col>
 			</Row>
 		</div>
