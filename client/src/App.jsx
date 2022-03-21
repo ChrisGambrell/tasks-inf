@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
-import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row } from 'antd'
+import {
+	Button,
+	Checkbox,
+	Col,
+	Dropdown,
+	Form,
+	Input,
+	Menu,
+	Row,
+	TextArea,
+} from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import './App.min.css'
 
@@ -12,14 +22,58 @@ const App = () => {
 
 	const [showAddingTask, setShowAddingTask] = useState(false)
 	const [selectedTask, setSelectedTask] = useState(-1)
+
 	const [title, setTitle] = useState('')
 	const [completed, setCompleted] = useState(false)
+
+	const [editTitle, setEditTitle] = useState('')
+	const [editNotes, setEditNotes] = useState('')
+
+	const handleSelectTask = (task) => {
+		setEditTitle(task.title)
+		setEditNotes(task.notes)
+		setSelectedTask(task.id)
+	}
+
+	const handleDeselectTask = () => {
+		setEditTitle('')
+		setEditNotes('')
+		setSelectedTask(-1)
+	}
+
+	const handleCreateTask = async (e) => {
+		e.preventDefault()
+
+		await createTask({ title, completed })
+		setShowAddingTask(false)
+		setTitle('')
+		setCompleted(false)
+	}
+
+	const handleEditTask = (e) => {
+		e.preventDefault()
+		editTask({
+			taskId: selectedTask,
+			data: { title: editTitle, notes: editNotes },
+		})
+	}
+
+	const handleDeleteTask = async (taskId = selectedTask) => {
+		await deleteTask(taskId)
+		handleDeselectTask()
+	}
+
+	const handleCloseAddTask = () => {
+		setShowAddingTask(false)
+		setTitle('')
+		setCompleted(false)
+	}
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			switch (e.keyCode) {
 				case 27:
-					setSelectedTask(-1)
+					handleDeselectTask()
 					break
 				default:
 					break
@@ -32,12 +86,12 @@ const App = () => {
 				currElement = currElement.parentElement
 				if (
 					currElement.id === 'toolbar' ||
-					currElement.id == selectedTask
+					Number(currElement.id) === selectedTask
 				)
 					return
 			}
 
-			setSelectedTask(-1)
+			handleDeselectTask()
 		}
 
 		document.addEventListener('keydown', handleKeyDown)
@@ -47,26 +101,6 @@ const App = () => {
 			document.removeEventListener('mousedown', handleMouseDown)
 		}
 	}, [selectedTask])
-
-	const handleCreateTask = async (e) => {
-		e.preventDefault()
-
-		await createTask({ title, completed })
-		setShowAddingTask(false)
-		setTitle('')
-		setCompleted(false)
-	}
-
-	const handleDeleteTask = async (taskId = selectedTask) => {
-		await deleteTask(taskId)
-		setSelectedTask(-1)
-	}
-
-	const handleCloseAddTask = () => {
-		setShowAddingTask(false)
-		setTitle('')
-		setCompleted(false)
-	}
 
 	return (
 		<div className='App'>
@@ -113,7 +147,7 @@ const App = () => {
 								}`}
 								key={task.id}
 								id={task.id}
-								onDoubleClick={() => setSelectedTask(task.id)}
+								onDoubleClick={() => handleSelectTask(task)}
 								onContextMenu={(e) => e.preventDefault()}>
 								<Dropdown
 									overlay={
@@ -144,18 +178,64 @@ const App = () => {
 												}
 											/>
 										</Col>
-										<Col
-											span={23}
-											style={{ paddingLeft: 3 }}>
-											{task.title}
-											{selectedTask === task.id &&
-												task.notes && (
-													<>
-														<br />
-														{task.notes}
-													</>
-												)}
-										</Col>
+										{selectedTask === task.id ? (
+											<Col
+												span={23}
+												style={{
+													paddingLeft: 3,
+												}}>
+												<Form
+													onSubmitCapture={
+														handleEditTask
+													}>
+													<Input
+														type='text'
+														size='small'
+														placeholder='New task'
+														value={editTitle}
+														onChange={(e) =>
+															setEditTitle(
+																e.target.value
+															)
+														}
+														bordered={false}
+													/>
+													<Input.TextArea
+														placeholder='Notes'
+														value={editNotes}
+														allowClear
+														onChange={(e) =>
+															setEditNotes(
+																e.target.value
+															)
+														}
+														bordered={false}
+													/>
+													<Button
+														htmlType='submit'
+														type='primary'
+														size='small'
+														style={{
+															marginTop: 10,
+														}}>
+														Save
+													</Button>
+												</Form>
+											</Col>
+										) : (
+											<Col
+												span={23}
+												style={{ paddingLeft: 3 }}>
+												{task.title}
+												{selectedTask === task.id &&
+													task.notes && (
+														<>
+															<br />
+															{task.notes}
+														</>
+													)}
+											</Col>
+										)}
 									</Row>
 								</Dropdown>
 							</li>
