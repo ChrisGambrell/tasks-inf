@@ -26,16 +26,9 @@ const App = () => {
 			}
 		}
 
-		const handleMouseDown = (e) => {
-			if (Number(e.srcElement.parentElement?.id) != selectedTask)
-				setSelectedTask(-1)
-		}
-
 		document.addEventListener('keydown', handleKeyDown)
-		document.addEventListener('mousedown', handleMouseDown)
 		return function cleanup() {
 			document.removeEventListener('keydown', handleKeyDown)
-			document.removeEventListener('mousedown', handleMouseDown)
 		}
 	}, [selectedTask])
 
@@ -43,6 +36,17 @@ const App = () => {
 		e.preventDefault()
 
 		await createTask({ title, completed })
+		setShowAddingTask(false)
+		setTitle('')
+		setCompleted(false)
+	}
+
+	const handleDeleteTask = async (taskId = selectedTask) => {
+		await deleteTask(taskId)
+		setSelectedTask(-1)
+	}
+
+	const handleCloseAddTask = () => {
 		setShowAddingTask(false)
 		setTitle('')
 		setCompleted(false)
@@ -102,7 +106,7 @@ const App = () => {
 												key='delete'
 												danger
 												onClick={() =>
-													deleteTask(task.id)
+													handleDeleteTask(task.id)
 												}>
 												Delete task
 											</Menu.Item>
@@ -129,17 +133,24 @@ const App = () => {
 							</li>
 						))}
 					</ul>
-					{/* <div className='toolbar'>
-						<Button
-							type='text'
-							onClick={() => setShowAddingTask(!showAddingTask)}>
-							{showAddingTask ? (
+					<div className='toolbar' id='toolbar'>
+						{selectedTask > -1 || showAddingTask ? (
+							<Button
+								type='text'
+								onClick={() => {
+									if (showAddingTask) handleCloseAddTask()
+									else handleDeleteTask()
+								}}>
 								<DeleteOutlined />
-							) : (
+							</Button>
+						) : (
+							<Button
+								type='text'
+								onClick={() => setShowAddingTask(true)}>
 								<PlusOutlined />
-							)}
-						</Button>
-					</div> */}
+							</Button>
+						)}
+					</div>
 				</Col>
 			</Row>
 		</div>
