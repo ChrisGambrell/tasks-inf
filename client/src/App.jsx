@@ -26,9 +26,25 @@ const App = () => {
 			}
 		}
 
+		const handleMouseDown = (e) => {
+			let currElement = e.srcElement
+			while (currElement.parentElement) {
+				currElement = currElement.parentElement
+				if (
+					currElement.id === 'toolbar' ||
+					currElement.id == selectedTask
+				)
+					return
+			}
+
+			setSelectedTask(-1)
+		}
+
 		document.addEventListener('keydown', handleKeyDown)
+		document.addEventListener('mousedown', handleMouseDown)
 		return function cleanup() {
 			document.removeEventListener('keydown', handleKeyDown)
+			document.removeEventListener('mousedown', handleMouseDown)
 		}
 	}, [selectedTask])
 
@@ -113,22 +129,34 @@ const App = () => {
 										</Menu>
 									}
 									trigger={['contextMenu']}>
-									<div>
-										<Checkbox
-											checked={task.completed}
-											onChange={() =>
-												editTask({
-													taskId: task.id,
-													data: {
-														completed:
-															!task.completed,
-													},
-												})
-											}
-											style={{ marginRight: 10 }}
-										/>
-										{task.title}
-									</div>
+									<Row>
+										<Col span={1}>
+											<Checkbox
+												checked={task.completed}
+												onChange={() =>
+													editTask({
+														taskId: task.id,
+														data: {
+															completed:
+																!task.completed,
+														},
+													})
+												}
+											/>
+										</Col>
+										<Col
+											span={23}
+											style={{ paddingLeft: 3 }}>
+											{task.title}
+											{selectedTask === task.id &&
+												task.notes && (
+													<>
+														<br />
+														{task.notes}
+													</>
+												)}
+										</Col>
+									</Row>
 								</Dropdown>
 							</li>
 						))}
