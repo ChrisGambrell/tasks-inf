@@ -1,16 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useCreateTask, useDeleteTask, useEditTask, useTasks } from './hooks'
-import {
-	Button,
-	Checkbox,
-	Col,
-	Dropdown,
-	Form,
-	Input,
-	Menu,
-	Row,
-	TextArea,
-} from 'antd'
+import { Button, Checkbox, Col, Dropdown, Form, Input, Menu, Row, TextArea } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import './App.min.css'
 
@@ -84,11 +74,7 @@ const App = () => {
 			let currElement = e.srcElement
 			while (currElement.parentElement) {
 				currElement = currElement.parentElement
-				if (
-					currElement.id === 'toolbar' ||
-					Number(currElement.id) === selectedTask
-				)
-					return
+				if (currElement.id === 'toolbar' || Number(currElement.id) === selectedTask) return
 			}
 
 			handleDeselectTask()
@@ -121,19 +107,12 @@ const App = () => {
 						{showAddingTask && (
 							<li className='task-item active'>
 								<Form onSubmitCapture={handleCreateTask}>
-									<Checkbox
-										checked={completed}
-										onChange={() =>
-											setCompleted(!completed)
-										}
-									/>
+									<Checkbox checked={completed} onChange={() => setCompleted(!completed)} />
 									<Input
 										type='text'
 										placeholder='New task'
 										value={title}
-										onChange={(e) =>
-											setTitle(e.target.value)
-										}
+										onChange={(e) => setTitle(e.target.value)}
 										bordered={false}
 										style={{ width: 'calc(100% - 25px)' }}
 									/>
@@ -142,9 +121,7 @@ const App = () => {
 						)}
 						{tasks?.map((task) => (
 							<li
-								className={`task-item ${
-									selectedTask === task.id ? 'active' : ''
-								}`}
+								className={`task-item ${selectedTask === task.id ? 'active' : ''}`}
 								key={task.id}
 								id={task.id}
 								onDoubleClick={() => handleSelectTask(task)}
@@ -152,12 +129,7 @@ const App = () => {
 								<Dropdown
 									overlay={
 										<Menu>
-											<Menu.Item
-												key='delete'
-												danger
-												onClick={() =>
-													handleDeleteTask(task.id)
-												}>
+											<Menu.Item key='delete' danger onClick={() => handleDeleteTask(task.id)}>
 												Delete task
 											</Menu.Item>
 										</Menu>
@@ -171,8 +143,7 @@ const App = () => {
 													editTask({
 														taskId: task.id,
 														data: {
-															completed:
-																!task.completed,
+															completed: !task.completed,
 														},
 													})
 												}
@@ -184,31 +155,20 @@ const App = () => {
 												style={{
 													paddingLeft: 3,
 												}}>
-												<Form
-													onSubmitCapture={
-														handleEditTask
-													}>
+												<Form onSubmitCapture={handleEditTask}>
 													<Input
 														type='text'
 														size='small'
 														placeholder='New task'
 														value={editTitle}
-														onChange={(e) =>
-															setEditTitle(
-																e.target.value
-															)
-														}
+														onChange={(e) => setEditTitle(e.target.value)}
 														bordered={false}
 													/>
 													<Input.TextArea
 														placeholder='Notes'
 														value={editNotes}
 														allowClear
-														onChange={(e) =>
-															setEditNotes(
-																e.target.value
-															)
-														}
+														onChange={(e) => setEditNotes(e.target.value)}
 														bordered={false}
 													/>
 													<Button
@@ -223,17 +183,14 @@ const App = () => {
 												</Form>
 											</Col>
 										) : (
-											<Col
-												span={23}
-												style={{ paddingLeft: 3 }}>
+											<Col span={23} style={{ paddingLeft: 3 }}>
 												{task.title}
-												{selectedTask === task.id &&
-													task.notes && (
-														<>
-															<br />
-															{task.notes}
-														</>
-													)}
+												{selectedTask === task.id && task.notes && (
+													<>
+														<br />
+														{task.notes}
+													</>
+												)}
 											</Col>
 										)}
 									</Row>
@@ -252,9 +209,7 @@ const App = () => {
 								<DeleteOutlined />
 							</Button>
 						) : (
-							<Button
-								type='text'
-								onClick={() => setShowAddingTask(true)}>
+							<Button type='text' onClick={() => setShowAddingTask(true)}>
 								<PlusOutlined />
 							</Button>
 						)}
