@@ -13,7 +13,7 @@ const App = () => {
 		const handleKeyDown = (e) => {
 			switch (e.keyCode) {
 				case 27:
-					dispatch({ type: 'set', payload: { open: -1 } })
+					dispatch({ type: 'set', payload: { open: -1, selected: [] } })
 					break
 				default:
 					break
@@ -24,10 +24,10 @@ const App = () => {
 			let currElement = e.srcElement
 			while (currElement.parentElement) {
 				currElement = currElement.parentElement
-				if (currElement.id === 'Toolbar' || Number(currElement.id) === state.open) return
+				if (currElement.id === 'Toolbar' || currElement.id.includes('task-')) return
 			}
 
-			dispatch({ type: 'set', payload: { open: -1, selected: -1 } })
+			dispatch({ type: 'set', payload: { open: -1, selected: [] } })
 		}
 
 		document.addEventListener('keydown', handleKeyDown)

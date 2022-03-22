@@ -1,4 +1,4 @@
-const initialState = { open: -1, selected: -1, showAddTask: false }
+const initialState = { open: -1, selected: [], showAddTask: false }
 
 const reducer = (state, action) => {
 	switch (action.type) {

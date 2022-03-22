@@ -12,6 +12,11 @@ const TaskList = () => {
 
 	const [state, dispatch] = useContext(TasksContext)
 
+	const handleSelectTask = (e, taskId) => {
+		if (e.metaKey) dispatch({ type: 'set', payload: { selected: [...state.selected, taskId], open: -1, showAddingTask: false } })
+		else if (!e.metaKey && !e.shiftKey) dispatch({ type: 'set', payload: { selected: [taskId], open: -1, showAddingTask: false } })
+	}
+
 	const handleDeleteTask = async (taskId = state.open) => {
 		await deleteTask(taskId)
 		dispatch({ type: 'set', payload: { open: -1 } })
@@ -24,11 +29,11 @@ const TaskList = () => {
 				<li
 					className={`task-item ${state.open === task.id ? 'active' : ''}`}
 					key={task.id}
-					id={task.id}
-					onClick={() => dispatch({ type: 'set', payload: { selected: task.id, open: -1, showAddingTask: false } })}
-					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: -1 } })}
+					id={`task-${task.id}`}
+					onClick={(e) => handleSelectTask(e, task.id)}
+					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}
 					onContextMenu={(e) => e.preventDefault()}
-					style={{ backgroundColor: state.selected === task.id ? blue[1] : 'white' }}>
+					style={{ backgroundColor: state.selected.includes(task.id) ? blue[1] : 'white' }}>
 					<Dropdown
 						overlay={
 							<Menu>
