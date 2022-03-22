@@ -1,26 +1,30 @@
+import { useContext } from 'react'
 import { Col, Checkbox, Dropdown, Menu, Row } from 'antd'
 import { useDeleteTask, useEditTask, useTasks } from '../hooks'
+import { TasksContext } from '../App'
 import { TaskForm } from '.'
 
-const TaskList = ({ selectedTask, showAddingTask, setSelectedTask, setShowAddingTask }) => {
+const TaskList = () => {
 	const { data: tasks } = useTasks()
 	const deleteTask = useDeleteTask().mutate
 	const editTask = useEditTask().mutate
 
-	const handleDeleteTask = async (taskId = selectedTask) => {
+	const [state, dispatch] = useContext(TasksContext)
+
+	const handleDeleteTask = async (taskId = state.selected) => {
 		await deleteTask(taskId)
-		setSelectedTask(-1)
+		dispatch({ type: 'set', payload: { selected: -1 } })
 	}
 
 	return (
 		<ul style={{ listStyle: 'none' }}>
-			{showAddingTask && <TaskForm className='task-item active' type='create' as='li' setShowAddingTask={setShowAddingTask} />}
+			{state.showAddingTask && <TaskForm className='task-item active' type='create' as='li' />}
 			{tasks?.map((task) => (
 				<li
-					className={`task-item ${selectedTask === task.id ? 'active' : ''}`}
+					className={`task-item ${state.selected === task.id ? 'active' : ''}`}
 					key={task.id}
 					id={task.id}
-					onDoubleClick={() => setSelectedTask(task.id)}
+					onDoubleClick={() => dispatch({ type: 'set', payload: { selected: task.id } })}
 					onContextMenu={(e) => e.preventDefault()}>
 					<Dropdown
 						overlay={
@@ -32,7 +36,7 @@ const TaskList = ({ selectedTask, showAddingTask, setSelectedTask, setShowAdding
 						}
 						trigger={['contextMenu']}>
 						<div>
-							{selectedTask === task.id ? (
+							{state.selected === task.id ? (
 								<TaskForm type='edit' task={task} />
 							) : (
 								<Row>

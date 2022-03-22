@@ -1,26 +1,31 @@
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useReducer, useState } from 'react'
 import { useDeleteTask } from './hooks'
-import { Button, Col, Menu, Row } from 'antd'
+import { Button, Col, Row } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { TaskList } from './components'
+import store from './app/store'
+import { SideMenu, TaskList } from './components'
 import './App.min.css'
+
+export const TasksContext = createContext()
 
 const App = () => {
 	const deleteTask = useDeleteTask().mutate
 
-	const [showAddingTask, setShowAddingTask] = useState(false)
-	const [selectedTask, setSelectedTask] = useState(-1)
+	const [state, dispatch] = useReducer(store.reducer, store.initialState)
 
-	const handleDeleteTask = async (taskId = selectedTask) => {
+	// const [showAddingTask, setShowAddingTask] = useState(false)
+	// const [selectedTask, setSelectedTask] = useState(-1)
+
+	const handleDeleteTask = async (taskId = state.selected) => {
 		await deleteTask(taskId)
-		setSelectedTask(-1)
+		dispatch({ type: 'set', payload: { selected: -1 } })
 	}
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			switch (e.keyCode) {
 				case 27:
-					setSelectedTask(-1)
+					dispatch({ type: 'set', payload: { selected: -1 } })
 					break
 				default:
 					break
@@ -31,10 +36,10 @@ const App = () => {
 			let currElement = e.srcElement
 			while (currElement.parentElement) {
 				currElement = currElement.parentElement
-				if (currElement.id === 'toolbar' || Number(currElement.id) === selectedTask) return
+				if (currElement.id === 'Toolbar' || Number(currElement.id) === state.selected) return
 			}
 
-			setSelectedTask(-1)
+			dispatch({ type: 'set', payload: { selected: -1 } })
 		}
 
 		document.addEventListener('keydown', handleKeyDown)
@@ -43,47 +48,41 @@ const App = () => {
 			document.removeEventListener('keydown', handleKeyDown)
 			document.removeEventListener('mousedown', handleMouseDown)
 		}
-	}, [selectedTask])
+	}, [state.selected])
 
 	return (
 		<div className='App'>
-			<Row style={{ margin: '25px 0' }}>
-				<Col sm={5}>
-					<h1 style={{ marginLeft: 25 }}>Tasks &infin;</h1>
-					<Menu defaultSelectedKeys={['1']} mode='inline'>
-						<Menu.Item key='1'>Tasks</Menu.Item>
-					</Menu>
-				</Col>
-				<Col
-					sm={19}
-					style={{
-						maxWidth: 600,
-						margin: '0 auto',
-					}}>
-					<TaskList
-						selectedTask={selectedTask}
-						showAddingTask={showAddingTask}
-						setSelectedTask={setSelectedTask}
-						setShowAddingTask={setShowAddingTask}
-					/>
-					<div className='toolbar' id='toolbar'>
-						{selectedTask > -1 || showAddingTask ? (
-							<Button
-								type='text'
-								onClick={() => {
-									if (showAddingTask) setShowAddingTask(false)
-									else handleDeleteTask()
-								}}>
-								<DeleteOutlined />
-							</Button>
-						) : (
-							<Button type='text' onClick={() => setShowAddingTask(true)}>
-								<PlusOutlined />
-							</Button>
-						)}
-					</div>
-				</Col>
-			</Row>
+			<TasksContext.Provider value={[state, dispatch]}>
+				<Row style={{ margin: '25px 0' }}>
+					<Col sm={5}>
+						<SideMenu />
+					</Col>
+					<Col
+						sm={19}
+						style={{
+							maxWidth: 600,
+							margin: '0 auto',
+						}}>
+						<TaskList />
+						<div className='Toolbar' id='toolbar'>
+							{state.selected > -1 || state.showAddingTask ? (
+								<Button
+									type='text'
+									onClick={() => {
+										if (state.showAddingTask) dispatch({ type: 'set', payload: { showAddingTask: false } })
+										else handleDeleteTask()
+									}}>
+									<DeleteOutlined />
+								</Button>
+							) : (
+								<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true } })}>
+									<PlusOutlined />
+								</Button>
+							)}
+						</div>
+					</Col>
+				</Row>
+			</TasksContext.Provider>
 		</div>
 	)
 }

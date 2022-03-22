@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
+import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
 
-const TaskForm = ({ type = 'create', as: Tag = React.Fragment, task = {}, setShowAddingTask }) => {
+const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} }) => {
 	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
+
+	const [state, dispatch] = useContext(TasksContext)
 
 	const [title, setTitle] = useState('')
 	const [notes, setNotes] = useState('')
@@ -14,7 +17,7 @@ const TaskForm = ({ type = 'create', as: Tag = React.Fragment, task = {}, setSho
 		e.preventDefault()
 
 		await createTask({ title, notes, completed })
-		setShowAddingTask(false)
+		dispatch({ type: 'set', payload: { showAddingTask: false } })
 		setTitle('')
 		setNotes('')
 		setCompleted(false)
@@ -37,7 +40,7 @@ const TaskForm = ({ type = 'create', as: Tag = React.Fragment, task = {}, setSho
 	}, [type, task])
 
 	return (
-		<Tag>
+		<Tag className={className}>
 			<Row>
 				<Col span={1}>
 					<Checkbox
