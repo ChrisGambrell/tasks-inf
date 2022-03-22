@@ -14,11 +14,7 @@ const TaskList = ({ selectedTask, showAddingTask, setSelectedTask, setShowAdding
 
 	return (
 		<ul style={{ listStyle: 'none' }}>
-			{showAddingTask && (
-				<li className='task-item active'>
-					<TaskForm type='create' setShowAddingTask={setShowAddingTask} />
-				</li>
-			)}
+			{showAddingTask && <TaskForm className='task-item active' type='create' as='li' setShowAddingTask={setShowAddingTask} />}
 			{tasks?.map((task) => (
 				<li
 					className={`task-item ${selectedTask === task.id ? 'active' : ''}`}

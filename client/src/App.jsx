@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useDeleteTask } from './hooks'
 import { Button, Col, Menu, Row } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-
 import { TaskList } from './components'
 import './App.min.css'
 
