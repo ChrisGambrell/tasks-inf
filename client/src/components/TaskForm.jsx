@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row } from 'antd'
 import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
 
 const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} }) => {
 	const createTask = useCreateTask().mutate
-	const editTask = useEditTask().mutate
+	const editTask = useEditTask()
 
 	const [_state, dispatch] = useContext(TasksContext)
 
@@ -23,12 +23,15 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 		setCompleted(false)
 	}
 
-	const handleEditTask = (e) => {
+	const handleEditTask = async (e) => {
 		e.preventDefault()
-		editTask({
-			taskId: task.id,
-			data: { title, notes },
-		})
+		try {
+			await editTask.mutateAsync({
+				taskId: task.id,
+				data: { title, notes },
+			})
+			message.success('Task updated')
+		} catch (err) {}
 	}
 
 	useEffect(() => {
@@ -48,7 +51,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 						onChange={() =>
 							type === 'create'
 								? setCompleted(!completed)
-								: editTask({ taskId: task.id, data: { completed: !task.completed } })
+								: editTask.mutate({ taskId: task.id, data: { completed: !task.completed } })
 						}
 					/>
 				</Col>
