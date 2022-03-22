@@ -25,9 +25,10 @@ const TaskList = () => {
 					className={`task-item ${state.open === task.id ? 'active' : ''}`}
 					key={task.id}
 					id={task.id}
-					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id } })}
+					onClick={() => dispatch({ type: 'set', payload: { selected: task.id, open: -1, showAddingTask: false } })}
+					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: -1 } })}
 					onContextMenu={(e) => e.preventDefault()}
-					style={{ backgroundColor: blue[1] }}>
+					style={{ backgroundColor: state.selected === task.id ? blue[1] : 'white' }}>
 					<Dropdown
 						overlay={
 							<Menu>

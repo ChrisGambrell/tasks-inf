@@ -16,7 +16,7 @@ const TaskToolbar = () => {
 
 	return (
 		<div className='Toolbar' id='toolbar'>
-			<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true } })}>
+			<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true, selected: -1 } })}>
 				<PlusOutlined />
 			</Button>
 			{(state.open > -1 || state.showAddingTask) && (

@@ -27,7 +27,7 @@ const App = () => {
 				if (currElement.id === 'Toolbar' || Number(currElement.id) === state.open) return
 			}
 
-			dispatch({ type: 'set', payload: { open: -1 } })
+			dispatch({ type: 'set', payload: { open: -1, selected: -1 } })
 		}
 
 		document.addEventListener('keydown', handleKeyDown)
