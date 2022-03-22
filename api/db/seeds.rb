@@ -6,5 +6,5 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-task1 = Task.create(title: 'Double-click this to-do', notes: 'You’re looking at a to-do! Complete it by clicking the checkbox on the left. Completed to-dos are collected at the bottom of your project.')
-task2 = Task.create(title: 'Double-click this completed to-do', completed: true)
+Task.create(title: 'Double-click this to-do', notes: 'You\'re looking at a to-do! Complete it by clicking the checkbox on the left. Completed to-dos are collected at the bottom of your project.')
+Task.create(title: 'Create a new to-do', notes: 'Your turn - just hit ⌘N on your keyboard.')
