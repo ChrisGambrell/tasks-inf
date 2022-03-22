@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { Col, Checkbox, Dropdown, Menu, Row } from 'antd'
+import { blue } from '@ant-design/colors'
 import { useDeleteTask, useEditTask, useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { TaskForm } from '.'
@@ -25,7 +26,8 @@ const TaskList = () => {
 					key={task.id}
 					id={task.id}
 					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id } })}
-					onContextMenu={(e) => e.preventDefault()}>
+					onContextMenu={(e) => e.preventDefault()}
+					style={{ backgroundColor: blue[1] }}>
 					<Dropdown
 						overlay={
 							<Menu>
