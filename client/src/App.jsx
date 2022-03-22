@@ -1,22 +1,13 @@
 import { createContext, useEffect, useReducer } from 'react'
-import { useDeleteTask } from './hooks'
-import { Button, Col, Row } from 'antd'
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+import { Col, Row } from 'antd'
 import store from './app/store'
-import { SideMenu, TaskList } from './components'
+import { SideMenu, TaskList, TaskToolbar } from './components'
 import './App.min.css'
 
 export const TasksContext = createContext()
 
 const App = () => {
-	const deleteTask = useDeleteTask().mutate
-
 	const [state, dispatch] = useReducer(store.reducer, store.initialState)
-
-	const handleDeleteTask = async (taskId = state.selected) => {
-		await deleteTask(taskId)
-		dispatch({ type: 'set', payload: { selected: -1 } })
-	}
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
@@ -61,22 +52,7 @@ const App = () => {
 							margin: '0 auto',
 						}}>
 						<TaskList />
-						<div className='Toolbar' id='toolbar'>
-							{state.selected > -1 || state.showAddingTask ? (
-								<Button
-									type='text'
-									onClick={() => {
-										if (state.showAddingTask) dispatch({ type: 'set', payload: { showAddingTask: false } })
-										else handleDeleteTask()
-									}}>
-									<DeleteOutlined />
-								</Button>
-							) : (
-								<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true } })}>
-									<PlusOutlined />
-								</Button>
-							)}
-						</div>
+						<TaskToolbar />
 					</Col>
 				</Row>
 			</TasksContext.Provider>

@@ -7,4 +7,4 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 Task.create(title: 'Double-click this to-do', notes: 'You\'re looking at a to-do! Complete it by clicking the checkbox on the left. Completed to-dos are collected at the bottom of your project.')
-Task.create(title: 'Create a new to-do', notes: 'Your turn - just hit ⌘N on your keyboard.')
+Task.create(title: 'Create a new to-do', notes: 'Your turn - just hit the plus button on the toolbar at the bottom.')
