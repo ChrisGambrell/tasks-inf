@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from 'react'
+import { createContext, useEffect, useReducer } from 'react'
 import { useDeleteTask } from './hooks'
 import { Button, Col, Row } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
@@ -12,9 +12,6 @@ const App = () => {
 	const deleteTask = useDeleteTask().mutate
 
 	const [state, dispatch] = useReducer(store.reducer, store.initialState)
-
-	// const [showAddingTask, setShowAddingTask] = useState(false)
-	// const [selectedTask, setSelectedTask] = useState(-1)
 
 	const handleDeleteTask = async (taskId = state.selected) => {
 		await deleteTask(taskId)

@@ -7,7 +7,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
 
-	const [state, dispatch] = useContext(TasksContext)
+	const [_state, dispatch] = useContext(TasksContext)
 
 	const [title, setTitle] = useState('')
 	const [notes, setNotes] = useState('')
