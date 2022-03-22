@@ -13,7 +13,7 @@ const App = () => {
 		const handleKeyDown = (e) => {
 			switch (e.keyCode) {
 				case 27:
-					dispatch({ type: 'set', payload: { selected: -1 } })
+					dispatch({ type: 'set', payload: { open: -1 } })
 					break
 				default:
 					break
@@ -24,10 +24,10 @@ const App = () => {
 			let currElement = e.srcElement
 			while (currElement.parentElement) {
 				currElement = currElement.parentElement
-				if (currElement.id === 'Toolbar' || Number(currElement.id) === state.selected) return
+				if (currElement.id === 'Toolbar' || Number(currElement.id) === state.open) return
 			}
 
-			dispatch({ type: 'set', payload: { selected: -1 } })
+			dispatch({ type: 'set', payload: { open: -1 } })
 		}
 
 		document.addEventListener('keydown', handleKeyDown)
@@ -36,7 +36,7 @@ const App = () => {
 			document.removeEventListener('keydown', handleKeyDown)
 			document.removeEventListener('mousedown', handleMouseDown)
 		}
-	}, [state.selected])
+	}, [state.open])
 
 	return (
 		<div className='App'>

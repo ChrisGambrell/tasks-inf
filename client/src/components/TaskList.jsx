@@ -11,9 +11,9 @@ const TaskList = () => {
 
 	const [state, dispatch] = useContext(TasksContext)
 
-	const handleDeleteTask = async (taskId = state.selected) => {
+	const handleDeleteTask = async (taskId = state.open) => {
 		await deleteTask(taskId)
-		dispatch({ type: 'set', payload: { selected: -1 } })
+		dispatch({ type: 'set', payload: { open: -1 } })
 	}
 
 	return (
@@ -21,10 +21,10 @@ const TaskList = () => {
 			{state.showAddingTask && <TaskForm className='task-item active' type='create' as='li' />}
 			{tasks?.map((task) => (
 				<li
-					className={`task-item ${state.selected === task.id ? 'active' : ''}`}
+					className={`task-item ${state.open === task.id ? 'active' : ''}`}
 					key={task.id}
 					id={task.id}
-					onDoubleClick={() => dispatch({ type: 'set', payload: { selected: task.id } })}
+					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id } })}
 					onContextMenu={(e) => e.preventDefault()}>
 					<Dropdown
 						overlay={
@@ -36,7 +36,7 @@ const TaskList = () => {
 						}
 						trigger={['contextMenu']}>
 						<div>
-							{state.selected === task.id ? (
+							{state.open === task.id ? (
 								<TaskForm type='edit' task={task} />
 							) : (
 								<Row>

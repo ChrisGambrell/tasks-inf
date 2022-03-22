@@ -9,9 +9,9 @@ const TaskToolbar = () => {
 
 	const [state, dispatch] = useContext(TasksContext)
 
-	const handleDeleteTask = async (taskId = state.selected) => {
+	const handleDeleteTask = async (taskId = state.open) => {
 		await deleteTask(taskId)
-		dispatch({ type: 'set', payload: { selected: -1 } })
+		dispatch({ type: 'set', payload: { open: -1 } })
 	}
 
 	return (
@@ -19,7 +19,7 @@ const TaskToolbar = () => {
 			<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true } })}>
 				<PlusOutlined />
 			</Button>
-			{(state.selected > -1 || state.showAddingTask) && (
+			{(state.open > -1 || state.showAddingTask) && (
 				<Button
 					type='text'
 					onClick={() => {
