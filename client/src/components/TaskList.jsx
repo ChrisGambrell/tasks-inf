@@ -14,7 +14,19 @@ const TaskList = () => {
 
 	const handleSelectTask = (e, taskId) => {
 		if (e.metaKey) dispatch({ type: 'set', payload: { selected: [...state.selected, taskId], open: -1, showAddingTask: false } })
-		else if (!e.metaKey && !e.shiftKey) dispatch({ type: 'set', payload: { selected: [taskId], open: -1, showAddingTask: false } })
+		else if (e.shiftKey) {
+			let indexClicked = tasks.findIndex((task) => task.id === taskId)
+			let indexLast = tasks.findIndex((task) => task.id === state.selected[state.selected.length - 1])
+			let taskIdsToAdd = []
+
+			if (indexClicked < indexLast) {
+				for (let i = indexClicked; i < indexLast; i++) taskIdsToAdd.push(tasks[i].id)
+			} else {
+				for (let i = indexLast; i <= indexClicked; i++) taskIdsToAdd.push(tasks[i].id)
+			}
+
+			dispatch({ type: 'set', payload: { selected: [...state.selected, ...taskIdsToAdd], open: -1, showAddingTask: false } })
+		} else if (!e.metaKey && !e.shiftKey) dispatch({ type: 'set', payload: { selected: [taskId], open: -1, showAddingTask: false } })
 	}
 
 	const handleDeleteTask = async (taskId = state.open) => {
