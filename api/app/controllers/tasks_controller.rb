@@ -44,8 +44,14 @@ class TasksController < ApplicationController
       @task = Task.find(params[:task_id])
     end
 
+    def parse_when
+      if params[:when]
+        params[:when] = DateTime.parse(params[:when])
+      end
+    end
+
     # Only allow a list of trusted parameters through.
     def task_params
-      params.permit(:title, :notes, :completed)
+      params.permit(:title, :notes, :completed, :when)
     end
 end
