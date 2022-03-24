@@ -24,7 +24,7 @@ const App = () => {
 			let currElement = e.srcElement
 			while (currElement.parentElement) {
 				currElement = currElement.parentElement
-				if (currElement.id === 'Toolbar' || currElement.id.includes('task-')) return
+				if (currElement.id === 'Toolbar' || currElement.id.includes('task-') || currElement.id === 'contextmenu') return
 			}
 
 			dispatch({ type: 'set', payload: { open: -1, selected: [] } })

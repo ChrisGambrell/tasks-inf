@@ -13,7 +13,17 @@ const TaskList = () => {
 	const [state, dispatch] = useContext(TasksContext)
 
 	const handleSelectTask = (e, taskId) => {
-		if (e.metaKey) dispatch({ type: 'set', payload: { selected: [...state.selected, taskId], open: -1, showAddingTask: false } })
+		if (e.metaKey)
+			dispatch({
+				type: 'set',
+				payload: {
+					selected: state.selected.includes(taskId)
+						? [...state.selected.filter((id) => id !== taskId)]
+						: [...state.selected, taskId],
+					open: -1,
+					showAddingTask: false,
+				},
+			})
 		else if (e.shiftKey) {
 			let indexClicked = tasks.findIndex((task) => task.id === taskId)
 			let indexLast = tasks.findIndex((task) => task.id === state.selected[state.selected.length - 1])
@@ -30,7 +40,9 @@ const TaskList = () => {
 	}
 
 	const handleDeleteTask = async (taskId = state.open) => {
-		await deleteTask(taskId)
+		console.log(state.selected)
+		if (state.selected.length > 1) await state.selected.map((tId) => deleteTask(tId))
+		else await deleteTask(taskId)
 		dispatch({ type: 'set', payload: { open: -1 } })
 	}
 
@@ -48,7 +60,7 @@ const TaskList = () => {
 					style={{ backgroundColor: state.selected.includes(task.id) ? blue[1] : 'white' }}>
 					<Dropdown
 						overlay={
-							<Menu>
+							<Menu id='contextmenu'>
 								<Menu.Item key='delete' danger onClick={() => handleDeleteTask(task.id)}>
 									Delete task
 								</Menu.Item>
