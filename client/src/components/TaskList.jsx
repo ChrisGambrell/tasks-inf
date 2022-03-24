@@ -37,7 +37,8 @@ const TaskList = () => {
 			}
 
 			dispatch({ type: 'set', payload: { selected: [...state.selected, ...taskIdsToAdd], open: -1, showAddingTask: false } })
-		} else if (!e.metaKey && !e.shiftKey) dispatch({ type: 'set', payload: { selected: [taskId], open: -1, showAddingTask: false } })
+		} else if (!e.metaKey && !e.shiftKey && state.open !== taskId)
+			dispatch({ type: 'set', payload: { selected: [taskId], open: -1, showAddingTask: false } })
 	}
 
 	const handleDeleteTask = async (taskId = state.open) => {
