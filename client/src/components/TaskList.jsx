@@ -63,7 +63,13 @@ const TaskList = () => {
 									<Col span={1}>
 										<Checkbox
 											checked={task.completed}
-											onChange={() => editTask({ taskId: task.id, data: { completed: !task.completed } })}
+											onChange={() =>
+												state.selected.length > 1
+													? state.selected.map((taskId) =>
+															editTask({ taskId, data: { completed: !task.completed } })
+													  )
+													: editTask({ taskId: task.id, data: { completed: !task.completed } })
+											}
 										/>
 									</Col>
 									<Col span={23} style={{ paddingLeft: 3 }}>
