@@ -13,7 +13,7 @@ const App = () => {
 		const handleKeyDown = (e) => {
 			switch (e.keyCode) {
 				case 27:
-					dispatch({ type: 'set', payload: { open: -1, selected: [] } })
+					dispatch({ type: 'set', payload: { open: -1, selected: [], showAddingTask: false } })
 					break
 				default:
 					break
