@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
-import { Button, Checkbox, Col, Form, Input, message, Row } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row, Tooltip, Typography } from 'antd'
+import { CalendarOutlined, FlagOutlined, TagOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
 
@@ -72,15 +73,46 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 							onChange={(e) => setNotes(e.target.value)}
 							bordered={false}
 						/>
-						<Button
-							htmlType='submit'
-							type='primary'
-							size='small'
+						<Row
 							style={{
 								marginTop: 10,
 							}}>
-							Save
-						</Button>
+							<Col span={12}>
+								<Button htmlType='submit' type='primary' size='small'>
+									Save
+								</Button>
+							</Col>
+							<Col span={12} style={{ textAlign: 'right' }}>
+								<Tooltip title='When'>
+									<Button type='text' onClick={() => console.log('TODO')}>
+										<Typography.Text type='secondary'>
+											<CalendarOutlined />
+										</Typography.Text>
+									</Button>
+								</Tooltip>
+								<Tooltip title='Tags'>
+									<Button type='text' onClick={() => console.log('TODO')}>
+										<Typography.Text type='secondary'>
+											<TagOutlined />
+										</Typography.Text>
+									</Button>
+								</Tooltip>
+								<Tooltip title='Checklist'>
+									<Button type='text' onClick={() => console.log('TODO')}>
+										<Typography.Text type='secondary'>
+											<UnorderedListOutlined />
+										</Typography.Text>
+									</Button>
+								</Tooltip>
+								<Tooltip title='Deadline'>
+									<Button type='text' onClick={() => console.log('TODO')}>
+										<Typography.Text type='secondary'>
+											<FlagOutlined />
+										</Typography.Text>
+									</Button>
+								</Tooltip>
+							</Col>
+						</Row>
 					</Form>
 				</Col>
 			</Row>
