@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Col, Checkbox, Dropdown, Menu, Row, Typography } from 'antd'
 import { blue } from '@ant-design/colors'
-import { FileOutlined } from '@ant-design/icons'
+import { FileOutlined, StarFilled } from '@ant-design/icons'
 import { useDeleteTask, useEditTask, useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { TaskForm } from '.'
@@ -155,6 +155,9 @@ const TaskList = ({ query: listQuery = {} }) => {
 											/>
 										</Col>
 										<Col span={23} style={{ paddingLeft: 3 }}>
+											{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && (
+												<StarFilled style={{ color: 'gold' }} />
+											)}{' '}
 											{task.title}{' '}
 											{task.notes && (
 												<Typography.Text type='secondary' style={{ marginLeft: 5 }}>
