@@ -82,7 +82,7 @@ const App = () => {
 										maxWidth: 600,
 										margin: '0 auto',
 									}}>
-									<TaskList />
+									<TaskList query={{ when: new Date().toLocaleDateString() }} />
 									<TaskToolbar />
 								</Col>
 							</Row>
