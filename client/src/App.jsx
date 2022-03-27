@@ -1,4 +1,5 @@
 import { createContext, useEffect, useReducer } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { Col, Row } from 'antd'
 import store from './app/store'
 import { SideMenu, TaskList, TaskToolbar } from './components'
@@ -47,20 +48,48 @@ const App = () => {
 	return (
 		<div className='App'>
 			<TasksContext.Provider value={[state, dispatch]}>
-				<Row style={{ margin: '25px 0' }}>
-					<Col sm={5}>
-						<SideMenu />
-					</Col>
-					<Col
-						sm={19}
-						style={{
-							maxWidth: 600,
-							margin: '0 auto',
-						}}>
-						<TaskList />
-						<TaskToolbar />
-					</Col>
-				</Row>
+				<Routes>
+					<Route
+						exact
+						path='/'
+						element={
+							<Row style={{ margin: '25px 0' }}>
+								<Col sm={5}>
+									<SideMenu />
+								</Col>
+								<Col
+									sm={19}
+									style={{
+										maxWidth: 600,
+										margin: '0 auto',
+									}}>
+									<TaskList />
+									<TaskToolbar />
+								</Col>
+							</Row>
+						}
+					/>
+					<Route
+						path='/today'
+						element={
+							<Row style={{ margin: '25px 0' }}>
+								<Col sm={5}>
+									<SideMenu />
+								</Col>
+								<Col
+									sm={19}
+									style={{
+										maxWidth: 600,
+										margin: '0 auto',
+									}}>
+									<TaskList />
+									<TaskToolbar />
+								</Col>
+							</Row>
+						}
+					/>
+					<Route path='*' element={<Navigate to='/' />} />
+				</Routes>
 			</TasksContext.Provider>
 		</div>
 	)
