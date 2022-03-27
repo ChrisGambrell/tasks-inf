@@ -48,7 +48,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 	}, [type, task])
 
 	return (
-		<Tag className={className}>
+		<Tag className={`TaskForm ${className}`}>
 			<Row>
 				<Col span={1}>
 					<Checkbox
@@ -70,13 +70,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 							onChange={(e) => setTitle(e.target.value)}
 							bordered={false}
 						/>
-						<Input.TextArea
-							placeholder='Notes'
-							value={notes}
-							allowClear
-							onChange={(e) => setNotes(e.target.value)}
-							bordered={false}
-						/>
+						<Input.TextArea placeholder='Notes' value={notes} onChange={(e) => setNotes(e.target.value)} bordered={false} />
 						<Row
 							style={{
 								marginTop: 10,
@@ -88,7 +82,11 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 								{task.when && (
 									<TaskDetail
 										icon={<CalendarOutlined style={{ color: 'red' }} />}
-										title={new Date(task.when).toLocaleDateString()}
+										title={
+											new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
+												? 'Today'
+												: new Date(task.when).toLocaleDateString()
+										}
 										onClick={() => editTask.mutate({ taskId: task.id, data: { when: null } })}
 									/>
 								)}
