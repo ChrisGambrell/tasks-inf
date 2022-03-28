@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import moment from 'moment'
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Row, Tooltip, Typography } from 'antd'
-import { CalendarOutlined, FlagOutlined, TagOutlined, UnorderedListOutlined } from '@ant-design/icons'
+import { Calendar, Flag3, List, Tag as TagIcon } from 'tabler-icons-react'
 import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
 import { TaskDetail } from '.'
@@ -81,7 +81,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 								</Button> */}
 								{task.when && (
 									<TaskDetail
-										icon={<CalendarOutlined style={{ color: 'red' }} />}
+										icon={<Calendar style={{ color: 'red' }} />}
 										title={
 											new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
 												? 'Today'
@@ -107,7 +107,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 											<Tooltip title='When'>
 												<Button type='text' onClick={() => setShowWhen(true)}>
 													<Typography.Text type='secondary'>
-														<CalendarOutlined />
+														<Calendar />
 													</Typography.Text>
 												</Button>
 											</Tooltip>
@@ -117,21 +117,21 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 								<Tooltip title='Tags'>
 									<Button type='text' onClick={() => console.log('TODO')}>
 										<Typography.Text type='secondary'>
-											<TagOutlined />
+											<TagIcon />
 										</Typography.Text>
 									</Button>
 								</Tooltip>
 								<Tooltip title='Checklist'>
 									<Button type='text' onClick={() => console.log('TODO')}>
 										<Typography.Text type='secondary'>
-											<UnorderedListOutlined />
+											<List />
 										</Typography.Text>
 									</Button>
 								</Tooltip>
 								<Tooltip title='Deadline'>
 									<Button type='text' onClick={() => console.log('TODO')}>
 										<Typography.Text type='secondary'>
-											<FlagOutlined />
+											<Flag3 />
 										</Typography.Text>
 									</Button>
 								</Tooltip>

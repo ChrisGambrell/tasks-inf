@@ -1,14 +1,6 @@
 import { useContext } from 'react'
 import { Button } from 'antd'
-import {
-	ArrowRightOutlined,
-	CalendarOutlined,
-	DeleteOutlined,
-	EllipsisOutlined,
-	PlusOutlined,
-	RightSquareOutlined,
-	SearchOutlined,
-} from '@ant-design/icons'
+import { ArrowBarRight, ArrowNarrowRight, Calendar, Dots, Plus, Search, Trash } from 'tabler-icons-react'
 import { useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 
@@ -27,7 +19,7 @@ const TaskToolbar = () => {
 			{state.open > -1 || state.showAddingTask ? (
 				<div>
 					<Button type='text' onClick={() => console.log('TODO')}>
-						<ArrowRightOutlined />
+						<ArrowNarrowRight />
 					</Button>
 					<Button
 						type='text'
@@ -35,28 +27,28 @@ const TaskToolbar = () => {
 							if (state.showAddingTask) dispatch({ type: 'set', payload: { showAddingTask: false } })
 							else handleDeleteTask()
 						}}>
-						<DeleteOutlined />
+						<Trash />
 					</Button>
 					<Button type='text' onClick={() => console.log('TODO')}>
-						<EllipsisOutlined />
+						<Dots />
 					</Button>
 				</div>
 			) : (
 				<div>
 					<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true, selected: [] } })}>
-						<PlusOutlined />
+						<Plus />
 					</Button>
 					<Button type='text' onClick={() => console.log('TODO')}>
-						<RightSquareOutlined />
+						<ArrowBarRight />
 					</Button>
 					<Button type='text' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
-						<CalendarOutlined />
+						<Calendar />
 					</Button>
 					<Button type='text' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
-						<ArrowRightOutlined />
+						<ArrowNarrowRight />
 					</Button>
 					<Button type='text' onClick={() => console.log('TODO')}>
-						<SearchOutlined />
+						<Search />
 					</Button>
 				</div>
 			)}
