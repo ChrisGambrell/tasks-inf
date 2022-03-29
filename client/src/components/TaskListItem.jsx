@@ -1,6 +1,5 @@
 import { forwardRef, useContext } from 'react'
-import { Col, Checkbox, Row, Typography } from 'antd'
-import { blue } from '@ant-design/colors'
+import { Checkbox, Group, List } from '@mantine/core'
 import { File, Star } from 'tabler-icons-react'
 import { useEditTask, useTasks } from '../hooks'
 import { TasksContext } from '../App'
@@ -43,26 +42,26 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 	}
 
 	return (
-		<li
-			className={`task-item ${state.open === task.id ? 'active' : ''}`}
-			ref={ref}
-			{...props}
-			key={task.id}
-			id={`task-${task.id}`}
-			onContextMenu={(e) => {
-				e.preventDefault()
-				handleSelectTask(e, task.id)
-				props['onClick']()
-			}}
-			onClick={(e) => handleSelectTask(e, task.id)}
-			onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}
-			style={{ backgroundColor: state.selected.includes(task.id) ? blue[1] : 'white' }}>
-			{state.open === task.id ? (
-				<TaskForm type='edit' task={task} />
-			) : (
-				<Row>
-					<Col span={1}>
+		<>
+			<List.Item
+				className={`task-item ${state.open === task.id ? 'active' : ''}`}
+				ref={ref}
+				{...props}
+				id={`task-${task.id}`}
+				onContextMenu={(e) => {
+					e.preventDefault()
+					handleSelectTask(e, task.id)
+					props['onClick']()
+				}}
+				onClick={(e) => handleSelectTask(e, task.id)}
+				onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}
+				sx={(themes) => ({ backgroundColor: state.selected.includes(task.id) ? themes.colors.blue[1] : 'white' })}>
+				{state.open === task.id ? (
+					<TaskForm type='edit' task={task} />
+				) : (
+					<Group spacing='xs'>
 						<Checkbox
+							size='xs'
 							checked={task.completed}
 							onChange={() =>
 								state.selected.length > 1
@@ -70,19 +69,15 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 									: editTask({ taskId: task.id, data: { completed: !task.completed } })
 							}
 						/>
-					</Col>
-					<Col span={23} style={{ paddingLeft: 3 }}>
-						{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && <Star style={{ color: 'gold' }} />}{' '}
-						{task.title}{' '}
-						{task.notes && (
-							<Typography.Text type='secondary' style={{ marginLeft: 5 }}>
-								<File />
-							</Typography.Text>
+						{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && (
+							<Star style={{ color: 'gold' }} size='16' />
 						)}
-					</Col>
-				</Row>
-			)}
-		</li>
+						{task.title}
+						{task.notes && <File color='lightgray' size='16' />}
+					</Group>
+				)}
+			</List.Item>
+		</>
 	)
 })
 
