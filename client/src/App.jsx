@@ -53,7 +53,7 @@ const App = () => {
 						exact
 						path='/'
 						element={
-							<Row style={{ margin: '25px 0' }}>
+							<Row>
 								<Col sm={5}>
 									<SideMenu />
 								</Col>
@@ -72,7 +72,7 @@ const App = () => {
 					<Route
 						path='/today'
 						element={
-							<Row style={{ margin: '25px 0' }}>
+							<Row>
 								<Col sm={5}>
 									<SideMenu />
 								</Col>
