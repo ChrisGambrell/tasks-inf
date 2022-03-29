@@ -1,5 +1,5 @@
-import { forwardRef, useContext } from 'react'
-import { Divider, Menu, UnstyledButton } from '@mantine/core'
+import { useContext } from 'react'
+import { Divider, Menu } from '@mantine/core'
 import { useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 

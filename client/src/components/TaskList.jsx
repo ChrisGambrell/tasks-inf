@@ -6,7 +6,7 @@ import { TaskContextMenu, TaskForm, TaskListItem } from '.'
 const TaskList = ({ query: listQuery = {} }) => {
 	const { data: tasks } = useTasks()
 
-	const [state, dispatch] = useContext(TasksContext)
+	const [state, _dispatch] = useContext(TasksContext)
 
 	return (
 		<ul style={{ listStyle: 'none' }}>
