@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Col, Row } from 'antd'
+import { Grid } from '@mantine/core'
 import store from './app/store'
 import { SideMenu, TaskList, TaskToolbar } from './components'
 import './App.min.css'
@@ -53,39 +53,29 @@ const App = () => {
 						exact
 						path='/'
 						element={
-							<Row>
-								<Col sm={5}>
+							<Grid>
+								<Grid.Col span={3}>
 									<SideMenu />
-								</Col>
-								<Col
-									sm={19}
-									style={{
-										maxWidth: 600,
-										margin: '0 auto',
-									}}>
+								</Grid.Col>
+								<Grid.Col span={9} sx={() => ({ maxWidth: 600, margin: '0 auto' })}>
 									<TaskList />
 									<TaskToolbar />
-								</Col>
-							</Row>
+								</Grid.Col>
+							</Grid>
 						}
 					/>
 					<Route
 						path='/today'
 						element={
-							<Row>
-								<Col sm={5}>
+							<Grid>
+								<Grid.Col span={3}>
 									<SideMenu />
-								</Col>
-								<Col
-									sm={19}
-									style={{
-										maxWidth: 600,
-										margin: '0 auto',
-									}}>
+								</Grid.Col>
+								<Grid.Col span={9} sx={() => ({ maxWidth: 600, margin: '0 auto' })}>
 									<TaskList query={{ when: new Date().toLocaleDateString() }} />
 									<TaskToolbar />
-								</Col>
-							</Row>
+								</Grid.Col>
+							</Grid>
 						}
 					/>
 					<Route path='*' element={<Navigate to='/' />} />

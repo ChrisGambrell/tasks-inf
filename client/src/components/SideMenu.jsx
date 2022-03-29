@@ -66,7 +66,7 @@ const SideMenu = () => {
 	const { classes } = useStyles()
 
 	return (
-		<Navbar width={{ sm: 300 }} p='md' className={classes.navbar}>
+		<Navbar p='md' className={classes.navbar}>
 			<Navbar.Section>
 				<Title order={1}>
 					Tasks <Infinity />
