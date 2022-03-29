@@ -19,7 +19,7 @@ const TaskToolbar = () => {
 			{state.open > -1 || state.showAddingTask ? (
 				<div>
 					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
-						<ArrowNarrowRight />
+						<ArrowNarrowRight size={16} />
 					</Button>
 					<Button
 						color='dark'
@@ -28,10 +28,10 @@ const TaskToolbar = () => {
 							if (state.showAddingTask) dispatch({ type: 'set', payload: { showAddingTask: false } })
 							else handleDeleteTask()
 						}}>
-						<Trash />
+						<Trash size={16} />
 					</Button>
 					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
-						<Dots />
+						<Dots size={16} />
 					</Button>
 				</div>
 			) : (
@@ -40,19 +40,19 @@ const TaskToolbar = () => {
 						color='dark'
 						variant='subtle'
 						onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true, selected: [] } })}>
-						<Plus />
+						<Plus size={16} />
 					</Button>
 					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
-						<ArrowBarRight />
+						<ArrowBarRight size={16} />
 					</Button>
 					<Button color='dark' variant='subtle' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
-						<Calendar />
+						<Calendar size={16} />
 					</Button>
 					<Button color='dark' variant='subtle' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
-						<ArrowNarrowRight />
+						<ArrowNarrowRight size={16} />
 					</Button>
 					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
-						<Search />
+						<Search size={16} />
 					</Button>
 				</div>
 			)}

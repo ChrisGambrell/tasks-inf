@@ -1,5 +1,5 @@
 import { forwardRef, useContext } from 'react'
-import { Checkbox, Group, List, createStyles, useMantineTheme } from '@mantine/core'
+import { Checkbox, Group, useMantineTheme } from '@mantine/core'
 import { File, Star } from 'tabler-icons-react'
 import { useEditTask, useTasks } from '../hooks'
 import { TasksContext } from '../App'

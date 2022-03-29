@@ -107,7 +107,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 											<Tooltip title='When'>
 												<Button type='text' onClick={() => setShowWhen(true)}>
 													<Typography.Text type='secondary'>
-														<Calendar />
+														<Calendar size={16} />
 													</Typography.Text>
 												</Button>
 											</Tooltip>
@@ -117,21 +117,21 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 								<Tooltip title='Tags'>
 									<Button type='text' onClick={() => console.log('TODO')}>
 										<Typography.Text type='secondary'>
-											<TagIcon />
+											<TagIcon size={16} />
 										</Typography.Text>
 									</Button>
 								</Tooltip>
 								<Tooltip title='Checklist'>
 									<Button type='text' onClick={() => console.log('TODO')}>
 										<Typography.Text type='secondary'>
-											<List />
+											<List size={16} />
 										</Typography.Text>
 									</Button>
 								</Tooltip>
 								<Tooltip title='Deadline'>
 									<Button type='text' onClick={() => console.log('TODO')}>
 										<Typography.Text type='secondary'>
-											<Flag3 />
+											<Flag3 size={16} />
 										</Typography.Text>
 									</Button>
 								</Tooltip>
