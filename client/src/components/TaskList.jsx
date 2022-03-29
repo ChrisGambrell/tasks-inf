@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import { List } from '@mantine/core'
 import { useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { TaskContextMenu, TaskForm, TaskListItem } from '.'
@@ -10,7 +9,7 @@ const TaskList = ({ query: listQuery = {} }) => {
 	const [state, _dispatch] = useContext(TasksContext)
 
 	return (
-		<List size='sm' sx={(themes) => ({ listStyle: 'none' })}>
+		<ul style={{ listStyle: 'none' }}>
 			{state.showAddingTask && <TaskForm className='task-item active' type='create' as='li' />}
 			{tasks
 				?.filter((task) => {
@@ -31,7 +30,7 @@ const TaskList = ({ query: listQuery = {} }) => {
 				.map((task) => (
 					<TaskContextMenu key={task.id} control={<TaskListItem task={task} />} />
 				))}
-		</List>
+		</ul>
 	)
 }
 

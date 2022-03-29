@@ -1,5 +1,5 @@
 import { forwardRef, useContext } from 'react'
-import { Checkbox, Group, List } from '@mantine/core'
+import { Checkbox, Group, List, createStyles, useMantineTheme } from '@mantine/core'
 import { File, Star } from 'tabler-icons-react'
 import { useEditTask, useTasks } from '../hooks'
 import { TasksContext } from '../App'
@@ -10,6 +10,8 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 	const editTask = useEditTask().mutate
 
 	const [state, dispatch] = useContext(TasksContext)
+
+	const { colors } = useMantineTheme()
 
 	const handleSelectTask = (e, taskId) => {
 		if (e.button === 2) return dispatch({ type: 'set', payload: { selected: [taskId], open: -1, showAddingTask: false } })
@@ -42,42 +44,40 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 	}
 
 	return (
-		<>
-			<List.Item
-				className={`task-item ${state.open === task.id ? 'active' : ''}`}
-				ref={ref}
-				{...props}
-				id={`task-${task.id}`}
-				onContextMenu={(e) => {
-					e.preventDefault()
-					handleSelectTask(e, task.id)
-					props['onClick']()
-				}}
-				onClick={(e) => handleSelectTask(e, task.id)}
-				onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}
-				sx={(themes) => ({ backgroundColor: state.selected.includes(task.id) ? themes.colors.blue[1] : 'white' })}>
-				{state.open === task.id ? (
-					<TaskForm type='edit' task={task} />
-				) : (
-					<Group spacing='xs'>
-						<Checkbox
-							size='xs'
-							checked={task.completed}
-							onChange={() =>
-								state.selected.length > 1
-									? state.selected.map((taskId) => editTask({ taskId, data: { completed: !task.completed } }))
-									: editTask({ taskId: task.id, data: { completed: !task.completed } })
-							}
-						/>
-						{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && (
-							<Star style={{ color: 'gold' }} size='16' />
-						)}
-						{task.title}
-						{task.notes && <File color='lightgray' size='16' />}
-					</Group>
-				)}
-			</List.Item>
-		</>
+		<li
+			className={`task-item ${state.open === task.id ? 'active' : ''}`}
+			ref={ref}
+			{...props}
+			id={`task-${task.id}`}
+			onContextMenu={(e) => {
+				e.preventDefault()
+				handleSelectTask(e, task.id)
+				props['onClick']()
+			}}
+			onClick={(e) => handleSelectTask(e, task.id)}
+			onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}
+			style={{ backgroundColor: state.selected.includes(task.id) ? colors.blue[1] : 'white' }}>
+			{state.open === task.id ? (
+				<TaskForm type='edit' task={task} />
+			) : (
+				<Group spacing='xs'>
+					<Checkbox
+						size='xs'
+						checked={task.completed}
+						onChange={() =>
+							state.selected.length > 1
+								? state.selected.map((taskId) => editTask({ taskId, data: { completed: !task.completed } }))
+								: editTask({ taskId: task.id, data: { completed: !task.completed } })
+						}
+					/>
+					{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && (
+						<Star style={{ color: 'gold' }} size='16' />
+					)}
+					{task.title}
+					{task.notes && <File color={colors.gray[5]} size='16' />}
+				</Group>
+			)}
+		</li>
 	)
 })
 
