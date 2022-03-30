@@ -29,7 +29,7 @@ const App = () => {
 					currElement.id === 'Toolbar' ||
 					currElement.id.includes('task-') ||
 					currElement.id === 'contextmenu' ||
-					currElement.className?.includes('ant-picker')
+					currElement.className?.includes('mantine-DatePicker')
 				)
 					return
 			}

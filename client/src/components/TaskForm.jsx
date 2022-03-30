@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
-import moment from 'moment'
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Row, Tooltip, Typography } from 'antd'
+import { useContext, useEffect, useState } from 'react'
+import { message } from 'antd'
+import { ActionIcon, Checkbox, Grid, Group, Stack, Textarea, TextInput, Tooltip } from '@mantine/core'
+import { DatePicker } from '@mantine/dates'
 import { Calendar, Flag3, List, Tag as TagIcon } from 'tabler-icons-react'
 import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
@@ -49,8 +50,8 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 
 	return (
 		<Tag className={`TaskForm ${className}`}>
-			<Row>
-				<Col span={1}>
+			<Stack>
+				<Group style={{ display: 'flex', alignItems: 'flex-start' }}>
 					<Checkbox
 						checked={type === 'create' ? completed : task.completed}
 						onChange={() =>
@@ -58,88 +59,90 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 								? setCompleted(!completed)
 								: editTask.mutate({ taskId: task.id, data: { completed: !task.completed } })
 						}
+						style={{ flex: '0', marginTop: 9 }}
 					/>
-				</Col>
-				<Col span={23} style={{ paddingLeft: 3 }}>
-					<Form onSubmitCapture={type === 'create' ? handleCreateTask : handleEditTask}>
-						<Input
-							type='text'
-							size='small'
-							placeholder='New task'
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							bordered={false}
-						/>
-						<Input.TextArea placeholder='Notes' value={notes} onChange={(e) => setNotes(e.target.value)} bordered={false} />
-						<Row
-							style={{
-								marginTop: 10,
-							}}>
-							<Col span={4} style={{ display: 'flex', flexDirection: 'row' }}>
-								{/* <Button htmlType='submit' type='primary' size='small'>
-									Save
-								</Button> */}
-								{task.when && (
-									<TaskDetail
-										icon={<Calendar style={{ color: 'red' }} />}
-										title={
-											new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
-												? 'Today'
-												: new Date(task.when).toLocaleDateString()
-										}
-										onClick={() => editTask.mutate({ taskId: task.id, data: { when: null } })}
-									/>
-								)}
-							</Col>
-							<Col span={20} style={{ textAlign: 'right' }}>
-								{!task.when && (
-									<>
-										{showWhen ? (
-											<DatePicker
-												size='small'
-												defaultValue={task.when ? moment(task.when) : null}
-												onChange={(e) => {
-													editTask.mutate({ taskId: task.id, data: { when: e._d } })
-													setShowWhen(false)
-												}}
-											/>
-										) : (
-											<Tooltip title='When'>
-												<Button type='text' onClick={() => setShowWhen(true)}>
-													<Typography.Text type='secondary'>
-														<Calendar size={16} />
-													</Typography.Text>
-												</Button>
-											</Tooltip>
-										)}
-									</>
-								)}
-								<Tooltip title='Tags'>
-									<Button type='text' onClick={() => console.log('TODO')}>
-										<Typography.Text type='secondary'>
-											<TagIcon size={16} />
-										</Typography.Text>
-									</Button>
-								</Tooltip>
-								<Tooltip title='Checklist'>
-									<Button type='text' onClick={() => console.log('TODO')}>
-										<Typography.Text type='secondary'>
-											<List size={16} />
-										</Typography.Text>
-									</Button>
-								</Tooltip>
-								<Tooltip title='Deadline'>
-									<Button type='text' onClick={() => console.log('TODO')}>
-										<Typography.Text type='secondary'>
-											<Flag3 size={16} />
-										</Typography.Text>
-									</Button>
-								</Tooltip>
-							</Col>
-						</Row>
-					</Form>
-				</Col>
-			</Row>
+					<form onSubmit={type === 'create' ? handleCreateTask : handleEditTask} style={{ flex: '1' }}>
+						<Stack spacing={0}>
+							<TextInput
+								type='text'
+								variant='unstyled'
+								placeholder='New task'
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								autoFocus
+							/>
+							<Textarea
+								variant='unstyled'
+								placeholder='Notes'
+								value={notes}
+								onChange={(e) => setNotes(e.target.value)}
+								autosize
+							/>
+						</Stack>
+					</form>
+				</Group>
+				<Grid grow='true'>
+					<Grid.Col span={3}>
+						{task.when && (
+							<TaskDetail
+								icon={<Calendar style={{ color: 'red' }} size={16} />}
+								title={
+									new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
+										? 'Today'
+										: new Date(task.when).toLocaleDateString()
+								}
+								onClick={() => editTask.mutate({ taskId: task.id, data: { when: null } })}
+							/>
+						)}
+					</Grid.Col>
+					<Grid.Col span={8}>
+						<Group position='right'>
+							{!task.when && (
+								<>
+									{showWhen ? (
+										<DatePicker
+											size='xs'
+											placeholder='When'
+											value={task.when ? new Date(task.when) : null}
+											onChange={(e) => {
+												editTask.mutate({ taskId: task.id, data: { when: e } })
+												setShowWhen(false)
+											}}
+											firstDayOfWeek='sunday'
+											dayStyle={(date) =>
+												date.toLocaleDateString() === new Date().toLocaleDateString()
+													? { border: '1px solid lightgrey', borderRadius: 25 }
+													: null
+											}
+										/>
+									) : (
+										<Tooltip label='When' openDelay={500}>
+											<ActionIcon size='lg' onClick={() => setShowWhen(true)}>
+												<Calendar />
+											</ActionIcon>
+										</Tooltip>
+									)}
+								</>
+							)}
+							<Tooltip label='Tags' openDelay={500}>
+								<ActionIcon size='lg' onClick={() => console.log('TODO')}>
+									<TagIcon />
+								</ActionIcon>
+							</Tooltip>
+							<Tooltip label='Checklist' openDelay={500}>
+								<ActionIcon size='lg' onClick={() => console.log('TODO')}>
+									<List />
+								</ActionIcon>
+							</Tooltip>
+							<Tooltip label='Deadline' openDelay={500}>
+								<ActionIcon size='lg' onClick={() => console.log('TODO')}>
+									<Flag3 />
+								</ActionIcon>
+							</Tooltip>
+						</Group>
+					</Grid.Col>
+				</Grid>
+			</Stack>
 		</Tag>
 	)
 }
