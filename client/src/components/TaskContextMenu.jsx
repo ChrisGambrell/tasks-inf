@@ -9,9 +9,10 @@ const TaskContextMenu = ({ control, taskId }) => {
 	const [state, dispatch] = useContext(TasksContext)
 
 	const handleDeleteTask = async (taskId = state.open) => {
-		if (state.selected.length > 1) await state.selected.map((tId) => deleteTask(tId))
-		else await deleteTask(taskId)
-		dispatch({ type: 'set', payload: { open: -1 } })
+		console.log('FIXME')
+		// if (state.selected.length > 1) await state.selected.map((tId) => deleteTask(tId))
+		// else await deleteTask(taskId)
+		// dispatch({ type: 'set', payload: { open: -1 } })
 	}
 
 	return (

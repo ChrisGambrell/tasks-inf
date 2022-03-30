@@ -2,10 +2,9 @@ import { useContext, useEffect, useState } from 'react'
 import { message } from 'antd'
 import { ActionIcon, Checkbox, Grid, Group, Stack, Textarea, TextInput, Tooltip } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
-import { Calendar, Flag3, List, Tag as TagIcon } from 'tabler-icons-react'
+import { Calendar, Flag3, List, Tag as TagIcon, X } from 'tabler-icons-react'
 import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
-import { TaskDetail } from '.'
 
 const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} }) => {
 	const createTask = useCreateTask().mutate
@@ -82,20 +81,25 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 					</form>
 				</Group>
 				<Grid grow='true'>
-					<Grid.Col span={3}>
+					<Grid.Col span={1}>
 						{task.when && (
-							<TaskDetail
-								icon={<Calendar style={{ color: 'red' }} size={16} />}
-								title={
-									new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
-										? 'Today'
-										: new Date(task.when).toLocaleDateString()
-								}
-								onClick={() => editTask.mutate({ taskId: task.id, data: { when: null } })}
-							/>
+							<Stack style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+								<span className='task-detail'>
+									<Calendar color='red' size={16} />
+									<span style={{ margin: '0 5px', flex: 0 }}>
+										{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
+											? 'Today'
+											: new Date(task.when).toLocaleDateString()}
+									</span>
+									<ActionIcon size='md' onClick={() => editTask.mutate({ taskId: task.id, data: { when: null } })}>
+										<X />
+									</ActionIcon>
+								</span>
+								<span style={{ flex: 1 }}></span>
+							</Stack>
 						)}
 					</Grid.Col>
-					<Grid.Col span={8}>
+					<Grid.Col span={1}>
 						<Group position='right'>
 							{!task.when && (
 								<>
@@ -114,6 +118,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 													? { border: '1px solid lightgrey', borderRadius: 25 }
 													: null
 											}
+											style={{ width: 100 }}
 										/>
 									) : (
 										<Tooltip label='When' openDelay={500}>

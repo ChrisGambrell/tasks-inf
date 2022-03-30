@@ -1,6 +1,5 @@
 export { default as SideMenu } from './SideMenu'
 export { default as TaskContextMenu } from './TaskContextMenu'
-export { default as TaskDetail } from './TaskDetail'
 export { default as TaskForm } from './TaskForm'
 export { default as TaskList } from './TaskList'
 export { default as TaskListItem } from './TaskListItem'
