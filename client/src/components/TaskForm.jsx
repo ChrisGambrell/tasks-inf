@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
-import { message } from 'antd'
 import { ActionIcon, Checkbox, Grid, Group, Stack, Textarea, TextInput, Tooltip } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
+import { showNotification } from '@mantine/notifications'
 import { Calendar, Flag3, List, Tag as TagIcon, X } from 'tabler-icons-react'
 import { TasksContext } from '../App'
 import { useCreateTask, useEditTask } from '../hooks'
@@ -35,7 +35,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 				taskId: task.id,
 				data: { title, notes },
 			})
-			message.success('Task updated')
+			showNotification({ message: 'Task updated' })
 		} catch (err) {}
 	}
 
