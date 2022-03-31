@@ -1,48 +1,107 @@
 import { useNavigate } from 'react-router-dom'
-import { Menu } from 'antd'
-import {
-	CalendarOutlined,
-	DeleteOutlined,
-	FolderOpenOutlined,
-	HourglassOutlined,
-	InboxOutlined,
-	ReadOutlined,
-	StarOutlined,
-} from '@ant-design/icons'
+import { Navbar, Title, createStyles } from '@mantine/core'
+import { Archive, Calendar, Inbox, Infinity, Notebook, Stack2, Star, Trash } from 'tabler-icons-react'
+
+const useStyles = createStyles((theme, _params, getRef) => {
+	const icon = getRef('icon')
+
+	return {
+		navbar: {
+			backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
+		},
+
+		title: {
+			textTransform: 'uppercase',
+			letterSpacing: -0.25,
+		},
+
+		link: {
+			...theme.fn.focusStyles(),
+			display: 'flex',
+			alignItems: 'center',
+			textDecoration: 'none',
+			fontSize: theme.fontSizes.sm,
+			color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
+			padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
+			borderRadius: theme.radius.sm,
+			fontWeight: 500,
+
+			'&:hover': {
+				backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+				color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+
+				[`& .${icon}`]: {
+					color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+				},
+			},
+		},
+
+		linkIcon: {
+			ref: icon,
+			color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
+			marginRight: theme.spacing.sm,
+		},
+
+		linkActive: {
+			'&, &:hover': {
+				backgroundColor:
+					theme.colorScheme === 'dark'
+						? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
+						: theme.colors[theme.primaryColor][0],
+				color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 7],
+				[`& .${icon}`]: {
+					color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 7],
+				},
+			},
+		},
+
+		footer: {
+			borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+			paddingTop: theme.spacing.md,
+		},
+	}
+})
 
 const SideMenu = () => {
-	const navigate = useNavigate()
+	const { classes } = useStyles()
 
 	return (
-		<>
-			<h1 style={{ marginLeft: 25 }}>Tasks &infin;</h1>
-			<Menu selectedKeys={window.location.pathname} mode='inline'>
-				<Menu.Item key='1' onClick={() => console.log('TODO')}>
-					<InboxOutlined /> Index
-				</Menu.Item>
-				<Menu.Item key='/today' onClick={() => navigate('/today')}>
-					<StarOutlined /> Today
-				</Menu.Item>
-				<Menu.Item key='3' onClick={() => console.log('TODO')}>
-					<CalendarOutlined /> Upcoming
-				</Menu.Item>
-				<Menu.Item key='4' onClick={() => console.log('TODO')}>
-					<HourglassOutlined /> Anytime
-				</Menu.Item>
-				<Menu.Item key='5' onClick={() => console.log('TODO')}>
-					<FolderOpenOutlined /> Someday
-				</Menu.Item>
-				<Menu.Item key='6' onClick={() => console.log('TODO')}>
-					<ReadOutlined /> Logbook
-				</Menu.Item>
-				<Menu.Item key='7' onClick={() => console.log('TODO')}>
-					<DeleteOutlined /> Trash
-				</Menu.Item>
-				<Menu.Item key='/' onClick={() => navigate('/')}>
-					Meet Tasks &infin;
-				</Menu.Item>
-			</Menu>
-		</>
+		<Navbar p='md' className={classes.navbar}>
+			<Navbar.Section>
+				<Title order={1}>
+					Tasks <Infinity />
+				</Title>
+			</Navbar.Section>
+
+			<Navbar.Section grow mt='xl'>
+				<SideMenuItem icon={Inbox} label='Inbox' to='/' />
+				<SideMenuItem icon={Star} label='Today' to='/today' />
+				<SideMenuItem icon={Calendar} label='Upcoming' to='TODO' />
+				<SideMenuItem icon={Stack2} label='Anytime' to='TODO' />
+				<SideMenuItem icon={Archive} label='Someday' to='TODO' />
+				<SideMenuItem icon={Notebook} label='Logbook' to='TODO' />
+				<SideMenuItem icon={Trash} label='Trash' to='TODO' />
+				<SideMenuItem icon={Infinity} label='Meet Tasks' to='/' />
+			</Navbar.Section>
+		</Navbar>
+	)
+}
+
+const SideMenuItem = ({ label, icon: Icon, to }) => {
+	const navigate = useNavigate()
+	const { classes, cx } = useStyles()
+
+	return (
+		<a
+			className={cx(classes.link, { [classes.linkActive]: to === window.location.pathname })}
+			key={label}
+			onClick={(e) => {
+				e.preventDefault()
+				navigate(to)
+			}}>
+			<Icon className={classes.linkIcon} />
+			<span>{label}</span>
+		</a>
 	)
 }
 

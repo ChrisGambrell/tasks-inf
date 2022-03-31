@@ -1,6 +1,7 @@
 import { createContext, useEffect, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Col, Row } from 'antd'
+import { Grid } from '@mantine/core'
+import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { SideMenu, TaskList, TaskToolbar } from './components'
 import './App.min.css'
@@ -29,7 +30,7 @@ const App = () => {
 					currElement.id === 'Toolbar' ||
 					currElement.id.includes('task-') ||
 					currElement.id === 'contextmenu' ||
-					currElement.className?.includes('ant-picker')
+					currElement.className?.includes('mantine-DatePicker')
 				)
 					return
 			}
@@ -47,50 +48,42 @@ const App = () => {
 
 	return (
 		<div className='App'>
-			<TasksContext.Provider value={[state, dispatch]}>
-				<Routes>
-					<Route
-						exact
-						path='/'
-						element={
-							<Row style={{ margin: '25px 0' }}>
-								<Col sm={5}>
-									<SideMenu />
-								</Col>
-								<Col
-									sm={19}
-									style={{
-										maxWidth: 600,
-										margin: '0 auto',
-									}}>
-									<TaskList />
-									<TaskToolbar />
-								</Col>
-							</Row>
-						}
-					/>
-					<Route
-						path='/today'
-						element={
-							<Row style={{ margin: '25px 0' }}>
-								<Col sm={5}>
-									<SideMenu />
-								</Col>
-								<Col
-									sm={19}
-									style={{
-										maxWidth: 600,
-										margin: '0 auto',
-									}}>
-									<TaskList query={{ when: new Date().toLocaleDateString() }} />
-									<TaskToolbar />
-								</Col>
-							</Row>
-						}
-					/>
-					<Route path='*' element={<Navigate to='/' />} />
-				</Routes>
-			</TasksContext.Provider>
+			<NotificationsProvider>
+				<TasksContext.Provider value={[state, dispatch]}>
+					<Routes>
+						<Route
+							exact
+							path='/'
+							element={
+								<Grid>
+									<Grid.Col span={3}>
+										<SideMenu />
+									</Grid.Col>
+									<Grid.Col span={9} sx={() => ({ maxWidth: 600, margin: '0 auto' })}>
+										<TaskList />
+										<TaskToolbar />
+									</Grid.Col>
+								</Grid>
+							}
+						/>
+						<Route
+							path='/today'
+							element={
+								<Grid>
+									<Grid.Col span={3}>
+										<SideMenu />
+									</Grid.Col>
+									<Grid.Col span={9} sx={() => ({ maxWidth: 600, margin: '0 auto' })}>
+										<TaskList query={{ when: new Date().toLocaleDateString() }} />
+										<TaskToolbar />
+									</Grid.Col>
+								</Grid>
+							}
+						/>
+						<Route path='*' element={<Navigate to='/' />} />
+					</Routes>
+				</TasksContext.Provider>
+			</NotificationsProvider>
 		</div>
 	)
 }

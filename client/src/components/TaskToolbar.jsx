@@ -1,14 +1,6 @@
 import { useContext } from 'react'
-import { Button } from 'antd'
-import {
-	ArrowRightOutlined,
-	CalendarOutlined,
-	DeleteOutlined,
-	EllipsisOutlined,
-	PlusOutlined,
-	RightSquareOutlined,
-	SearchOutlined,
-} from '@ant-design/icons'
+import { Button } from '@mantine/core'
+import { ArrowBarRight, ArrowNarrowRight, Calendar, Dots, Plus, Search, Trash } from 'tabler-icons-react'
 import { useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 
@@ -26,37 +18,41 @@ const TaskToolbar = () => {
 		<div className='Toolbar' id='toolbar'>
 			{state.open > -1 || state.showAddingTask ? (
 				<div>
-					<Button type='text' onClick={() => console.log('TODO')}>
-						<ArrowRightOutlined />
+					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
+						<ArrowNarrowRight size={16} />
 					</Button>
 					<Button
-						type='text'
+						color='dark'
+						variant='subtle'
 						onClick={() => {
 							if (state.showAddingTask) dispatch({ type: 'set', payload: { showAddingTask: false } })
 							else handleDeleteTask()
 						}}>
-						<DeleteOutlined />
+						<Trash size={16} />
 					</Button>
-					<Button type='text' onClick={() => console.log('TODO')}>
-						<EllipsisOutlined />
+					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
+						<Dots size={16} />
 					</Button>
 				</div>
 			) : (
 				<div>
-					<Button type='text' onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true, selected: [] } })}>
-						<PlusOutlined />
+					<Button
+						color='dark'
+						variant='subtle'
+						onClick={() => dispatch({ type: 'set', payload: { showAddingTask: true, selected: [] } })}>
+						<Plus size={16} />
 					</Button>
-					<Button type='text' onClick={() => console.log('TODO')}>
-						<RightSquareOutlined />
+					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
+						<ArrowBarRight size={16} />
 					</Button>
-					<Button type='text' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
-						<CalendarOutlined />
+					<Button color='dark' variant='subtle' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
+						<Calendar size={16} />
 					</Button>
-					<Button type='text' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
-						<ArrowRightOutlined />
+					<Button color='dark' variant='subtle' disabled={state.selected.length === 0} onClick={() => console.log('TODO')}>
+						<ArrowNarrowRight size={16} />
 					</Button>
-					<Button type='text' onClick={() => console.log('TODO')}>
-						<SearchOutlined />
+					<Button color='dark' variant='subtle' onClick={() => console.log('TODO')}>
+						<Search size={16} />
 					</Button>
 				</div>
 			)}

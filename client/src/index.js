@@ -3,18 +3,17 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { message } from 'antd'
+import { showNotification } from '@mantine/notifications'
 import App from './App'
-import 'antd/dist/antd.min.css'
 import './index.css'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			onError: (error) => error.response?.data?.errors?.map((e) => message.error(e)),
+			onError: (error) => error.response?.data?.errors?.map((e) => showNotification({ message: e, color: 'red' })),
 		},
 		mutations: {
-			onError: (error) => error.response?.data?.errors?.map((e) => message.error(e)),
+			onError: (error) => error.response?.data?.errors?.map((e) => showNotification({ message: e, color: 'red' })),
 		},
 	},
 })
