@@ -4,7 +4,6 @@ import { Grid } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { SideMenu, TaskList, TaskToolbar } from './components'
-import './App.min.css'
 
 export const TasksContext = createContext()
 
@@ -59,7 +58,7 @@ const App = () => {
 									<Grid.Col span={3}>
 										<SideMenu />
 									</Grid.Col>
-									<Grid.Col span={9} sx={() => ({ maxWidth: 600, margin: '0 auto' })}>
+									<Grid.Col span={9}>
 										<TaskList />
 										<TaskToolbar />
 									</Grid.Col>
@@ -73,7 +72,7 @@ const App = () => {
 									<Grid.Col span={3}>
 										<SideMenu />
 									</Grid.Col>
-									<Grid.Col span={9} sx={() => ({ maxWidth: 600, margin: '0 auto' })}>
+									<Grid.Col span={9}>
 										<TaskList query={{ when: new Date().toLocaleDateString() }} />
 										<TaskToolbar />
 									</Grid.Col>

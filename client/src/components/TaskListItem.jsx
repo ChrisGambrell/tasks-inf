@@ -45,7 +45,6 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 
 	return (
 		<li
-			className={`task-item ${state.open === task.id ? 'active' : ''}`}
 			ref={ref}
 			{...props}
 			id={`task-${task.id}`}
@@ -55,8 +54,7 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 				props['onClick']()
 			}}
 			onClick={(e) => handleSelectTask(e, task.id)}
-			onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}
-			style={{ backgroundColor: state.selected.includes(task.id) ? colors.blue[1] : 'white' }}>
+			onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id, selected: [] } })}>
 			{state.open === task.id ? (
 				<TaskForm type='edit' task={task} />
 			) : (
@@ -70,9 +68,7 @@ const TaskListItem = forwardRef(({ task, ...props }, ref) => {
 								: editTask({ taskId: task.id, data: { completed: !task.completed } })
 						}
 					/>
-					{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && (
-						<Star style={{ color: 'gold' }} size='16' />
-					)}
+					{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString() && <Star size='16' />}
 					{task.title}
 					{task.notes && <File color={colors.gray[5]} size='16' />}
 				</Group>

@@ -48,9 +48,9 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 	}, [type, task])
 
 	return (
-		<Tag className={`TaskForm ${className}`}>
+		<Tag>
 			<Stack>
-				<Group style={{ display: 'flex', alignItems: 'flex-start' }}>
+				<Group>
 					<Checkbox
 						checked={type === 'create' ? completed : task.completed}
 						onChange={() =>
@@ -58,9 +58,8 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 								? setCompleted(!completed)
 								: editTask.mutate({ taskId: task.id, data: { completed: !task.completed } })
 						}
-						style={{ flex: '0', marginTop: 9 }}
 					/>
-					<form onSubmit={type === 'create' ? handleCreateTask : handleEditTask} style={{ flex: '1' }}>
+					<form onSubmit={type === 'create' ? handleCreateTask : handleEditTask}>
 						<Stack spacing={0}>
 							<TextInput
 								type='text'
@@ -83,10 +82,10 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 				<Grid grow='true'>
 					<Grid.Col span={1}>
 						{task.when && (
-							<Stack style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-								<span className='task-detail'>
+							<Stack>
+								<span>
 									<Calendar color='red' size={16} />
-									<span style={{ margin: '0 5px', flex: 0 }}>
+									<span>
 										{new Date(task.when).toLocaleDateString() === new Date().toLocaleDateString()
 											? 'Today'
 											: new Date(task.when).toLocaleDateString()}
@@ -95,7 +94,7 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 										<X />
 									</ActionIcon>
 								</span>
-								<span style={{ flex: 1 }}></span>
+								<span></span>
 							</Stack>
 						)}
 					</Grid.Col>
@@ -118,7 +117,6 @@ const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} 
 													? { border: '1px solid lightgrey', borderRadius: 25 }
 													: null
 											}
-											style={{ width: 100 }}
 										/>
 									) : (
 										<Tooltip label='When' openDelay={500}>

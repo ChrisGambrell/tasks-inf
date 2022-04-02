@@ -9,8 +9,8 @@ const TaskList = ({ query: listQuery = {} }) => {
 	const [state, _dispatch] = useContext(TasksContext)
 
 	return (
-		<ul style={{ listStyle: 'none' }}>
-			{state.showAddingTask && <TaskForm className='task-item active' type='create' as='li' />}
+		<ul>
+			{state.showAddingTask && <TaskForm type='create' as='li' />}
 			{tasks
 				?.filter((task) => {
 					if (Object.keys(listQuery).length > 0) {
