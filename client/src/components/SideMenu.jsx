@@ -31,7 +31,7 @@ const MenuItem = ({ menuItem, type = null }) => {
 			} hover:bg-gray-200 active:bg-gray-300`}
 			onClick={() => (menuItem.url ? navigate(menuItem.url) : {})}>
 			<FontAwesomeIcon
-				className={`flex-none h-5 w-5 mr-2 text-${menuItem.color ? menuItem.color : 'gray-400'}`}
+				className={`flex-none h-5 w-5 mr-2 ${menuItem.color ? menuItem.color : 'text-gray-400'}`}
 				icon={menuItem.icon ? menuItem.icon : type === 'project' ? faCircleNotch : faCircleQuestion}
 			/>
 			<div className='flex-grow truncate'>{menuItem.title}</div>

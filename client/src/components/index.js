@@ -10,12 +10,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 export const menuItems = [
-	[{ title: 'Inbox', icon: faInbox, color: 'blue-400', notification: 0, url: '/' }],
+	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/' }],
 	[
-		{ title: 'Today', icon: faStar, color: 'yellow-300', notification: 3, url: '/today' },
-		{ title: 'Upcoming', icon: faCalendar, color: 'red-600', notification: 0, url: '/upcoming' },
+		{ title: 'Today', icon: faStar, color: 'text-yellow-300', notification: 3, url: '/today' },
+		{ title: 'Upcoming', icon: faCalendar, color: 'text-red-600', notification: 0, url: '/upcoming' },
 	],
-	[{ title: 'Logbook', icon: faBook, color: 'green-600', notification: 0, url: '/logbook' }],
+	[{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook' }],
 ]
 
 export const projects = [
