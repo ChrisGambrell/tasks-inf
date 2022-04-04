@@ -51,9 +51,21 @@ const App = () => {
 				<TasksContext.Provider value={[state, dispatch]}>
 					<div className='flex h-screen'>
 						<SideMenu />
-
 						<Routes>
 							<Route exact path='/' element={<ContentView />} />
+
+							<Route exact path='/inbox' element={<div>Inbox page - TODO</div>} />
+
+							<Route exact path='/today' element={<div>Today page - TODO</div>} />
+							<Route exact path='/upcoming' element={<div>Upcoming page - TODO</div>} />
+							<Route exact path='/logbook' element={<div>Logbook page - TODO</div>} />
+							<Route exact path='/anytime' element={<div>Anytime page - TODO</div>} />
+
+							<Route exact path='/someday' element={<div>Someday page - TODO</div>} />
+							<Route exact path='/trash' element={<div>Trash page - TODO</div>} />
+
+							<Route exact path='/projects/:projectId' element={<div>Project page - TODO</div>} />
+
 							<Route
 								exact
 								path='/archive'
@@ -73,7 +85,6 @@ const App = () => {
 									</>
 								}
 							/>
-							<Route path='/playground' element={<ContentView />} />
 							<Route path='*' element={<Navigate to='/' />} />
 						</Routes>
 					</div>
