@@ -1,9 +1,9 @@
 import { createContext, useEffect, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Grid } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
-import { SideMenu, TaskList, TaskToolbar } from './components'
+import { TaskList, TaskToolbar } from './archive'
+import { ContentView, SideMenu } from './components'
 
 export const TasksContext = createContext()
 
@@ -49,38 +49,34 @@ const App = () => {
 		<div className='App'>
 			<NotificationsProvider>
 				<TasksContext.Provider value={[state, dispatch]}>
-					<Routes>
-						<Route
-							exact
-							path='/'
-							element={
-								<Grid>
-									<Grid.Col span={3}>
-										<SideMenu />
-									</Grid.Col>
-									<Grid.Col span={9}>
+					<div className='flex h-screen'>
+						<SideMenu />
+
+						<Routes>
+							<Route exact path='/' element={<ContentView />} />
+							<Route
+								exact
+								path='/archive'
+								element={
+									<>
 										<TaskList />
 										<TaskToolbar />
-									</Grid.Col>
-								</Grid>
-							}
-						/>
-						<Route
-							path='/today'
-							element={
-								<Grid>
-									<Grid.Col span={3}>
-										<SideMenu />
-									</Grid.Col>
-									<Grid.Col span={9}>
+									</>
+								}
+							/>
+							<Route
+								path='/archive/today'
+								element={
+									<>
 										<TaskList query={{ when: new Date().toLocaleDateString() }} />
 										<TaskToolbar />
-									</Grid.Col>
-								</Grid>
-							}
-						/>
-						<Route path='*' element={<Navigate to='/' />} />
-					</Routes>
+									</>
+								}
+							/>
+							<Route path='/playground' element={<ContentView />} />
+							<Route path='*' element={<Navigate to='/' />} />
+						</Routes>
+					</div>
 				</TasksContext.Provider>
 			</NotificationsProvider>
 		</div>
