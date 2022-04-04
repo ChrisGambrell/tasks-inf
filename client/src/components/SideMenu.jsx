@@ -1,107 +1,90 @@
 import { useNavigate } from 'react-router-dom'
-import { Navbar, Title, createStyles } from '@mantine/core'
-import { Archive, Calendar, Inbox, Infinity, Notebook, Stack2, Star, Trash } from 'tabler-icons-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronRight, faCircleNotch, faCircleQuestion, faLayerGroup, faPlus, faSliders } from '@fortawesome/free-solid-svg-icons'
+import { menuItems, projects, areas } from '.'
 
-const useStyles = createStyles((theme, _params, getRef) => {
-	const icon = getRef('icon')
+const MenuSection = ({ children }) => <div>{children}</div>
 
-	return {
-		navbar: {
-			backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
-		},
+const MenuDropdown = ({ label = '', icon = faCircleQuestion, children }) => (
+	<details className='group flex p-1'>
+		<summary className='flex items-center list-none'>
+			<FontAwesomeIcon className='flex-none h-5 w-5 mr-2 text-gray-400' icon={icon} />
+			<div className='flex-grow truncate font-semibold'>{label}</div>
+			<FontAwesomeIcon
+				className='flex-none invisible group-hover:visible h-3 w-3 text-gray-400 rotate-0 group-open:rotate-90'
+				icon={faChevronRight}
+			/>
+		</summary>
+		<div className='mt-2'>
+			<div className='ml-2 pl-3 border-l-2 border-gray-400'>{children}</div>
+		</div>
+	</details>
+)
 
-		title: {
-			textTransform: 'uppercase',
-			letterSpacing: -0.25,
-		},
-
-		link: {
-			...theme.fn.focusStyles(),
-			display: 'flex',
-			alignItems: 'center',
-			textDecoration: 'none',
-			fontSize: theme.fontSizes.sm,
-			color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
-			padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
-			borderRadius: theme.radius.sm,
-			fontWeight: 500,
-
-			'&:hover': {
-				backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
-				color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-
-				[`& .${icon}`]: {
-					color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-				},
-			},
-		},
-
-		linkIcon: {
-			ref: icon,
-			color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
-			marginRight: theme.spacing.sm,
-		},
-
-		linkActive: {
-			'&, &:hover': {
-				backgroundColor:
-					theme.colorScheme === 'dark'
-						? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
-						: theme.colors[theme.primaryColor][0],
-				color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 7],
-				[`& .${icon}`]: {
-					color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 7],
-				},
-			},
-		},
-
-		footer: {
-			borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
-			paddingTop: theme.spacing.md,
-		},
-	}
-})
-
-const SideMenu = () => {
-	const { classes } = useStyles()
+const MenuItem = ({ menuItem, type = null }) => {
+	const navigate = useNavigate()
 
 	return (
-		<Navbar p='md' className={classes.navbar}>
-			<Navbar.Section>
-				<Title order={1}>
-					Tasks <Infinity />
-				</Title>
-			</Navbar.Section>
-
-			<Navbar.Section grow mt='xl'>
-				<SideMenuItem icon={Inbox} label='Inbox' to='/' />
-				<SideMenuItem icon={Star} label='Today' to='/today' />
-				<SideMenuItem icon={Calendar} label='Upcoming' to='TODO' />
-				<SideMenuItem icon={Stack2} label='Anytime' to='TODO' />
-				<SideMenuItem icon={Archive} label='Someday' to='TODO' />
-				<SideMenuItem icon={Notebook} label='Logbook' to='TODO' />
-				<SideMenuItem icon={Trash} label='Trash' to='TODO' />
-				<SideMenuItem icon={Infinity} label='Meet Tasks' to='/' />
-			</Navbar.Section>
-		</Navbar>
+		<div
+			className={`flex items-center p-1 rounded-md ${
+				window.location.pathname === menuItem.url && 'bg-gray-200'
+			} hover:bg-gray-200 active:bg-gray-300`}
+			onClick={() => (menuItem.url ? navigate(menuItem.url) : {})}>
+			<FontAwesomeIcon
+				className={`flex-none h-5 w-5 mr-2 text-${menuItem.color ? menuItem.color : 'gray-400'}`}
+				icon={menuItem.icon ? menuItem.icon : type === 'project' ? faCircleNotch : faCircleQuestion}
+			/>
+			<div className='flex-grow truncate'>{menuItem.title}</div>
+			{menuItem.notification > 0 && <div className='flex-none pr-1 text-sm text-gray-400'>{menuItem.notification}</div>}
+		</div>
 	)
 }
 
-const SideMenuItem = ({ label, icon: Icon, to }) => {
-	const navigate = useNavigate()
-	const { classes, cx } = useStyles()
+const Toolbar = () => (
+	<div className='flex justify-between h-10 px-2 border-t text-gray-500'>
+		<button className='flex items-center m-1 py-1 px-2 rounded text-sm border border-gray-100 hover:border-gray-300 active:bg-gray-300'>
+			<FontAwesomeIcon className='mr-2 w-3 h-3' icon={faPlus} />
+			New List
+		</button>
+		<button className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'>
+			<FontAwesomeIcon icon={faSliders} />
+		</button>
+	</div>
+)
 
+const SideMenu = () => {
 	return (
-		<a
-			className={cx(classes.link, { [classes.linkActive]: to === window.location.pathname })}
-			key={label}
-			onClick={(e) => {
-				e.preventDefault()
-				navigate(to)
-			}}>
-			<Icon className={classes.linkIcon} />
-			<span>{label}</span>
-		</a>
+		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
+			<div className='px-4 space-y-4 select-none overflow-y-scroll'>
+				{/* Main menu items */}
+				{menuItems.map((section, i) => (
+					<MenuSection key={i}>
+						{section.map((menuItem) => (
+							<MenuItem key={menuItem.title} menuItem={menuItem} />
+						))}
+					</MenuSection>
+				))}
+
+				{/* Projects */}
+				<MenuSection>
+					{projects.map((project) => (
+						<MenuItem key={project.title} menuItem={project} type='project' />
+					))}
+				</MenuSection>
+
+				{/* Areas */}
+				<MenuSection>
+					{areas.map((area) => (
+						<MenuDropdown key={area.title} label={area.title} icon={faLayerGroup} area={area}>
+							{area.children.map((project) => (
+								<MenuItem key={project.title} menuItem={project} type='project' />
+							))}
+						</MenuDropdown>
+					))}
+				</MenuSection>
+			</div>
+			<Toolbar />
+		</div>
 	)
 }
 
