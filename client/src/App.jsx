@@ -10,41 +10,6 @@ export const TasksContext = createContext()
 const App = () => {
 	const [state, dispatch] = useReducer(store.reducer, store.initialState)
 
-	// useEffect(() => {
-	// 	const handleKeyDown = (e) => {
-	// 		switch (e.keyCode) {
-	// 			case 27:
-	// 				dispatch({ type: 'set', payload: { open: -1, selected: [], showAddingTask: false } })
-	// 				break
-	// 			default:
-	// 				break
-	// 		}
-	// 	}
-
-	// 	const handleMouseDown = (e) => {
-	// 		let currElement = e.srcElement
-	// 		while (currElement.parentElement) {
-	// 			currElement = currElement.parentElement
-	// 			if (
-	// 				currElement.id === 'Toolbar' ||
-	// 				currElement.id.includes('task-') ||
-	// 				currElement.id === 'contextmenu' ||
-	// 				currElement.className?.includes('mantine-DatePicker')
-	// 			)
-	// 				return
-	// 		}
-
-	// 		dispatch({ type: 'set', payload: { open: -1, selected: [] } })
-	// 	}
-
-	// 	document.addEventListener('keydown', handleKeyDown)
-	// 	document.addEventListener('mousedown', handleMouseDown)
-	// 	return function cleanup() {
-	// 		document.removeEventListener('keydown', handleKeyDown)
-	// 		document.removeEventListener('mousedown', handleMouseDown)
-	// 	}
-	// }, [state.open])
-
 	return (
 		<div className='App'>
 			<NotificationsProvider>
