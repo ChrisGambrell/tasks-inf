@@ -3,47 +3,47 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { TaskList, TaskToolbar } from './archive'
-import { ContentView, SideMenu } from './components'
+import { menuItems, ContentView, Placeholder, SideMenu } from './components'
 
 export const TasksContext = createContext()
 
 const App = () => {
 	const [state, dispatch] = useReducer(store.reducer, store.initialState)
 
-	useEffect(() => {
-		const handleKeyDown = (e) => {
-			switch (e.keyCode) {
-				case 27:
-					dispatch({ type: 'set', payload: { open: -1, selected: [], showAddingTask: false } })
-					break
-				default:
-					break
-			}
-		}
+	// useEffect(() => {
+	// 	const handleKeyDown = (e) => {
+	// 		switch (e.keyCode) {
+	// 			case 27:
+	// 				dispatch({ type: 'set', payload: { open: -1, selected: [], showAddingTask: false } })
+	// 				break
+	// 			default:
+	// 				break
+	// 		}
+	// 	}
 
-		const handleMouseDown = (e) => {
-			let currElement = e.srcElement
-			while (currElement.parentElement) {
-				currElement = currElement.parentElement
-				if (
-					currElement.id === 'Toolbar' ||
-					currElement.id.includes('task-') ||
-					currElement.id === 'contextmenu' ||
-					currElement.className?.includes('mantine-DatePicker')
-				)
-					return
-			}
+	// 	const handleMouseDown = (e) => {
+	// 		let currElement = e.srcElement
+	// 		while (currElement.parentElement) {
+	// 			currElement = currElement.parentElement
+	// 			if (
+	// 				currElement.id === 'Toolbar' ||
+	// 				currElement.id.includes('task-') ||
+	// 				currElement.id === 'contextmenu' ||
+	// 				currElement.className?.includes('mantine-DatePicker')
+	// 			)
+	// 				return
+	// 		}
 
-			dispatch({ type: 'set', payload: { open: -1, selected: [] } })
-		}
+	// 		dispatch({ type: 'set', payload: { open: -1, selected: [] } })
+	// 	}
 
-		document.addEventListener('keydown', handleKeyDown)
-		document.addEventListener('mousedown', handleMouseDown)
-		return function cleanup() {
-			document.removeEventListener('keydown', handleKeyDown)
-			document.removeEventListener('mousedown', handleMouseDown)
-		}
-	}, [state.open])
+	// 	document.addEventListener('keydown', handleKeyDown)
+	// 	document.addEventListener('mousedown', handleMouseDown)
+	// 	return function cleanup() {
+	// 		document.removeEventListener('keydown', handleKeyDown)
+	// 		document.removeEventListener('mousedown', handleMouseDown)
+	// 	}
+	// }, [state.open])
 
 	return (
 		<div className='App'>
@@ -54,15 +54,17 @@ const App = () => {
 						<Routes>
 							<Route exact path='/' element={<ContentView />} />
 
-							<Route exact path='/inbox' element={<div>Inbox page - TODO</div>} />
-
-							<Route exact path='/today' element={<div>Today page - TODO</div>} />
-							<Route exact path='/upcoming' element={<div>Upcoming page - TODO</div>} />
-							<Route exact path='/logbook' element={<div>Logbook page - TODO</div>} />
-							<Route exact path='/anytime' element={<div>Anytime page - TODO</div>} />
-
-							<Route exact path='/someday' element={<div>Someday page - TODO</div>} />
-							<Route exact path='/trash' element={<div>Trash page - TODO</div>} />
+							{menuItems.map((section) =>
+								section.map((menuItem) => (
+									<Route
+										exact
+										path={menuItem.url}
+										element={
+											<Placeholder title={`${menuItem.title} TODO`} icon={menuItem.icon} color={menuItem.color} />
+										}
+									/>
+								))
+							)}
 
 							<Route exact path='/projects/:projectId' element={<div>Project page - TODO</div>} />
 
