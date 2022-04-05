@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faCircle, faEllipsis, faFile } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays, faCircle, faEllipsis, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks, toolbarButtons } from '.'
 
 const ContentView = () => {
@@ -44,8 +44,11 @@ const ContentView = () => {
 												className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400'
 												icon={faCalendarDays}
 											/>
-											<input className='ml-3' type='checkbox' />
-											<div className='ml-2 mr-1 text-gray-800'>{task.title}</div>
+											<input className='ml-3 mr-1' type='checkbox' />
+											{task.when?.toLocaleDateString() === new Date().toLocaleDateString() && (
+												<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
+											)}
+											<div className='ml-1 mr-1 text-gray-800'>{task.title}</div>
 											{task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
 										</div>
 									))}
