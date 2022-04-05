@@ -138,7 +138,7 @@ export const toolbarButtons = [
 	{ icon: faMagnifyingGlass, disabled: false },
 ]
 
-export { default as ContentView } from './ContentView'
 export { default as Menu } from './Menu'
 export { default as Placeholder } from './Placeholder'
 export { default as SideMenu } from './SideMenu'
+export { default as View } from './View'

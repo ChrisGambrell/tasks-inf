@@ -4,6 +4,7 @@ import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { TaskList, TaskToolbar } from './archive'
 import { menuItems, ContentView, Placeholder, SideMenu } from './components'
+import { DummyContent } from './pages'
 
 export const TasksContext = createContext()
 
@@ -16,8 +17,9 @@ const App = () => {
 				<TasksContext.Provider value={[state, dispatch]}>
 					<div className='flex h-screen'>
 						<SideMenu />
+
 						<Routes>
-							<Route exact path='/' element={<ContentView />} />
+							<Route exact path='/' element={<DummyContent />} />
 
 							{menuItems.map((section) =>
 								section.map((menuItem) => (
