@@ -2,7 +2,7 @@ import {
 	faArchive,
 	faArrowRight,
 	faBook,
-	faCalendar,
+	faCalendarDays,
 	faCaretSquareRight,
 	faInbox,
 	faLayerGroup,
@@ -17,7 +17,7 @@ export const menuItems = [
 	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox' }],
 	[
 		{ title: 'Today', icon: faStar, color: 'text-yellow-400', notification: 3, url: '/today' },
-		{ title: 'Upcoming', icon: faCalendar, color: 'text-red-600', notification: 0, url: '/upcoming' },
+		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming' },
 		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime' },
 		{ title: 'Someday', icon: faArchive, color: 'text-yellow-700', notification: 0, url: '/someday' },
 	],
@@ -133,7 +133,7 @@ export const tasks = [
 export const toolbarButtons = [
 	{ icon: faPlus, disabled: false },
 	{ icon: faCaretSquareRight, disabled: false },
-	{ icon: faCalendar, disabled: true },
+	{ icon: faCalendarDays, disabled: true },
 	{ icon: faArrowRight, disabled: true },
 	{ icon: faMagnifyingGlass, disabled: false },
 ]
