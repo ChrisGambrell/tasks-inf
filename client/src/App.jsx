@@ -59,13 +59,10 @@ const App = () => {
 									<Route
 										exact
 										path={menuItem.url}
-										element={
-											<Placeholder title={`${menuItem.title} TODO`} icon={menuItem.icon} color={menuItem.color} />
-										}
+										element={<Placeholder title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />}
 									/>
 								))
 							)}
-
 							<Route exact path='/projects/:projectId' element={<div>Project page - TODO</div>} />
 
 							<Route

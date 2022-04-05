@@ -40,7 +40,9 @@ const MenuItem = ({ menuItem, type = null }) => {
 				icon={menuItem.icon ? menuItem.icon : type === 'project' ? faCircleNotch : faCircleQuestion}
 			/>
 			<div className='flex-grow truncate'>{menuItem.title}</div>
-			{menuItem.notification > 0 && <div className='flex-none pr-1 text-sm text-gray-400'>{menuItem.notification}</div>}
+			{menuItem.notification > 0 && (
+				<div className='flex-none pr-1 text-sm text-gray-400'>{menuItem.notification > 99 ? '99+' : menuItem.notification}</div>
+			)}
 		</div>
 	)
 }
