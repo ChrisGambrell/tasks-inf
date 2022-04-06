@@ -1,6 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
-import { toolbarButtons } from '../components'
+import { faArrowRight, faCalendarDays, faCaretSquareRight, faEllipsis, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
+
+export const toolbarButtons = [
+	{ icon: faPlus, disabled: false },
+	{ icon: faCaretSquareRight, disabled: false, show: '/project' },
+	{ icon: faCalendarDays, disabled: true },
+	{ icon: faArrowRight, disabled: true },
+	{ icon: faMagnifyingGlass, disabled: false },
+]
 
 const View = ({ children }) => (
 	<div className='flex flex-col justify-between w-3/4 shadow-lg'>
@@ -9,14 +16,16 @@ const View = ({ children }) => (
 		</div>
 		<div className='flex justify-center items-center h-10 px-2 border-t text-gray-500'>
 			{/* TODO */}
-			{toolbarButtons.map((button, i) => (
-				<button
-					key={i}
-					className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
-					disabled={button.disabled}>
-					<FontAwesomeIcon icon={button.icon} />
-				</button>
-			))}
+			{toolbarButtons
+				.filter((button) => window.location.pathname.includes(button.show ? button.show : ''))
+				.map((button, i) => (
+					<button
+						key={i}
+						className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
+						disabled={button.disabled}>
+						<FontAwesomeIcon icon={button.icon} />
+					</button>
+				))}
 		</div>
 	</div>
 )

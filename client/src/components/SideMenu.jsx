@@ -1,6 +1,40 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faSliders } from '@fortawesome/free-solid-svg-icons'
-import { menuItems, projects, areas, Menu } from '.'
+import {
+	faArchive,
+	faBook,
+	faCalendarDays,
+	faInbox,
+	faLayerGroup,
+	faPlus,
+	faSliders,
+	faStar,
+	faTrash,
+} from '@fortawesome/free-solid-svg-icons'
+import { areas, projects, tasks } from '../app/mockData'
+import { Menu } from '.'
+import { DummyContent, Placeholder, Today } from '../pages'
+
+export const menuItems = [
+	[{ title: 'Dummy Content', icon: '', color: '', notification: 100, url: '/', component: DummyContent }],
+	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
+	[
+		{
+			title: 'Today',
+			icon: faStar,
+			color: 'text-yellow-400',
+			notification: tasks.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString()).length,
+			url: '/today',
+			component: Today,
+		},
+		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming', component: Placeholder },
+		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
+		{ title: 'Someday', icon: faArchive, color: 'text-yellow-700', notification: 0, url: '/someday', component: Placeholder },
+	],
+	[
+		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook', component: Placeholder },
+		{ title: 'Trash', icon: faTrash, color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
+	],
+]
 
 const SideMenu = () => {
 	return (

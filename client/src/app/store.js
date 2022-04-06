@@ -11,4 +11,5 @@ const reducer = (state, action) => {
 	}
 }
 
-export default { initialState, reducer }
+const store = { initialState, reducer }
+export default store
