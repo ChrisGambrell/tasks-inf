@@ -1,6 +1,7 @@
 import { tasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
+import { Placeholder } from '.'
 import { Task } from './DummyContent'
 
 const Today = () => {
@@ -10,7 +11,7 @@ const Today = () => {
 
 	const tasks = taskCollection.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString())
 
-	return (
+	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
@@ -19,6 +20,8 @@ const Today = () => {
 				))}
 			</View.Content>
 		</View>
+	) : (
+		<Placeholder {...menuItem} />
 	)
 }
 
