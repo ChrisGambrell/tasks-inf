@@ -1,10 +1,9 @@
-import { createContext, useEffect, useReducer } from 'react'
+import { createContext, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { TaskList, TaskToolbar } from './archive'
-import { menuItems, ContentView, Placeholder, SideMenu } from './components'
-import { DummyContent } from './pages'
+import { menuItems, SideMenu } from './components'
 
 export const TasksContext = createContext()
 
@@ -19,15 +18,9 @@ const App = () => {
 						<SideMenu />
 
 						<Routes>
-							<Route exact path='/' element={<DummyContent />} />
-
 							{menuItems.map((section) =>
-								section.map((menuItem) => (
-									<Route
-										exact
-										path={menuItem.url}
-										element={<Placeholder title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />}
-									/>
+								section.map(({ component: Component, ...menuItem }) => (
+									<Route exact path={menuItem.url} element={<Component {...menuItem} />} />
 								))
 							)}
 							<Route exact path='/projects/:projectId' element={<div>Project page - TODO</div>} />

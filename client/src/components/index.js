@@ -11,19 +11,20 @@ import {
 	faStar,
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
+import { DummyContent, Placeholder } from '../pages'
 
 export const menuItems = [
-	[{ title: 'Dummy Content', icon: '', color: '', notification: 100, url: '/' }],
-	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox' }],
+	[{ title: 'Dummy Content', icon: '', color: '', notification: 100, url: '/', component: DummyContent }],
+	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
 	[
-		{ title: 'Today', icon: faStar, color: 'text-yellow-400', notification: 3, url: '/today' },
-		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming' },
-		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime' },
-		{ title: 'Someday', icon: faArchive, color: 'text-yellow-700', notification: 0, url: '/someday' },
+		{ title: 'Today', icon: faStar, color: 'text-yellow-400', notification: 3, url: '/today', component: Placeholder },
+		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming', component: Placeholder },
+		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
+		{ title: 'Someday', icon: faArchive, color: 'text-yellow-700', notification: 0, url: '/someday', component: Placeholder },
 	],
 	[
-		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook' },
-		{ title: 'Trash', icon: faTrash, color: 'text-gray-400', notification: 0, url: '/trash' },
+		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook', component: Placeholder },
+		{ title: 'Trash', icon: faTrash, color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
 	],
 ]
 
@@ -139,6 +140,5 @@ export const toolbarButtons = [
 ]
 
 export { default as Menu } from './Menu'
-export { default as Placeholder } from './Placeholder'
 export { default as SideMenu } from './SideMenu'
 export { default as View } from './View'
