@@ -1,7 +1,25 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faCircle, faEllipsis, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
+import {
+	faArrowRight,
+	faCalendarDays,
+	faCheckToSlot,
+	faCircle,
+	faFile,
+	faStar,
+	faTrash,
+	faUpRightFromSquare,
+} from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks } from '../app/mockData'
-import { View } from '../components'
+import { Dropdown, View } from '../components'
+
+const actionMenuItems = [
+	[{ label: 'Archive', icon: faCheckToSlot }],
+	[
+		{ label: 'Move', icon: faArrowRight },
+		{ label: 'Convert to Project...', icon: faUpRightFromSquare },
+		{ label: 'Delete', icon: faTrash },
+	],
+]
 
 export const Task = ({ task, specialDisplay = false }) => {
 	const project = projects.find((project) => project.id === task.projectId)
@@ -38,10 +56,20 @@ const DummyContent = () => {
 								key={header.title}
 								className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
 								<div>{header.title}</div>
-								<FontAwesomeIcon
+								{/* <FontAwesomeIcon
 									className='ml-1 w-5 h-5 px-1 py-0.5 rounded text-blue-600 active:bg-gray-200'
 									icon={faEllipsis}
-								/>
+								/> */}
+								<Dropdown color='text-blue-600'>
+									{actionMenuItems.map((section, i) => (
+										<div key={i}>
+											{section.map((actionMenuItem) => (
+												<Dropdown.Item key={actionMenuItem.label} {...actionMenuItem} />
+											))}
+											{i !== actionMenuItems.length - 1 && <Dropdown.Divider />}
+										</div>
+									))}
+								</Dropdown>
 							</div>
 
 							{/* Tasks */}

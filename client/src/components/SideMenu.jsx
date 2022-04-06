@@ -1,8 +1,12 @@
+import { useState } from 'react'
+import { Modal, Popover } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArchive,
 	faBook,
+	faBox,
 	faCalendarDays,
+	faCircleHalfStroke,
 	faInbox,
 	faLayerGroup,
 	faPlus,
@@ -37,6 +41,9 @@ export const menuItems = [
 ]
 
 const SideMenu = () => {
+	const [newListOpen, setNewListOpen] = useState(false)
+	const [settingsOpen, setSettingsOpen] = useState(false)
+
 	return (
 		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
 			<div className='px-4 space-y-4 select-none overflow-y-scroll'>
@@ -73,11 +80,52 @@ const SideMenu = () => {
 			</div>
 			{/* TODO */}
 			<div className='flex justify-between h-10 px-2 border-t text-gray-500'>
-				<button className='flex items-center m-1 py-1 px-2 rounded text-sm border border-gray-100 hover:border-gray-300 active:bg-gray-300'>
-					<FontAwesomeIcon className='mr-2 w-3 h-3' icon={faPlus} />
-					New List
-				</button>
-				<button className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'>
+				<Popover
+					classNames={{ popover: 'bg-gray-800 text-gray-50' }}
+					target={
+						<button
+							className='flex items-center m-1 py-1 px-2 rounded text-sm border border-gray-100 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => setNewListOpen(!newListOpen)}>
+							<FontAwesomeIcon className='mr-2 w-3 h-3' icon={faPlus} />
+							New List
+						</button>
+					}
+					position='top'
+					placement='start'
+					radius='md'
+					opened={newListOpen}
+					onClose={() => setNewListOpen(false)}>
+					<div className='w-80 select-none'>
+						<div className='flex space-x-2 p-1 rounded hover:bg-blue-500'>
+							<div>
+								<FontAwesomeIcon className='text-blue-400' icon={faCircleHalfStroke} />
+							</div>
+							<div className='flex flex-col'>
+								<div>New Project</div>
+								<div className='text-sm text-gray-400'>Define a goal, then work towards it one to-do at a time.</div>
+							</div>
+						</div>
+						<hr className='my-2 border-gray-500' />
+						<div className='flex space-x-2 p-1 rounded hover:bg-blue-500'>
+							<div>
+								<FontAwesomeIcon className='text-green-500' icon={faBox} />
+							</div>
+							<div className='flex flex-col'>
+								<div>New Area</div>
+								<div className='text-sm text-gray-400'>
+									Group your projects and to-dos based on different responsibilities, such as Family or Work .
+								</div>
+							</div>
+						</div>
+					</div>
+				</Popover>
+
+				<Modal opened={settingsOpen} onClose={() => setSettingsOpen(false)} withCloseButton={false}>
+					Settings Menu - TODO
+				</Modal>
+				<button
+					className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'
+					onClick={() => setSettingsOpen(true)}>
 					<FontAwesomeIcon icon={faSliders} />
 				</button>
 			</div>

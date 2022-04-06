@@ -1,5 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faCalendarDays, faCaretSquareRight, faEllipsis, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
+import {
+	faArrowRight,
+	faArrowRotateRight,
+	faCalendarDays,
+	faCaretSquareRight,
+	faCircleCheck,
+	faCopy,
+	faFlag,
+	faMagnifyingGlass,
+	faPlus,
+	faShareFromSquare,
+	faTag,
+	faTrash,
+} from '@fortawesome/free-solid-svg-icons'
+import { Dropdown } from '.'
 
 export const toolbarButtons = [
 	{ icon: faPlus, disabled: false },
@@ -7,6 +21,22 @@ export const toolbarButtons = [
 	{ icon: faCalendarDays, disabled: true },
 	{ icon: faArrowRight, disabled: true },
 	{ icon: faMagnifyingGlass, disabled: false },
+]
+
+const actionMenuItems = [
+	[
+		{ label: 'Complete Project', icon: faCircleCheck },
+		{ label: 'When', icon: faCalendarDays },
+		{ label: 'Add Tags', icon: faTag },
+		{ label: 'Add Deadline', icon: faFlag },
+	],
+	[
+		{ label: 'Move', icon: faArrowRight },
+		{ label: 'Repeat', icon: faArrowRotateRight },
+		{ label: 'Duplicate Project', icon: faCopy },
+		{ label: 'Delete Project', icon: faTrash },
+		{ label: 'Share', icon: faShareFromSquare },
+	],
 ]
 
 const View = ({ children }) => (
@@ -30,20 +60,33 @@ const View = ({ children }) => (
 	</div>
 )
 
-const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => (
-	<div className='flex flex-col space-y-2 mb-8'>
-		<div className='flex items-center'>
-			{icon && <FontAwesomeIcon className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
-			<h2 className='text-3xl font-semibold'>{title}</h2>
-			{actionButton && <FontAwesomeIcon className='ml-1 px-2 py-0.5 rounded text-gray-400 active:bg-gray-200' icon={faEllipsis} />}
+const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
+	return (
+		<div className='flex flex-col space-y-2 mb-8'>
+			<div className='flex items-center'>
+				{icon && <FontAwesomeIcon className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
+				<h2 className='text-3xl font-semibold'>{title}</h2>
+				{actionButton && (
+					<Dropdown>
+						{actionMenuItems.map((section, i) => (
+							<div key={i}>
+								{section.map((actionMenuItem) => (
+									<Dropdown.Item key={actionMenuItem.label} {...actionMenuItem} />
+								))}
+								{i !== actionMenuItems.length - 1 && <Dropdown.Divider />}
+							</div>
+						))}
+					</Dropdown>
+				)}
+			</div>
+			{description && <div className='text-sm text-gray-700'>{description}</div>}
+			{actionButton && actionButton}
 		</div>
-		{description && <div className='text-sm text-gray-700'>{description}</div>}
-	</div>
-)
+	)
+}
 
 const Content = ({ children }) => <>{children}</>
 
 View.Header = Header
 View.Content = Content
-
 export default View
