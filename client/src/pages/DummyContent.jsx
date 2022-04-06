@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faCircle, faEllipsis, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
-import { View, headers, projects, tasks } from '../components'
+import { headers, projects, tasks } from '../app/mockData'
+import { View } from '../components'
 
 const DummyContent = () => {
 	const project = projects.find((project) => project.id === 2)

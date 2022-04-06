@@ -1,6 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
-import { toolbarButtons } from '../components'
+import { faArrowRight, faCalendarDays, faCaretSquareRight, faEllipsis, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
+
+export const toolbarButtons = [
+	{ icon: faPlus, disabled: false },
+	{ icon: faCaretSquareRight, disabled: false },
+	{ icon: faCalendarDays, disabled: true },
+	{ icon: faArrowRight, disabled: true },
+	{ icon: faMagnifyingGlass, disabled: false },
+]
 
 const View = ({ children }) => (
 	<div className='flex flex-col justify-between w-3/4 shadow-lg'>

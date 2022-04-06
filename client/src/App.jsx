@@ -3,7 +3,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { TaskList, TaskToolbar } from './archive'
-import { menuItems, SideMenu } from './components'
+import { SideMenu } from './components'
+import { menuItems } from './components/SideMenu'
 
 export const TasksContext = createContext()
 

@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { Divider, Menu } from '@mantine/core'
-import { useDeleteTask } from '../hooks'
+// import { useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 
 const TaskContextMenu = ({ control, taskId }) => {
-	const deleteTask = useDeleteTask().mutate
+	// const deleteTask = useDeleteTask().mutate
 
-	const [state, dispatch] = useContext(TasksContext)
+	const [state, _dispatch] = useContext(TasksContext)
 
 	const handleDeleteTask = async (taskId = state.open) => {
 		console.log('FIXME')
