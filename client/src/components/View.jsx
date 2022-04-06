@@ -8,6 +8,7 @@ const View = ({ children }) => (
 			<div className='flex flex-col mt-6 w-3/4 px-4'>{children}</div>
 		</div>
 		<div className='flex justify-center items-center h-10 px-2 border-t text-gray-500'>
+			{/* TODO */}
 			{toolbarButtons.map((button, i) => (
 				<button
 					key={i}

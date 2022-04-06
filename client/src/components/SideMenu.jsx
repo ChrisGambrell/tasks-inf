@@ -37,6 +37,7 @@ const SideMenu = () => {
 					))}
 				</Menu.Section>
 			</div>
+			{/* TODO */}
 			<div className='flex justify-between h-10 px-2 border-t text-gray-500'>
 				<button className='flex items-center m-1 py-1 px-2 rounded text-sm border border-gray-100 hover:border-gray-300 active:bg-gray-300'>
 					<FontAwesomeIcon className='mr-2 w-3 h-3' icon={faPlus} />

@@ -25,6 +25,7 @@ const App = () => {
 							)}
 							<Route exact path='/projects/:projectId' element={<div>Project page - TODO</div>} />
 
+							{/* TODO */}
 							<Route
 								exact
 								path='/archive'
