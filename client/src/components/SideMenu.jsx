@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Popover } from '@mantine/core'
+import { Modal, Popover } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArchive,
@@ -41,7 +41,8 @@ export const menuItems = [
 ]
 
 const SideMenu = () => {
-	const [newListOpen, setNewListOpen] = useState(true)
+	const [newListOpen, setNewListOpen] = useState(false)
+	const [settingsOpen, setSettingsOpen] = useState(false)
 
 	return (
 		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
@@ -118,7 +119,13 @@ const SideMenu = () => {
 						</div>
 					</div>
 				</Popover>
-				<button className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'>
+
+				<Modal opened={settingsOpen} onClose={() => setSettingsOpen(false)} withCloseButton={false}>
+					Settings Menu - TODO
+				</Modal>
+				<button
+					className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'
+					onClick={() => setSettingsOpen(true)}>
 					<FontAwesomeIcon icon={faSliders} />
 				</button>
 			</div>
