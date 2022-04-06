@@ -34,7 +34,7 @@ const DummyContent = () => {
 											className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400'
 											icon={faCalendarDays}
 										/>
-										<input className='ml-3 mr-1' type='checkbox' />
+										<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
 										{task.when?.toLocaleDateString() === new Date().toLocaleDateString() && (
 											<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
 										)}
