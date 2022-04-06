@@ -111,7 +111,7 @@ const SideMenu = () => {
 								<FontAwesomeIcon className='text-green-500' icon={faBox} />
 							</div>
 							<div className='flex flex-col'>
-								<div>New Project</div>
+								<div>New Area</div>
 								<div className='text-sm text-gray-400'>
 									Group your projects and to-dos based on different responsibilities, such as Family or Work .
 								</div>

@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { Popover } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faCircle, faEllipsis, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks } from '../app/mockData'
@@ -24,6 +26,7 @@ export const Task = ({ task, specialDisplay = false }) => {
 
 const DummyContent = () => {
 	const project = projects.find((project) => project.id === 2)
+	const [menuOpen, setMenuOpen] = useState(true)
 
 	return (
 		<View>

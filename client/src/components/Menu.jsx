@@ -51,5 +51,4 @@ const Section = ({ children }) => <div>{children}</div>
 Menu.Dropdown = Dropdown
 Menu.Item = Item
 Menu.Section = Section
-
 export default Menu
