@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { Popover } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRight,
@@ -8,7 +6,6 @@ import {
 	faCaretSquareRight,
 	faCircleCheck,
 	faCopy,
-	faEllipsis,
 	faFlag,
 	faMagnifyingGlass,
 	faPlus,
