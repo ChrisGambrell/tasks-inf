@@ -64,39 +64,22 @@ const View = ({ children }) => (
 )
 
 const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
-	const [menuOpen, setMenuOpen] = useState(true)
-
 	return (
 		<div className='flex flex-col space-y-2 mb-8'>
 			<div className='flex items-center'>
 				{icon && <FontAwesomeIcon className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
 				<h2 className='text-3xl font-semibold'>{title}</h2>
 				{actionButton && (
-					<Popover
-						classNames={{ popover: 'bg-gray-800 text-gray-50', inner: 'p-1' }}
-						target={
-							<button
-								className={`ml-1 px-2 py-0.5 rounded text-gray-400 active:bg-gray-200 ${menuOpen && 'bg-gray-200'}`}
-								onClick={() => setMenuOpen(!menuOpen)}>
-								<FontAwesomeIcon icon={faEllipsis} />
-							</button>
-						}
-						position='bottom'
-						placement='center'
-						radius='md'
-						opened={menuOpen}
-						onClose={() => setMenuOpen(false)}>
-						<Dropdown>
-							{actionMenuItems.map((section, i) => (
-								<div key={i}>
-									{section.map((actionMenuItem) => (
-										<Dropdown.Item key={actionMenuItem.label} {...actionMenuItem} />
-									))}
-									{i !== actionMenuItems.length - 1 && <Dropdown.Divider />}
-								</div>
-							))}
-						</Dropdown>
-					</Popover>
+					<Dropdown>
+						{actionMenuItems.map((section, i) => (
+							<div key={i}>
+								{section.map((actionMenuItem) => (
+									<Dropdown.Item key={actionMenuItem.label} {...actionMenuItem} />
+								))}
+								{i !== actionMenuItems.length - 1 && <Dropdown.Divider />}
+							</div>
+						))}
+					</Dropdown>
 				)}
 			</div>
 			{description && <div className='text-sm text-gray-700'>{description}</div>}
