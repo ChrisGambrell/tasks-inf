@@ -13,7 +13,7 @@ const Dropdown = ({ color = 'text-gray-400', children }) => {
 				<button
 					className={`ml-1 px-2 py-0.5 rounded ${color} active:bg-gray-200 ${open && 'bg-gray-200'}`}
 					onClick={() => setOpen(!open)}>
-					<FontAwesomeIcon icon={faEllipsis} />
+					<FontAwesomeIcon className='w-5 h-5' icon={faEllipsis} />
 				</button>
 			}
 			position='bottom'
@@ -21,7 +21,7 @@ const Dropdown = ({ color = 'text-gray-400', children }) => {
 			radius='md'
 			opened={open}
 			onClose={() => setOpen(false)}>
-			<div className='w-36 select-none text-sm'>{children}</div>
+			<div className='w-44 select-none text-sm'>{children}</div>
 		</Popover>
 	)
 }
