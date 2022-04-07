@@ -51,6 +51,15 @@ const DummyContent = () => {
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
+				{/* Tasks w/o headers */}
+				<div className='mb-8'>
+					{tasks
+						.filter((task) => !task.headerId)
+						.map((task) => (
+							<Task key={task.title} task={task} />
+						))}
+				</div>
+
 				{headers
 					.filter((header) => header.projectId === project.id)
 					.map((header) => (

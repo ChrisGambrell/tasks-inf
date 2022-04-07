@@ -85,6 +85,14 @@ export const tasks = [
 		when: null,
 	},
 	{
+		headerId: null,
+		projectId: 2,
+		title: 'Task without header & without description',
+		notes: null,
+		completed: false,
+		when: null,
+	},
+	{
 		headerId: 1,
 		projectId: 2,
 		title: 'Organize with areas',
