@@ -131,8 +131,8 @@ export const tasks = [
 		projectId: 2,
 		title: 'Add some widgets',
 		notes: 'Widgets let you quickly access to your lists while working in other apps. You can add as many as you like. Here’s how:',
-		completed: false,
-		completedWhen: null,
+		completed: true,
+		completedWhen: new Date(new Date().getFullYear() - 1, new Date().getMonth() - 6, new Date().getDate()),
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 4, new Date().getDate() + 2),
 	},
 	{

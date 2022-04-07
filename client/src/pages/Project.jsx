@@ -13,6 +13,16 @@ import { headers, projects, incompleteTasks as tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
 
+const CompletedWhenDisplay = ({ when }) => {
+	return (
+		<div className='px-1 text-xs font-semibold text-blue-600'>
+			{when?.toLocaleDateString() === new Date().toLocaleDateString()
+				? 'today'
+				: when.toLocaleDateString('en-us', { month: 'short', day: 'numeric' })}
+		</div>
+	)
+}
+
 const WhenDisplay = ({ when }) => {
 	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
 		<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
@@ -28,7 +38,7 @@ const WhenDisplay = ({ when }) => {
 	) : null
 }
 
-export const Task = ({ task, showNotesIndicator = false, showProject = false, showWhen = false }) => {
+export const Task = ({ task, showCompletedWhen = false, showNotesIndicator = false, showProject = false, showWhen = false }) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
 	return (
@@ -37,6 +47,7 @@ export const Task = ({ task, showNotesIndicator = false, showProject = false, sh
 				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
 			/>
 			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
+			{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
 			{showWhen && <WhenDisplay when={task.when} />}
 			<div className='ml-1 mr-1'>
 				<div className='text-gray-800 truncate'>{task.title}</div>
