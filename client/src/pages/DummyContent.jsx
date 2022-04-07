@@ -10,7 +10,7 @@ import {
 	faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks } from '../app/mockData'
-import { Dropdown, View } from '../components'
+import { Dropdown, View, WhenSelect } from '../components'
 
 const actionMenuItems = [
 	[{ label: 'Archive', icon: faCheckToSlot }],
@@ -26,7 +26,9 @@ export const Task = ({ task, specialDisplay = false }) => {
 
 	return (
 		<div className='flex items-center -mx-6 mt-1.5'>
-			<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />
+			<WhenSelect
+				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
+			/>
 			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
 			{!specialDisplay && task.when?.toLocaleDateString() === new Date().toLocaleDateString() && (
 				<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />

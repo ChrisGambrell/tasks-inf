@@ -32,7 +32,7 @@ export const menuItems = [
 		},
 		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming', component: Placeholder },
 		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
-		{ title: 'Someday', icon: faArchive, color: 'text-yellow-700', notification: 0, url: '/someday', component: Placeholder },
+		{ title: 'Someday', icon: faArchive, color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
 	],
 	[
 		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook', component: Placeholder },
@@ -55,7 +55,6 @@ const SideMenu = () => {
 						))}
 					</Menu.Section>
 				))}
-
 				{/* Projects */}
 				<Menu.Section>
 					{projects
@@ -64,7 +63,6 @@ const SideMenu = () => {
 							<Menu.Item key={project.title} menuItem={project} type='project' />
 						))}
 				</Menu.Section>
-
 				{/* Areas */}
 				<Menu.Section>
 					{areas.map((area) => (
