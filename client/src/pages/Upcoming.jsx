@@ -6,7 +6,7 @@ import { Task } from './Project'
 
 const Upcoming = () => {
 	const menuItem = menuItems
-		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/today') !== -1)[0]
+		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/upcoming') !== -1)[0]
 		.find((menuItem) => menuItem.url === '/upcoming')
 
 	const tasks = taskCollection.filter((task) => task.when).sort((a, b) => a.when - b.when)
@@ -83,27 +83,29 @@ const Upcoming = () => {
 					))}
 
 					{/* Tasks for the rest of the month */}
-					<div className='space-y-2'>
-						<div className='flex space-x-2'>
-							<div className='flex-grow flex space-x-1 mt-1.5 pt-0.5 border-t font-bold text-sm'>
-								<div>{new Date().toLocaleDateString('en-us', { month: 'long' })}</div>
-								<div className='text-gray-500'>
-									{new Date(new Date().setDate(new Date().getDate() + 8)).toLocaleDateString('en-us', {
-										day: 'numeric',
-									})}
-									-
-									{new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toLocaleDateString('en-us', {
-										day: 'numeric',
-									})}
+					{tasksMonth.length > 0 && (
+						<div className='space-y-2'>
+							<div className='flex space-x-2'>
+								<div className='flex-grow flex space-x-1 mt-1.5 pt-0.5 border-t font-bold text-sm'>
+									<div>{new Date().toLocaleDateString('en-us', { month: 'long' })}</div>
+									<div className='text-gray-500'>
+										{new Date(new Date().setDate(new Date().getDate() + 8)).toLocaleDateString('en-us', {
+											day: 'numeric',
+										})}
+										-
+										{new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toLocaleDateString('en-us', {
+											day: 'numeric',
+										})}
+									</div>
 								</div>
 							</div>
+							<div>
+								{tasksMonth.map((task) => (
+									<Task key={task.title} task={task} showProject showWhen />
+								))}
+							</div>
 						</div>
-						<div>
-							{tasksMonth.map((task) => (
-								<Task key={task.title} task={task} showProject showWhen />
-							))}
-						</div>
-					</div>
+					)}
 
 					{/* Tasks for the rest of the year */}
 					{Object.keys(tasksYear).map((group) => (

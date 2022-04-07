@@ -16,7 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { areas, projects, tasks } from '../app/mockData'
 import { Menu } from '.'
-import { Placeholder, Today, Upcoming } from '../pages'
+import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
 export const menuItems = [
 	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
@@ -34,7 +34,7 @@ export const menuItems = [
 		{ title: 'Someday', icon: faArchive, color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
 	],
 	[
-		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook', component: Placeholder },
+		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook', component: Logbook },
 		{ title: 'Trash', icon: faTrash, color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
 	],
 ]
