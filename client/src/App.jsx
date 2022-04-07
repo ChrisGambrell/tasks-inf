@@ -5,6 +5,7 @@ import store from './app/store'
 import { TaskList, TaskToolbar } from './archive'
 import { SideMenu } from './components'
 import { menuItems } from './components/SideMenu'
+import { DummyContent } from './pages'
 
 export const TasksContext = createContext()
 
@@ -24,7 +25,7 @@ const App = () => {
 									<Route exact path={menuItem.url} element={<Component {...menuItem} />} />
 								))
 							)}
-							<Route exact path='/projects/:projectId' element={<div>Project page - TODO</div>} />
+							<Route exact path='/projects/:projectId' element={<DummyContent />} />
 
 							{/* TODO */}
 							<Route

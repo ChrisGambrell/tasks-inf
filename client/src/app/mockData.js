@@ -1,3 +1,5 @@
+import { faBookmark, faCircleNotch, faHandshake, faNetworkWired, faPersonChalkboard } from '@fortawesome/free-solid-svg-icons'
+
 export const areas = [
 	{
 		id: 1,
@@ -6,17 +8,18 @@ export const areas = [
 ]
 
 export const projects = [
-	{ id: 1, areaId: null, title: 'Reminders', url: '/projects/1' },
+	{ id: 1, areaId: null, title: 'Reminders', icon: faBookmark, url: '/projects/1' },
 	{
 		id: 2,
 		areaId: null,
 		title: 'Meet Things for Mac',
 		description:
 			'This project shows you everything you need to know to hit the ground running. Don’t hesitate to play around in it – you can always create a new one from the Help menu.',
+		icon: faHandshake,
 		url: '/projects/2',
 	},
-	{ id: 3, areaId: 1, title: 'COM 101', url: '/projects/3' },
-	{ id: 4, areaId: 1, title: 'CS 371', url: '/projects/4' },
+	{ id: 3, areaId: 1, title: 'COM 101', icon: faPersonChalkboard, url: '/projects/3' },
+	{ id: 4, areaId: 1, title: 'CS 371', icon: faNetworkWired, url: '/projects/4' },
 ]
 
 export const headers = [

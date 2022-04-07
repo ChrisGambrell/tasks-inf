@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRight,
@@ -43,11 +44,12 @@ export const Task = ({ task, specialDisplay = false }) => {
 }
 
 const DummyContent = () => {
-	const project = projects.find((project) => project.id === 2)
+	const { projectId } = useParams()
+	const project = projects.find((project) => project.id === Number(projectId))
 
 	return (
 		<View>
-			<View.Header title={project.title} description={project.description} icon={faCircle} color='text-blue-600' actionButton />
+			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
 				{headers
 					.filter((header) => header.projectId === project.id)
