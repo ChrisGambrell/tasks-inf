@@ -2,7 +2,7 @@ import { tasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
-import { Task } from './DummyContent'
+import { Task } from './Project'
 
 const Today = () => {
 	const menuItem = menuItems

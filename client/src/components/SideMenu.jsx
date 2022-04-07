@@ -19,7 +19,6 @@ import { Menu } from '.'
 import { DummyContent, Placeholder, Today } from '../pages'
 
 export const menuItems = [
-	[{ title: 'Dummy Content', icon: '', color: '', notification: 100, url: '/', component: DummyContent }],
 	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
 	[
 		{

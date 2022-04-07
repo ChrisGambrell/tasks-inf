@@ -10,6 +10,7 @@ const Placeholder = ({ title = '', icon = faCircleQuestion, color = 'text-gray-4
 		<View.Content>
 			<div className='flex-grow flex justify-center items-center drop-shadow-xl text-8xl text-gray-300'>
 				<FontAwesomeIcon icon={icon} />
+				{/* TODO maybe show 'empty' message? */}
 			</div>
 		</View.Content>
 	</View>
