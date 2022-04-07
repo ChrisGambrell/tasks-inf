@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
+import Placeholder from './Placeholder'
 
 const actionMenuItems = [
 	[{ label: 'Archive', icon: faCheckToSlot, onClick: () => console.log('TODO') }],
@@ -47,14 +48,14 @@ const DummyContent = () => {
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
 
-	return (
+	return tasks.filter((task) => task.projectId === project.id).length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
 				{/* Tasks w/o headers */}
 				<div className='mb-8'>
 					{tasks
-						.filter((task) => !task.headerId)
+						.filter((task) => task.projectId === project.id && !task.headerId)
 						.map((task) => (
 							<Task key={task.title} task={task} />
 						))}
@@ -91,6 +92,8 @@ const DummyContent = () => {
 					))}
 			</View.Content>
 		</View>
+	) : (
+		<Placeholder title={project.title} icon={project.icon} color='text-blue-600' />
 	)
 }
 

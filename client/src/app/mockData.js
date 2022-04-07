@@ -1,4 +1,4 @@
-import { faBookmark, faCircleNotch, faHandshake, faNetworkWired, faPersonChalkboard } from '@fortawesome/free-solid-svg-icons'
+import { faBookmark, faHandshake, faNetworkWired, faPersonChalkboard } from '@fortawesome/free-solid-svg-icons'
 
 export const areas = [
 	{
