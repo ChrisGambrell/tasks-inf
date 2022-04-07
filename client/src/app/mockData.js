@@ -50,7 +50,7 @@ export const tasks = [
 		title: 'Create a new to-do',
 		notes: 'Your turn – just hit ⌘N on your keyboard.',
 		completed: false,
-		when: null,
+		when: new Date(new Date().setDate(new Date().getDate() + 1)),
 	},
 	{
 		headerId: 1,

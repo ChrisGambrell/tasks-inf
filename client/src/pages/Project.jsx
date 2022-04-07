@@ -23,9 +23,13 @@ export const Task = ({ task, specialDisplay = false }) => {
 				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
 			/>
 			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
-			{!specialDisplay && task.when?.toLocaleDateString() === new Date().toLocaleDateString() && (
+			{!specialDisplay && task.when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
 				<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
-			)}
+			) : task.when ? (
+				<div className='ml-1 px-2 rounded text-xs font-semibold text-gray-600 bg-gray-200 select-none'>
+					{task.when.toLocaleDateString('en-us', { weekday: 'short' })}
+				</div>
+			) : null}
 			<div className='ml-1 mr-1'>
 				<div className='text-gray-800 truncate'>{task.title}</div>
 				{specialDisplay && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
@@ -35,7 +39,7 @@ export const Task = ({ task, specialDisplay = false }) => {
 	)
 }
 
-const DummyContent = () => {
+const Project = () => {
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
 
@@ -91,4 +95,4 @@ const DummyContent = () => {
 	)
 }
 
-export default DummyContent
+export default Project
