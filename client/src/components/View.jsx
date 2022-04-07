@@ -16,26 +16,26 @@ import {
 import { Dropdown } from '.'
 
 export const toolbarButtons = [
-	{ icon: faPlus, disabled: false },
-	{ icon: faCaretSquareRight, disabled: false, show: '/project' },
-	{ icon: faCalendarDays, disabled: true },
-	{ icon: faArrowRight, disabled: true },
-	{ icon: faMagnifyingGlass, disabled: false },
+	{ icon: faPlus, disabled: false, onClick: () => console.log('TODO') },
+	{ icon: faCaretSquareRight, disabled: false, onClick: () => console.log('TODO'), show: '/project' },
+	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
+	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
+	{ icon: faMagnifyingGlass, disabled: false, onClick: () => console.log('TODO') },
 ]
 
 const actionMenuItems = [
 	[
-		{ label: 'Complete Project', icon: faCircleCheck },
-		{ label: 'When', icon: faCalendarDays },
-		{ label: 'Add Tags', icon: faTag },
-		{ label: 'Add Deadline', icon: faFlag },
+		{ label: 'Complete Project', icon: faCircleCheck, onClick: () => console.log('TODO') },
+		{ label: 'When', icon: faCalendarDays, onClick: () => console.log('TODO') },
+		{ label: 'Add Tags', icon: faTag, onClick: () => console.log('TODO') },
+		{ label: 'Add Deadline', icon: faFlag, onClick: () => console.log('TODO') },
 	],
 	[
-		{ label: 'Move', icon: faArrowRight },
-		{ label: 'Repeat', icon: faArrowRotateRight },
-		{ label: 'Duplicate Project', icon: faCopy },
-		{ label: 'Delete Project', icon: faTrash },
-		{ label: 'Share', icon: faShareFromSquare },
+		{ label: 'Move', icon: faArrowRight, onClick: () => console.log('TODO') },
+		{ label: 'Repeat', icon: faArrowRotateRight, onClick: () => console.log('TODO') },
+		{ label: 'Duplicate Project', icon: faCopy, onClick: () => console.log('TODO') },
+		{ label: 'Delete Project', icon: faTrash, onClick: () => console.log('TODO') },
+		{ label: 'Share', icon: faShareFromSquare, onClick: () => console.log('TODO') },
 	],
 ]
 
@@ -52,7 +52,8 @@ const View = ({ children }) => (
 					<button
 						key={i}
 						className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
-						disabled={button.disabled}>
+						disabled={button.disabled}
+						onClick={button.onClick}>
 						<FontAwesomeIcon icon={button.icon} />
 					</button>
 				))}

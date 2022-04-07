@@ -94,7 +94,7 @@ const SideMenu = () => {
 					opened={newListOpen}
 					onClose={() => setNewListOpen(false)}>
 					<div className='w-80 select-none'>
-						<div className='flex space-x-2 p-1 rounded hover:bg-blue-500'>
+						<div className='flex space-x-2 p-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
 							<div>
 								<FontAwesomeIcon className='text-blue-400' icon={faCircleHalfStroke} />
 							</div>
@@ -104,7 +104,7 @@ const SideMenu = () => {
 							</div>
 						</div>
 						<hr className='my-2 border-gray-500' />
-						<div className='flex space-x-2 p-1 rounded hover:bg-blue-500'>
+						<div className='flex space-x-2 p-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
 							<div>
 								<FontAwesomeIcon className='text-green-500' icon={faBox} />
 							</div>

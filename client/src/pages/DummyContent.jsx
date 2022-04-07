@@ -13,11 +13,11 @@ import { headers, projects, tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 
 const actionMenuItems = [
-	[{ label: 'Archive', icon: faCheckToSlot }],
+	[{ label: 'Archive', icon: faCheckToSlot, onClick: () => console.log('TODO') }],
 	[
-		{ label: 'Move', icon: faArrowRight },
-		{ label: 'Convert to Project...', icon: faUpRightFromSquare },
-		{ label: 'Delete', icon: faTrash },
+		{ label: 'Move', icon: faArrowRight, onClick: () => console.log('TODO') },
+		{ label: 'Convert to Project...', icon: faUpRightFromSquare, onClick: () => console.log('TODO') },
+		{ label: 'Delete', icon: faTrash, onClick: () => console.log('TODO') },
 	],
 ]
 
