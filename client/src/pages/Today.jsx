@@ -16,7 +16,7 @@ const Today = () => {
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
 				{tasks.map((task) => (
-					<Task key={task.title} task={task} specialDisplay />
+					<Task key={task.title} task={task} showProject showWhen />
 				))}
 			</View.Content>
 		</View>

@@ -4,7 +4,6 @@ import {
 	faArrowRight,
 	faCalendarDays,
 	faCheckToSlot,
-	faCircle,
 	faFile,
 	faStar,
 	faTrash,
@@ -14,7 +13,22 @@ import { headers, projects, tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
 
-export const Task = ({ task, specialDisplay = false }) => {
+const WhenDisplay = ({ when }) => {
+	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
+		<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
+	) : when ? (
+		<div className='ml-1 px-2 rounded text-xs font-semibold text-gray-600 bg-gray-200 select-none'>
+			{when.toLocaleDateString(
+				'en-us',
+				when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+					? { weekday: 'short' }
+					: { month: 'short', day: 'numeric' }
+			)}
+		</div>
+	) : null
+}
+
+export const Task = ({ task, showNotesIndicator = false, showProject = false, showWhen = false }) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
 	return (
@@ -23,19 +37,17 @@ export const Task = ({ task, specialDisplay = false }) => {
 				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
 			/>
 			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
-			{!specialDisplay && task.when?.toLocaleDateString() === new Date().toLocaleDateString() && (
-				<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
-			)}
+			{showWhen && <WhenDisplay when={task.when} />}
 			<div className='ml-1 mr-1'>
 				<div className='text-gray-800 truncate'>{task.title}</div>
-				{specialDisplay && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+				{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
 			</div>
-			{!specialDisplay && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
+			{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
 		</div>
 	)
 }
 
-const DummyContent = () => {
+const Project = () => {
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
 
@@ -48,7 +60,7 @@ const DummyContent = () => {
 					{tasks
 						.filter((task) => task.projectId === project.id && !task.headerId)
 						.map((task) => (
-							<Task key={task.title} task={task} />
+							<Task key={task.title} task={task} showNotesIndicator showWhen />
 						))}
 				</div>
 
@@ -80,7 +92,7 @@ const DummyContent = () => {
 							{tasks
 								.filter((task) => task.headerId === header.id)
 								.map((task) => (
-									<Task key={task.title} task={task} />
+									<Task key={task.title} task={task} showNotesIndicator showWhen />
 								))}
 						</div>
 					))}
@@ -91,4 +103,4 @@ const DummyContent = () => {
 	)
 }
 
-export default DummyContent
+export default Project

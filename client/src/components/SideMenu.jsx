@@ -16,7 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { areas, projects, tasks } from '../app/mockData'
 import { Menu } from '.'
-import { DummyContent, Placeholder, Today } from '../pages'
+import { Placeholder, Today, Upcoming } from '../pages'
 
 export const menuItems = [
 	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
@@ -29,7 +29,7 @@ export const menuItems = [
 			url: '/today',
 			component: Today,
 		},
-		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming', component: Placeholder },
+		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming', component: Upcoming },
 		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
 		{ title: 'Someday', icon: faArchive, color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
 	],
