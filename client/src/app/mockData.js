@@ -42,6 +42,7 @@ export const tasks = [
 		title: 'Double-click this to-do',
 		notes: 'You’re looking at a to-do! Complete it by clicking the checkbox on the left. Completed to-dos are collected at the bottom of your project.',
 		completed: false,
+		completedWhen: null,
 		when: new Date(),
 	},
 	{
@@ -50,6 +51,7 @@ export const tasks = [
 		title: 'Create a new to-do',
 		notes: 'Your turn – just hit ⌘N on your keyboard.',
 		completed: false,
+		completedWhen: null,
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1),
 	},
 	{
@@ -58,6 +60,7 @@ export const tasks = [
 		title: 'Add this to-do to your Today list',
 		notes: 'Click the calendar button below to plan when you’ll do this to-do. Choose Today.',
 		completed: true,
+		completedWhen: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1),
 		when: new Date(),
 	},
 	{
@@ -66,6 +69,7 @@ export const tasks = [
 		title: 'Plan this to-do for later',
 		notes: 'Click the calendar button again, but this time, choose a date in the future. It will automatically appear in your Today list when the date comes. Upcoming to-dos are grouped together at the bottom of each section.',
 		completed: false,
+		completedWhen: null,
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7),
 	},
 	{
@@ -73,7 +77,8 @@ export const tasks = [
 		projectId: 2,
 		title: 'Create a new heading',
 		notes: 'Go to File → New Heading to create a heading, then drag this to-do under it.',
-		completed: false,
+		completed: true,
+		completedWhen: new Date(),
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 6),
 	},
 	{
@@ -82,6 +87,7 @@ export const tasks = [
 		title: 'Create a project',
 		notes: 'On to bigger things! At the bottom of the sidebar, click “+ New List” to add a project of your own.',
 		completed: true,
+		completedWhen: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 4),
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 10),
 	},
 	{
@@ -90,6 +96,7 @@ export const tasks = [
 		title: 'Task without header & without description',
 		notes: null,
 		completed: false,
+		completedWhen: null,
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
 	},
 	{
@@ -97,7 +104,8 @@ export const tasks = [
 		projectId: 2,
 		title: 'Organize with areas',
 		notes: 'Create an area for each sphere of your life, such as Work, Family, Finance, and so on. You can drop your projects into them to stay organized. At the bottom of the sidebar, click “+ New List” to create one. Unlike projects, areas are never completed.',
-		completed: false,
+		completed: true,
+		completedWhen: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1),
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 10),
 	},
 	{
@@ -105,7 +113,8 @@ export const tasks = [
 		projectId: 2,
 		title: "You're done!",
 		notes: 'That’s all you really need to know. Feel free to start adding your own projects and to-dos. You can come back to this project later to learn the advanced features below. When you’re done with the project, click the progress ring at the top to mark it complete. We hope you’ll enjoy using Things!',
-		completed: false,
+		completed: true,
+		completedWhen: new Date(new Date().getFullYear(), new Date().getMonth() - 2, new Date().getDate() - 4),
 		when: null,
 	},
 	{
@@ -114,6 +123,7 @@ export const tasks = [
 		title: 'Show your calendar events',
 		notes: 'You can connect your calendars to Things and see all of your events and to-dos together. Go to Things → Preferences → Calendar Events to turn it on.',
 		completed: false,
+		completedWhen: null,
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 4, new Date().getDate()),
 	},
 	{
@@ -122,6 +132,7 @@ export const tasks = [
 		title: 'Add some widgets',
 		notes: 'Widgets let you quickly access to your lists while working in other apps. You can add as many as you like. Here’s how:',
 		completed: false,
+		completedWhen: null,
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 4, new Date().getDate() + 2),
 	},
 	{
@@ -130,6 +141,10 @@ export const tasks = [
 		title: 'Sync your devices',
 		notes: 'Things Cloud keeps your to-dos in sync across your Mac, iPhone, and iPad. Go to Things → Preferences → Things Cloud to create a free account. Even if you only use one device, you should still create a Things Cloud account – this ensures your data is always safely backed up.',
 		completed: false,
+		completedWhen: null,
 		when: new Date(new Date().getFullYear() + 1, new Date().getMonth() + 2, new Date().getDate()),
 	},
 ]
+
+export const completeTasks = tasks.filter((task) => task.completed)
+export const incompleteTasks = tasks.filter((task) => !task.completed)

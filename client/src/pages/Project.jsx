@@ -9,7 +9,7 @@ import {
 	faTrash,
 	faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
-import { headers, projects, tasks } from '../app/mockData'
+import { headers, projects, incompleteTasks as tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
 

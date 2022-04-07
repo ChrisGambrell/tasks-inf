@@ -1,4 +1,4 @@
-import { tasks as taskCollection } from '../app/mockData'
+import { incompleteTasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
