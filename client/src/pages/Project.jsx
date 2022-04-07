@@ -4,7 +4,6 @@ import {
 	faArrowRight,
 	faCalendarDays,
 	faCheckToSlot,
-	faCircle,
 	faFile,
 	faStar,
 	faTrash,
@@ -13,6 +12,19 @@ import {
 import { headers, projects, tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
+
+const WhenDisplay = ({ when }) => {
+	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
+		<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
+	) : when ? (
+		<div className='ml-1 px-2 rounded text-xs font-semibold text-gray-600 bg-gray-200 select-none'>
+			{when.toLocaleDateString(
+				'en-us',
+				(when - new Date()) / (1000 * 60 * 60 * 24) < 6 ? { weekday: 'short' } : { month: 'short', day: 'numeric' }
+			)}
+		</div>
+	) : null
+}
 
 export const Task = ({ task, specialDisplay = false }) => {
 	const project = projects.find((project) => project.id === task.projectId)
@@ -23,13 +35,7 @@ export const Task = ({ task, specialDisplay = false }) => {
 				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
 			/>
 			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
-			{!specialDisplay && task.when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
-				<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
-			) : task.when ? (
-				<div className='ml-1 px-2 rounded text-xs font-semibold text-gray-600 bg-gray-200 select-none'>
-					{task.when.toLocaleDateString('en-us', { weekday: 'short' })}
-				</div>
-			) : null}
+			{!specialDisplay && <WhenDisplay when={task.when} />}
 			<div className='ml-1 mr-1'>
 				<div className='text-gray-800 truncate'>{task.title}</div>
 				{specialDisplay && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}

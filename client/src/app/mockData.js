@@ -66,7 +66,7 @@ export const tasks = [
 		title: 'Plan this to-do for later',
 		notes: 'Click the calendar button again, but this time, choose a date in the future. It will automatically appear in your Today list when the date comes. Upcoming to-dos are grouped together at the bottom of each section.',
 		completed: false,
-		when: null,
+		when: new Date(new Date().setDate(new Date().getDate() + 6)),
 	},
 	{
 		headerId: 1,
@@ -74,7 +74,7 @@ export const tasks = [
 		title: 'Create a new heading',
 		notes: 'Go to File → New Heading to create a heading, then drag this to-do under it.',
 		completed: false,
-		when: null,
+		when: new Date(new Date().setDate(new Date().getDate() + 7)),
 	},
 	{
 		headerId: 1,
