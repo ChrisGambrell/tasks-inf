@@ -58,10 +58,6 @@ const DummyContent = () => {
 								key={header.title}
 								className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
 								<div>{header.title}</div>
-								{/* <FontAwesomeIcon
-									className='ml-1 w-5 h-5 px-1 py-0.5 rounded text-blue-600 active:bg-gray-200'
-									icon={faEllipsis}
-								/> */}
 								<Dropdown color='text-blue-600'>
 									{actionMenuItems.map((section, i) => (
 										<div key={i}>
