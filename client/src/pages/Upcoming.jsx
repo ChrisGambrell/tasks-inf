@@ -17,7 +17,7 @@ const Upcoming = () => {
 		let { when } = task
 		when = when.toLocaleDateString()
 
-		if ((new Date(when) - new Date()) / (1000 * 60 * 60 * 24) > 7) return group
+		if (new Date(when) > new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 8)) return group
 
 		group[when] = group[when] ?? []
 		group[when].push(task)
@@ -71,7 +71,8 @@ const Upcoming = () => {
 								<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm text-gray-500'>
 									{new Date(group).toLocaleDateString(
 										'en-us',
-										(new Date(group) - new Date()) / (1000 * 60 * 60 * 24) < 7 ? { weekday: 'long' } : {}
+										new Date(group) <
+											new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
 									)}
 								</div>
 							</div>

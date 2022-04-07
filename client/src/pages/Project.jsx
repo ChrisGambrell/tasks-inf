@@ -20,7 +20,9 @@ const WhenDisplay = ({ when }) => {
 		<div className='ml-1 px-2 rounded text-xs font-semibold text-gray-600 bg-gray-200 select-none'>
 			{when.toLocaleDateString(
 				'en-us',
-				(when - new Date()) / (1000 * 60 * 60 * 24) < 6 ? { weekday: 'short' } : { month: 'short', day: 'numeric' }
+				when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+					? { weekday: 'short' }
+					: { month: 'short', day: 'numeric' }
 			)}
 		</div>
 	) : null
