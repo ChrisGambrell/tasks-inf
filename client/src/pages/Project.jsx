@@ -26,7 +26,7 @@ const WhenDisplay = ({ when }) => {
 	) : null
 }
 
-export const Task = ({ task, specialDisplay = false }) => {
+export const Task = ({ task, showNotesIndicator = false, showProject = false, showWhen = false }) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
 	return (
@@ -35,12 +35,12 @@ export const Task = ({ task, specialDisplay = false }) => {
 				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
 			/>
 			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
-			{!specialDisplay && <WhenDisplay when={task.when} />}
+			{showWhen && <WhenDisplay when={task.when} />}
 			<div className='ml-1 mr-1'>
 				<div className='text-gray-800 truncate'>{task.title}</div>
-				{specialDisplay && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+				{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
 			</div>
-			{!specialDisplay && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
+			{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
 		</div>
 	)
 }
@@ -58,7 +58,7 @@ const Project = () => {
 					{tasks
 						.filter((task) => task.projectId === project.id && !task.headerId)
 						.map((task) => (
-							<Task key={task.title} task={task} />
+							<Task key={task.title} task={task} showNotesIndicator showWhen />
 						))}
 				</div>
 
@@ -90,7 +90,7 @@ const Project = () => {
 							{tasks
 								.filter((task) => task.headerId === header.id)
 								.map((task) => (
-									<Task key={task.title} task={task} />
+									<Task key={task.title} task={task} showNotesIndicator showWhen />
 								))}
 						</div>
 					))}
