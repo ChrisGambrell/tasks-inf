@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
 import { tasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
 import { Task } from './Project'
-import { groupOptions } from '@mantine/core'
 
 const Upcoming = () => {
 	const menuItem = menuItems
@@ -58,7 +56,7 @@ const Upcoming = () => {
 		return group
 	}, {})
 
-	return (
+	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
@@ -141,6 +139,8 @@ const Upcoming = () => {
 				</div>
 			</View.Content>
 		</View>
+	) : (
+		<Placeholder {...menuItem} />
 	)
 }
 
