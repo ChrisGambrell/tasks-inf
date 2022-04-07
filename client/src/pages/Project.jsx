@@ -14,15 +14,6 @@ import { headers, projects, tasks } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
 
-const actionMenuItems = [
-	[{ label: 'Archive', icon: faCheckToSlot, onClick: () => console.log('TODO') }],
-	[
-		{ label: 'Move', icon: faArrowRight, onClick: () => console.log('TODO') },
-		{ label: 'Convert to Project...', icon: faUpRightFromSquare, onClick: () => console.log('TODO') },
-		{ label: 'Delete', icon: faTrash, onClick: () => console.log('TODO') },
-	],
-]
-
 export const Task = ({ task, specialDisplay = false }) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
@@ -71,14 +62,17 @@ const DummyContent = () => {
 								className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
 								<div>{header.title}</div>
 								<Dropdown color='text-blue-600'>
-									{actionMenuItems.map((section, i) => (
-										<div key={i}>
-											{section.map((actionMenuItem) => (
-												<Dropdown.Item key={actionMenuItem.label} {...actionMenuItem} />
-											))}
-											{i !== actionMenuItems.length - 1 && <Dropdown.Divider />}
-										</div>
-									))}
+									<Dropdown.Item label='Archive' icon={faCheckToSlot} onClick={() => console.log('TODO')} />
+
+									<Dropdown.Divider />
+
+									<Dropdown.Item label='Move' icon={faArrowRight} onClick={() => console.log('TODO')} />
+									<Dropdown.Item
+										label='Convert to Project...'
+										icon={faUpRightFromSquare}
+										onClick={() => console.log('TODO')}
+									/>
+									<Dropdown.Item label='Delete' icon={faTrash} onClick={() => console.log('TODO')} />
 								</Dropdown>
 							</div>
 

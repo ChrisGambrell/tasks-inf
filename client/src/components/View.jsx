@@ -13,7 +13,7 @@ import {
 	faTag,
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { Dropdown } from '.'
+import { Dropdown, WhenSelect } from '.'
 
 export const toolbarButtons = [
 	{ icon: faPlus, disabled: false, onClick: () => console.log('TODO') },
@@ -21,22 +21,6 @@ export const toolbarButtons = [
 	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
 	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
 	{ icon: faMagnifyingGlass, disabled: false, onClick: () => console.log('TODO') },
-]
-
-const actionMenuItems = [
-	[
-		{ label: 'Complete Project', icon: faCircleCheck, onClick: () => console.log('TODO') },
-		{ label: 'When', icon: faCalendarDays, onClick: () => console.log('TODO') },
-		{ label: 'Add Tags', icon: faTag, onClick: () => console.log('TODO') },
-		{ label: 'Add Deadline', icon: faFlag, onClick: () => console.log('TODO') },
-	],
-	[
-		{ label: 'Move', icon: faArrowRight, onClick: () => console.log('TODO') },
-		{ label: 'Repeat', icon: faArrowRotateRight, onClick: () => console.log('TODO') },
-		{ label: 'Duplicate Project', icon: faCopy, onClick: () => console.log('TODO') },
-		{ label: 'Delete Project', icon: faTrash, onClick: () => console.log('TODO') },
-		{ label: 'Share', icon: faShareFromSquare, onClick: () => console.log('TODO') },
-	],
 ]
 
 const View = ({ children }) => (
@@ -69,14 +53,18 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 				<h2 className='text-3xl font-semibold'>{title}</h2>
 				{actionButton && (
 					<Dropdown>
-						{actionMenuItems.map((section, i) => (
-							<div key={i}>
-								{section.map((actionMenuItem) => (
-									<Dropdown.Item key={actionMenuItem.label} {...actionMenuItem} />
-								))}
-								{i !== actionMenuItems.length - 1 && <Dropdown.Divider />}
-							</div>
-						))}
+						<Dropdown.Item label='Complete Project' icon={faCircleCheck} onClick={() => console.log('TODO')} />
+						<WhenSelect target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />} />
+						<Dropdown.Item label='Add Tags' icon={faTag} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Add Deadline' icon={faFlag} onClick={() => console.log('TODO')} />
+
+						<Dropdown.Divider />
+
+						<Dropdown.Item label='Move' icon={faArrowRight} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Repeat' icon={faArrowRotateRight} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Duplicate Project' icon={faCopy} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Delete Project' icon={faTrash} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Share' icon={faShareFromSquare} onClick={() => console.log('TODO')} />
 					</Dropdown>
 				)}
 			</div>
