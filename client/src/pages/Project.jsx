@@ -89,11 +89,19 @@ const NewTask = () => (
 					</button>
 				}
 			/>
-			<button
+			<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
+				<div className='flex-none'>
+					<FontAwesomeIcon icon={faTag} />
+				</div>
+				<div className='flex-grow'>
+					<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
+				</div>
+			</div>
+			{/* <button
 				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
 				onClick={() => console.log('TODO')}>
 				<FontAwesomeIcon icon={faTag} />
-			</button>
+			</button> */}
 			<button
 				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
 				onClick={() => console.log('TODO')}>
