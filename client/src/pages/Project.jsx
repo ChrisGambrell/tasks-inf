@@ -13,6 +13,7 @@ import {
 	faTag,
 	faTrash,
 	faUpRightFromSquare,
+	faX,
 } from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks as taskCollection } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
@@ -70,51 +71,72 @@ export const Task = ({
 	)
 }
 
-const NewTask = () => (
-	<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
-		<div className='flex space-x-2'>
-			<div className='flex-none'>
-				<input type='checkbox' />
-			</div>
-			<div className='flex-grow flex flex-col'>
-				<input className='focus:outline-none' type='text' placeholder='New To-Do' />
-				<textarea className='focus:outline-none' placeholder='Notes'></textarea>
-			</div>
-		</div>
-		<div className='flex justify-end space-x-2'>
-			<WhenSelect
-				target={
-					<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'>
-						<FontAwesomeIcon icon={faCalendarDays} />
-					</button>
-				}
-			/>
-			<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
+export const NewTask = ({ defaultWhen }) => {
+	const [when, setWhen] = useState(defaultWhen)
+
+	return (
+		<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
+			<div className='flex space-x-2'>
 				<div className='flex-none'>
-					<FontAwesomeIcon icon={faTag} />
+					<input type='checkbox' />
 				</div>
-				<div className='flex-grow'>
-					<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
+				<div className='flex-grow flex flex-col'>
+					<input className='focus:outline-none' type='text' placeholder='New To-Do' />
+					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
 				</div>
 			</div>
-			{/* <button
+			<div className='flex justify-between items-center'>
+				<div>
+					{when && (
+						<WhenSelect
+							target={
+								<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+									<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+									<div className='font-semibold'>Today</div>
+									{/* TODO - clear X button */}
+								</button>
+							}
+						/>
+					)}
+				</div>
+				<div className='flex justify-end space-x-2'>
+					{!when && (
+						<WhenSelect
+							target={
+								<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'>
+									<FontAwesomeIcon icon={faCalendarDays} />
+								</button>
+							}
+						/>
+					)}
+					<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
+						<div className='flex-none'>
+							<FontAwesomeIcon icon={faTag} />
+						</div>
+						<div className='flex-grow'>
+							<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
+						</div>
+					</div>
+					{/* <button
 				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
 				onClick={() => console.log('TODO')}>
 				<FontAwesomeIcon icon={faTag} />
 			</button> */}
-			<button
-				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-				onClick={() => console.log('TODO')}>
-				<FontAwesomeIcon icon={faListUl} />
-			</button>
-			<button
-				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-				onClick={() => console.log('TODO')}>
-				<FontAwesomeIcon icon={faFlag} />
-			</button>
+					<button
+						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+						onClick={() => console.log('TODO')}>
+						<FontAwesomeIcon icon={faListUl} />
+					</button>
+					<button
+						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+						onClick={() => console.log('TODO')}>
+						<FontAwesomeIcon icon={faFlag} />
+					</button>
+				</div>
+			</div>
 		</div>
-	</div>
-)
+	)
+}
 
 const Project = () => {
 	const { projectId } = useParams()
