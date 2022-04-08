@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRight,
 	faCalendarDays,
 	faCheckToSlot,
 	faFile,
+	faFlag,
+	faListUl,
 	faStar,
+	faTag,
 	faTrash,
 	faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
@@ -66,6 +70,44 @@ export const Task = ({
 	)
 }
 
+const NewTask = () => (
+	<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
+		<div className='flex space-x-2'>
+			<div className='flex-none'>
+				<input type='checkbox' />
+			</div>
+			<div className='flex-grow flex flex-col'>
+				<input className='focus:outline-none' type='text' placeholder='New To-Do' />
+				<textarea className='focus:outline-none' placeholder='Notes'></textarea>
+			</div>
+		</div>
+		<div className='flex justify-end space-x-2'>
+			<WhenSelect
+				target={
+					<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'>
+						<FontAwesomeIcon icon={faCalendarDays} />
+					</button>
+				}
+			/>
+			<button
+				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+				onClick={() => console.log('TODO')}>
+				<FontAwesomeIcon icon={faTag} />
+			</button>
+			<button
+				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+				onClick={() => console.log('TODO')}>
+				<FontAwesomeIcon icon={faListUl} />
+			</button>
+			<button
+				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+				onClick={() => console.log('TODO')}>
+				<FontAwesomeIcon icon={faFlag} />
+			</button>
+		</div>
+	</div>
+)
+
 const Project = () => {
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
@@ -75,12 +117,20 @@ const Project = () => {
 		.filter((task) => task.projectId === project.id && task.completed)
 		.sort((a, b) => b.completedWhen - a.completedWhen)
 
+	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
+
+	useHotkeys([
+		['alt + n', () => setShowNewTask(true)],
+		['escape', () => setShowNewTask(false)],
+	])
 
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
+				{showNewTask && <NewTask />}
+
 				{/* Tasks w/o headers */}
 				<div className='mb-8'>
 					{tasks.map((task) => (
@@ -123,6 +173,7 @@ const Project = () => {
 
 				{/* Logged tasks */}
 				{loggedTasks.length > 0 && (
+					// TODO show headers with task
 					<div>
 						<button
 							className='px-1 rounded border border-white font-semibold text-xs text-gray-400 hover:border-gray-300 active:bg-gray-300'
