@@ -77,6 +77,45 @@ export const NewTask = ({ defaultTags, defaultWhen }) => {
 	const [tags, setTags] = useState(defaultTags)
 	const [when, setWhen] = useState(defaultWhen)
 
+	const Checklist = () => (
+		<div className='mb-4'>
+			<div className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
+				<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
+				<input className='w-full focus:outline-none focus:bg-gray-200' type='text' />
+			</div>
+			<div className='flex items-center space-x-2 p-1.5 border border-x-white border-t-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
+				<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
+				<input className='w-full focus:outline-none focus:bg-gray-200' type='text' defaultValue='already has some text here' />
+			</div>
+		</div>
+	)
+
+	const Tags = () => (
+		<div className='flex space-x-1 select-none'>
+			{/* TODO fix overflow */}
+			{tags.map((tag) => (
+				<div key={tag} className='px-2 rounded-full bg-green-300 text-sm text-green-700 active:bg-blue-400 active:text-white'>
+					{tag}
+				</div>
+			))}
+		</div>
+	)
+
+	const SelectedWhen = () => (
+		<div>
+			{/* TODO show actual date */}
+			<WhenSelect
+				target={
+					<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+						<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+						<div className='font-semibold'>Today</div>
+						{/* TODO - clear X button */}
+					</button>
+				}
+			/>
+		</div>
+	)
+
 	return (
 		<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
 			<div className='flex space-x-2'>
@@ -86,49 +125,13 @@ export const NewTask = ({ defaultTags, defaultWhen }) => {
 				<div className='flex-grow flex flex-col'>
 					<input className='focus:outline-none' type='text' placeholder='New To-Do' />
 					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
-					<div className='mb-4'>
-						<div className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
-							<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
-							<input className='w-full focus:outline-none focus:bg-gray-200' type='text' />
-						</div>
-						<div className='flex items-center space-x-2 p-1.5 border border-x-white border-t-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
-							<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
-							<input
-								className='w-full focus:outline-none focus:bg-gray-200'
-								type='text'
-								defaultValue='already has some text here'
-							/>
-						</div>
-					</div>
+					<Checklist />
 				</div>
 			</div>
 			<div className='flex justify-between items-end'>
 				<div className='flex flex-col space-y-2'>
-					{tags?.length > 0 && (
-						<div className='flex space-x-1 select-none'>
-							{/* TODO fix overflow */}
-							{tags.map((tag) => (
-								<div
-									key={tag}
-									className='px-2 rounded-full bg-green-300 text-sm text-green-700 active:bg-blue-400 active:text-white'>
-									{tag}
-								</div>
-							))}
-						</div>
-					)}
-					{when && (
-						<div>
-							<WhenSelect
-								target={
-									<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
-										<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
-										<div className='font-semibold'>Today</div>
-										{/* TODO - clear X button */}
-									</button>
-								}
-							/>
-						</div>
-					)}
+					{tags?.length > 0 && <Tags />}
+					{when && <SelectedWhen />}
 				</div>
 				<div className='flex justify-end space-x-2'>
 					{!when && (
