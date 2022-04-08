@@ -1,3 +1,4 @@
+import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRight,
@@ -20,7 +21,7 @@ export const toolbarButtons = [
 	{ icon: faCaretSquareRight, disabled: false, onClick: () => console.log('TODO'), show: '/project' },
 	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
 	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
-	{ icon: faMagnifyingGlass, disabled: false, onClick: () => console.log('TODO') },
+	{ icon: faMagnifyingGlass, disabled: false, onClick: openSpotlight },
 ]
 
 const View = ({ children }) => (
