@@ -46,31 +46,31 @@ const View = ({ children }) => (
 			{/* TODO */}
 			{toolbarButtons
 				.filter((button) => window.location.pathname.includes(button.show ? button.show : ''))
-				.map((button, i) =>
-					button.tooltip ? (
-						<Tooltip
-							className='w-52'
-							target={
-								<button
-									key={i}
-									className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
-									disabled={button.disabled}
-									onClick={button.onClick}>
-									<FontAwesomeIcon icon={button.icon} />
-								</button>
-							}>
-							{button.tooltip}
-						</Tooltip>
-					) : (
-						<button
-							key={i}
-							className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
-							disabled={button.disabled}
-							onClick={button.onClick}>
-							<FontAwesomeIcon icon={button.icon} />
-						</button>
-					)
-				)}
+				.map((button, i) => (
+					<div key={i}>
+						{button.tooltip ? (
+							<Tooltip
+								className='w-52'
+								target={
+									<button
+										className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
+										disabled={button.disabled}
+										onClick={button.onClick}>
+										<FontAwesomeIcon icon={button.icon} />
+									</button>
+								}>
+								{button.tooltip}
+							</Tooltip>
+						) : (
+							<button
+								className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
+								disabled={button.disabled}
+								onClick={button.onClick}>
+								<FontAwesomeIcon icon={button.icon} />
+							</button>
+						)}
+					</div>
+				))}
 		</div>
 	</div>
 )
