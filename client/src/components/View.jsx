@@ -14,14 +14,27 @@ import {
 	faTag,
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { Dropdown, WhenSelect } from '.'
+import { Dropdown, Tooltip, WhenSelect } from '.'
 
 export const toolbarButtons = [
 	{ icon: faPlus, disabled: false, onClick: () => console.log('TODO') },
 	{ icon: faCaretSquareRight, disabled: false, onClick: () => console.log('TODO'), show: '/project' },
 	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
 	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
-	{ icon: faMagnifyingGlass, disabled: false, onClick: openSpotlight },
+	{
+		icon: faMagnifyingGlass,
+		disabled: false,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>Quick Find</div>
+					<div>⌘/</div>
+				</div>
+				<div className='flex-wrap'>Quickly switch lists, find to-dos, or search for tags.</div>
+			</div>
+		),
+		onClick: openSpotlight,
+	},
 ]
 
 const View = ({ children }) => (
@@ -33,15 +46,31 @@ const View = ({ children }) => (
 			{/* TODO */}
 			{toolbarButtons
 				.filter((button) => window.location.pathname.includes(button.show ? button.show : ''))
-				.map((button, i) => (
-					<button
-						key={i}
-						className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
-						disabled={button.disabled}
-						onClick={button.onClick}>
-						<FontAwesomeIcon icon={button.icon} />
-					</button>
-				))}
+				.map((button, i) =>
+					button.tooltip ? (
+						<Tooltip
+							className='w-52'
+							target={
+								<button
+									key={i}
+									className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
+									disabled={button.disabled}
+									onClick={button.onClick}>
+									<FontAwesomeIcon icon={button.icon} />
+								</button>
+							}>
+							{button.tooltip}
+						</Tooltip>
+					) : (
+						<button
+							key={i}
+							className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
+							disabled={button.disabled}
+							onClick={button.onClick}>
+							<FontAwesomeIcon icon={button.icon} />
+						</button>
+					)
+				)}
 		</div>
 	</div>
 )

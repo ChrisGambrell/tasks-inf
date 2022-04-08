@@ -15,7 +15,7 @@ import {
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
 import { areas, projects, tasks } from '../app/mockData'
-import { Menu } from '.'
+import { Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
 export const menuItems = [
@@ -120,11 +120,20 @@ const SideMenu = () => {
 				<Modal opened={settingsOpen} onClose={() => setSettingsOpen(false)} withCloseButton={false}>
 					Settings Menu - TODO
 				</Modal>
-				<button
-					className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'
-					onClick={() => setSettingsOpen(true)}>
-					<FontAwesomeIcon icon={faSliders} />
-				</button>
+				<Tooltip
+					className='w-32'
+					target={
+						<button
+							className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => setSettingsOpen(true)}>
+							<FontAwesomeIcon icon={faSliders} />
+						</button>
+					}>
+					<div className='flex justify-between p-2'>
+						<div className='font-semibold'>Settings</div>
+						<div>⌘,</div>
+					</div>
+				</Tooltip>
 			</div>
 		</div>
 	)

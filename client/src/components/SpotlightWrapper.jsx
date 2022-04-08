@@ -1,7 +1,9 @@
+// TODO
+
 import { useNavigate } from 'react-router-dom'
 import { SpotlightProvider } from '@mantine/spotlight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { menuItems } from './SideMenu'
 
 const SpotlightItem = ({ action, styles, classNames, hovered, onTrigger, ...others }) => (
@@ -29,7 +31,10 @@ const SpotlightWrapper = ({ children }) => {
 				[]
 			)}
 			actionComponent={SpotlightItem}
-			shortcut='mod + /'>
+			searchPlaceholder='Quick Find'
+			searchIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+			shortcut='mod + /'
+			nothingFoundMessage='Nothing here...'>
 			{children}
 		</SpotlightProvider>
 	)
