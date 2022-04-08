@@ -33,7 +33,7 @@ const SpotlightWrapper = ({ children }) => {
 			actionComponent={SpotlightItem}
 			searchPlaceholder='Quick Find'
 			searchIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-			shortcut='mod + /'
+			shortcut='alt + f'
 			nothingFoundMessage='Nothing here...'>
 			{children}
 		</SpotlightProvider>

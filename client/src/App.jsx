@@ -1,5 +1,6 @@
 import { createContext, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { useHotkeys } from '@mantine/hooks'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { TaskList, TaskToolbar } from './archive'
@@ -11,6 +12,8 @@ export const TasksContext = createContext()
 
 const App = () => {
 	const [state, dispatch] = useReducer(store.reducer, store.initialState)
+
+	useHotkeys([['alt + n', () => console.log('TODO')]])
 
 	return (
 		<div className='App'>

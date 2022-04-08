@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Modal, Popover } from '@mantine/core'
+import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArchive,
@@ -42,6 +43,8 @@ export const menuItems = [
 const SideMenu = () => {
 	const [newListOpen, setNewListOpen] = useState(false)
 	const [settingsOpen, setSettingsOpen] = useState(false)
+
+	useHotkeys([['alt + comma', () => setSettingsOpen(true)]])
 
 	return (
 		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
@@ -131,7 +134,7 @@ const SideMenu = () => {
 					}>
 					<div className='flex justify-between p-2'>
 						<div className='font-semibold'>Settings</div>
-						<div>⌘,</div>
+						<div>⌥,</div>
 					</div>
 				</Tooltip>
 			</div>

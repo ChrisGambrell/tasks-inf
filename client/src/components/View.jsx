@@ -17,7 +17,20 @@ import {
 import { Dropdown, Tooltip, WhenSelect } from '.'
 
 export const toolbarButtons = [
-	{ icon: faPlus, disabled: false, onClick: () => console.log('TODO') },
+	{
+		icon: faPlus,
+		disabled: false,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>New To-Do</div>
+					<div>⌥N</div>
+				</div>
+				<div className='flex-wrap'>You can also just press your spacebar.</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+	},
 	{ icon: faCaretSquareRight, disabled: false, onClick: () => console.log('TODO'), show: '/project' },
 	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
 	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
@@ -28,7 +41,7 @@ export const toolbarButtons = [
 			<div className='flex flex-col p-2'>
 				<div className='flex justify-between'>
 					<div className='font-semibold'>Quick Find</div>
-					<div>⌘/</div>
+					<div>⌥F</div>
 				</div>
 				<div className='flex-wrap'>Quickly switch lists, find to-dos, or search for tags.</div>
 			</div>
