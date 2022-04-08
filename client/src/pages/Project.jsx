@@ -6,6 +6,7 @@ import {
 	faArrowRight,
 	faCalendarDays,
 	faCheckToSlot,
+	faCircleDot,
 	faFile,
 	faFlag,
 	faListUl,
@@ -85,6 +86,20 @@ export const NewTask = ({ defaultTags, defaultWhen }) => {
 				<div className='flex-grow flex flex-col'>
 					<input className='focus:outline-none' type='text' placeholder='New To-Do' />
 					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
+					<div className='mb-4'>
+						<div className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
+							<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
+							<input className='w-full focus:outline-none focus:bg-gray-200' type='text' />
+						</div>
+						<div className='flex items-center space-x-2 p-1.5 border border-x-white border-t-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
+							<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
+							<input
+								className='w-full focus:outline-none focus:bg-gray-200'
+								type='text'
+								defaultValue='already has some text here'
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div className='flex justify-between items-end'>
