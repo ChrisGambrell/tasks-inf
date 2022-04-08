@@ -24,7 +24,13 @@ const Today = () => {
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
-				{showNewTask && <NewTask defaultTags={['foo', 'this is a test']} defaultWhen={new Date()} />}
+				{showNewTask && (
+					<NewTask
+						defaultChecklist={['first item', 'second item in checklist']}
+						defaultTags={['foo', 'this is a test']}
+						defaultWhen={new Date()}
+					/>
+				)}
 
 				{tasks.map((task) => (
 					<Task key={task.title} task={task} showProject showWhen />

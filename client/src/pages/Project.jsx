@@ -12,10 +12,8 @@ import {
 	faListUl,
 	faStar,
 	faTag,
-	faTags,
 	faTrash,
 	faUpRightFromSquare,
-	faX,
 } from '@fortawesome/free-solid-svg-icons'
 import { headers, projects, tasks as taskCollection } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
@@ -73,20 +71,22 @@ export const Task = ({
 	)
 }
 
-export const NewTask = ({ defaultTags, defaultWhen }) => {
+export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
+	const [checklist, setChecklist] = useState(defaultChecklist)
 	const [tags, setTags] = useState(defaultTags)
 	const [when, setWhen] = useState(defaultWhen)
 
 	const Checklist = () => (
 		<div className='mb-4'>
-			<div className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
-				<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
-				<input className='w-full focus:outline-none focus:bg-gray-200' type='text' />
-			</div>
-			<div className='flex items-center space-x-2 p-1.5 border border-x-white border-t-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
-				<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
-				<input className='w-full focus:outline-none focus:bg-gray-200' type='text' defaultValue='already has some text here' />
-			</div>
+			{checklist.map((item) => (
+				<div
+					key={item}
+					className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
+					{/* TODO fix borders for multi-item */}
+					<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
+					<input className='w-full focus:outline-none focus:bg-gray-200' type='text' defaultValue={item} />
+				</div>
+			))}
 		</div>
 	)
 
@@ -125,7 +125,7 @@ export const NewTask = ({ defaultTags, defaultWhen }) => {
 				<div className='flex-grow flex flex-col'>
 					<input className='focus:outline-none' type='text' placeholder='New To-Do' />
 					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
-					<Checklist />
+					{checklist?.length > 0 && <Checklist />}
 				</div>
 			</div>
 			<div className='flex justify-between items-end'>
@@ -158,11 +158,13 @@ export const NewTask = ({ defaultTags, defaultWhen }) => {
 				onClick={() => console.log('TODO')}>
 				<FontAwesomeIcon icon={faTag} />
 			</button> */}
-					<button
-						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-						onClick={() => console.log('TODO')}>
-						<FontAwesomeIcon icon={faListUl} />
-					</button>
+					{(!checklist || checklist?.length === 0) && (
+						<button
+							className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => console.log('TODO')}>
+							<FontAwesomeIcon icon={faListUl} />
+						</button>
+					)}
 					<button
 						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
 						onClick={() => console.log('TODO')}>
