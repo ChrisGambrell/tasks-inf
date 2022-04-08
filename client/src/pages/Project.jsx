@@ -11,6 +11,7 @@ import {
 	faListUl,
 	faStar,
 	faTag,
+	faTags,
 	faTrash,
 	faUpRightFromSquare,
 	faX,
@@ -71,7 +72,8 @@ export const Task = ({
 	)
 }
 
-export const NewTask = ({ defaultWhen }) => {
+export const NewTask = ({ defaultTags, defaultWhen }) => {
+	const [tags, setTags] = useState(defaultTags)
 	const [when, setWhen] = useState(defaultWhen)
 
 	return (
@@ -85,18 +87,32 @@ export const NewTask = ({ defaultWhen }) => {
 					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
 				</div>
 			</div>
-			<div className='flex justify-between items-center'>
-				<div>
+			<div className='flex justify-between items-end'>
+				<div className='flex flex-col space-y-2'>
+					{tags?.length > 0 && (
+						<div className='flex space-x-1 select-none'>
+							{/* TODO fix overflow */}
+							{tags.map((tag) => (
+								<div
+									key={tag}
+									className='px-2 rounded-full bg-green-300 text-sm text-green-700 active:bg-blue-400 active:text-white'>
+									{tag}
+								</div>
+							))}
+						</div>
+					)}
 					{when && (
-						<WhenSelect
-							target={
-								<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
-									<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
-									<div className='font-semibold'>Today</div>
-									{/* TODO - clear X button */}
-								</button>
-							}
-						/>
+						<div>
+							<WhenSelect
+								target={
+									<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+										<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+										<div className='font-semibold'>Today</div>
+										{/* TODO - clear X button */}
+									</button>
+								}
+							/>
+						</div>
 					)}
 				</div>
 				<div className='flex justify-end space-x-2'>
@@ -109,14 +125,16 @@ export const NewTask = ({ defaultWhen }) => {
 							}
 						/>
 					)}
-					<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
-						<div className='flex-none'>
-							<FontAwesomeIcon icon={faTag} />
+					{(!tags || tags?.length === 0) && (
+						<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
+							<div className='flex-none'>
+								<FontAwesomeIcon icon={faTag} />
+							</div>
+							<div className='flex-grow'>
+								<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
+							</div>
 						</div>
-						<div className='flex-grow'>
-							<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
-						</div>
-					</div>
+					)}
 					{/* <button
 				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
 				onClick={() => console.log('TODO')}>
