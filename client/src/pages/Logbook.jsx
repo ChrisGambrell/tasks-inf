@@ -1,4 +1,3 @@
-import { openSpotlight } from '@mantine/spotlight'
 import { completeTasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
@@ -49,9 +48,6 @@ const Logbook = () => {
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
-				<button className='p-1 rounded active:bg-gray-100' onClick={openSpotlight}>
-					testing123
-				</button>
 				<div className='space-y-8'>
 					{/* Tasks completed today */}
 					<div className='space-y-2'>

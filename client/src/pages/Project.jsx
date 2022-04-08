@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -9,7 +10,7 @@ import {
 	faTrash,
 	faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
-import { headers, projects, incompleteTasks as tasks } from '../app/mockData'
+import { headers, projects, tasks as taskCollection } from '../app/mockData'
 import { Dropdown, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
 
@@ -38,7 +39,14 @@ const WhenDisplay = ({ when }) => {
 	) : null
 }
 
-export const Task = ({ task, showCompletedWhen = false, showNotesIndicator = false, showProject = false, showWhen = false }) => {
+export const Task = ({
+	task,
+	secondary = false,
+	showCompletedWhen = false,
+	showNotesIndicator = false,
+	showProject = false,
+	showWhen = false,
+}) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
 	return (
@@ -50,7 +58,7 @@ export const Task = ({ task, showCompletedWhen = false, showNotesIndicator = fal
 			{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
 			{showWhen && <WhenDisplay when={task.when} />}
 			<div className='ml-1 mr-1'>
-				<div className='text-gray-800 truncate'>{task.title}</div>
+				<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
 				{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
 			</div>
 			{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
@@ -62,17 +70,22 @@ const Project = () => {
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
 
-	return tasks.filter((task) => task.projectId === project.id).length > 0 ? (
+	const tasks = taskCollection.filter((task) => task.projectId === project.id && !task.completed)
+	const loggedTasks = taskCollection
+		.filter((task) => task.projectId === project.id && task.completed)
+		.sort((a, b) => b.completedWhen - a.completedWhen)
+
+	const [showLoggedItems, setShowLoggedItems] = useState(false)
+
+	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
 				{/* Tasks w/o headers */}
 				<div className='mb-8'>
-					{tasks
-						.filter((task) => task.projectId === project.id && !task.headerId)
-						.map((task) => (
-							<Task key={task.title} task={task} showNotesIndicator showWhen />
-						))}
+					{tasks.map((task) => (
+						<Task key={task.title} task={task} showNotesIndicator showWhen />
+					))}
 				</div>
 
 				{headers
@@ -107,6 +120,18 @@ const Project = () => {
 								))}
 						</div>
 					))}
+
+				{/* Logged tasks */}
+				{loggedTasks.length > 0 && (
+					<div>
+						<button
+							className='px-1 rounded border border-white font-semibold text-xs text-gray-400 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => setShowLoggedItems(!showLoggedItems)}>
+							{showLoggedItems ? 'Hide logged items' : `Show ${loggedTasks.length} logged items`}
+						</button>
+						{showLoggedItems && loggedTasks.map((task) => <Task key={task.title} task={task} secondary showCompletedWhen />)}
+					</div>
+				)}
 			</View.Content>
 		</View>
 	) : (
