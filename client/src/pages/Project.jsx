@@ -124,6 +124,7 @@ export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 
 	return (
 		<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
+			{/* Tooltips on toolbar buttons */}
 			<div className='flex space-x-2'>
 				<div className='flex-none'>
 					<input type='checkbox' />

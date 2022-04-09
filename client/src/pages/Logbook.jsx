@@ -79,7 +79,7 @@ const Logbook = () => {
 						.map((group) => (
 							<div key={group} className='space-y-2'>
 								<div className='flex space-x-2'>
-									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
+									<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
 										{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
 									</div>
 								</div>
