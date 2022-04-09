@@ -47,26 +47,32 @@ const WhenDisplay = ({ when }) => {
 export const Task = ({
 	task,
 	secondary = false,
+	selected = false,
 	showCompletedWhen = false,
 	showNotesIndicator = false,
 	showProject = false,
 	showWhen = false,
+	onClick = () => {},
 }) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
 	return (
-		<div className='flex items-center -mx-6 mt-1.5'>
+		<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
 			<WhenSelect
-				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
+				target={
+					<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon={faCalendarDays} />
+				}
 			/>
-			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
-			{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
-			{showWhen && <WhenDisplay when={task.when} />}
-			<div className='ml-1 mr-1'>
-				<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
-				{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+			<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
+				<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
+				{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
+				{showWhen && <WhenDisplay when={task.when} />}
+				<div className='ml-1 mr-1'>
+					<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
+					{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+				</div>
+				{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
 			</div>
-			{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
 		</div>
 	)
 }
@@ -177,6 +183,8 @@ export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 }
 
 const Project = () => {
+	// TODO show new task even when there's a placeholder
+	// TODO click on toolbar to add extra items to task
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
 
@@ -185,12 +193,20 @@ const Project = () => {
 		.filter((task) => task.projectId === project.id && task.completed)
 		.sort((a, b) => b.completedWhen - a.completedWhen)
 
+	const [selectedTask, setSelectedTask] = useState(0)
+
 	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
 	useHotkeys([
 		['alt + n', () => setShowNewTask(true)],
-		['escape', () => setShowNewTask(false)],
+		[
+			'escape',
+			() => {
+				setSelectedTask(0)
+				setShowNewTask(false)
+			},
+		],
 	])
 
 	return tasks.length > 0 ? (
@@ -201,9 +217,18 @@ const Project = () => {
 
 				{/* Tasks w/o headers */}
 				<div className='mb-8'>
-					{tasks.map((task) => (
-						<Task key={task.title} task={task} showNotesIndicator showWhen />
-					))}
+					{tasks
+						.filter((task) => !task.headerId)
+						.map((task) => (
+							<Task
+								key={task.title}
+								task={task}
+								showNotesIndicator
+								showWhen
+								selected={selectedTask === task.id}
+								onClick={() => setSelectedTask(task.id)}
+							/>
+						))}
 				</div>
 
 				{headers
@@ -234,7 +259,14 @@ const Project = () => {
 							{tasks
 								.filter((task) => task.headerId === header.id)
 								.map((task) => (
-									<Task key={task.title} task={task} showNotesIndicator showWhen />
+									<Task
+										key={task.title}
+										task={task}
+										showNotesIndicator
+										showWhen
+										selected={selectedTask === task.id}
+										onClick={() => setSelectedTask(task.id)}
+									/>
 								))}
 						</div>
 					))}
