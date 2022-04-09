@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRight,
 	faCalendarDays,
 	faCheckToSlot,
+	faCircleDot,
 	faFile,
+	faFlag,
+	faListUl,
 	faStar,
+	faTag,
 	faTrash,
 	faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
@@ -42,31 +47,144 @@ const WhenDisplay = ({ when }) => {
 export const Task = ({
 	task,
 	secondary = false,
+	selected = false,
 	showCompletedWhen = false,
 	showNotesIndicator = false,
 	showProject = false,
 	showWhen = false,
+	onClick = () => {},
 }) => {
 	const project = projects.find((project) => project.id === task.projectId)
 
 	return (
-		<div className='flex items-center -mx-6 mt-1.5'>
+		<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
 			<WhenSelect
-				target={<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 text-gray-400' icon={faCalendarDays} />}
+				target={
+					<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon={faCalendarDays} />
+				}
 			/>
-			<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
-			{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
-			{showWhen && <WhenDisplay when={task.when} />}
-			<div className='ml-1 mr-1'>
-				<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
-				{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+			<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
+				<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
+				{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
+				{showWhen && <WhenDisplay when={task.when} />}
+				<div className='ml-1 mr-1'>
+					<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
+					{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+				</div>
+				{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
 			</div>
-			{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
+		</div>
+	)
+}
+
+export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
+	const [checklist, setChecklist] = useState(defaultChecklist)
+	const [tags, setTags] = useState(defaultTags)
+	const [when, setWhen] = useState(defaultWhen)
+
+	const Checklist = () => (
+		<div className='mb-4'>
+			{checklist.map((item) => (
+				<div
+					key={item}
+					className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
+					{/* TODO fix borders for multi-item */}
+					<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
+					<input className='w-full focus:outline-none focus:bg-gray-200' type='text' defaultValue={item} />
+				</div>
+			))}
+		</div>
+	)
+
+	const Tags = () => (
+		<div className='flex space-x-1 select-none'>
+			{/* TODO fix overflow */}
+			{tags.map((tag) => (
+				<div key={tag} className='px-2 rounded-full bg-green-300 text-sm text-green-700 active:bg-blue-400 active:text-white'>
+					{tag}
+				</div>
+			))}
+		</div>
+	)
+
+	const SelectedWhen = () => (
+		<div>
+			{/* TODO show actual date */}
+			<WhenSelect
+				target={
+					<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+						<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+						<div className='font-semibold'>Today</div>
+						{/* TODO - clear X button */}
+					</button>
+				}
+			/>
+		</div>
+	)
+
+	return (
+		<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
+			<div className='flex space-x-2'>
+				<div className='flex-none'>
+					<input type='checkbox' />
+				</div>
+				<div className='flex-grow flex flex-col'>
+					<input className='focus:outline-none' type='text' placeholder='New To-Do' />
+					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
+					{checklist?.length > 0 && <Checklist />}
+				</div>
+			</div>
+			<div className='flex justify-between items-end'>
+				<div className='flex flex-col space-y-2'>
+					{tags?.length > 0 && <Tags />}
+					{when && <SelectedWhen />}
+				</div>
+				<div className='flex justify-end space-x-2'>
+					{!when && (
+						<WhenSelect
+							target={
+								<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'>
+									<FontAwesomeIcon icon={faCalendarDays} />
+								</button>
+							}
+						/>
+					)}
+					{(!tags || tags?.length === 0) && (
+						<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
+							<div className='flex-none'>
+								<FontAwesomeIcon icon={faTag} />
+							</div>
+							<div className='flex-grow'>
+								<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
+							</div>
+						</div>
+					)}
+					{/* <button
+				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+				onClick={() => console.log('TODO')}>
+				<FontAwesomeIcon icon={faTag} />
+			</button> */}
+					{(!checklist || checklist?.length === 0) && (
+						<button
+							className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => console.log('TODO')}>
+							<FontAwesomeIcon icon={faListUl} />
+						</button>
+					)}
+					<button
+						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+						onClick={() => console.log('TODO')}>
+						<FontAwesomeIcon icon={faFlag} />
+					</button>
+				</div>
+			</div>
 		</div>
 	)
 }
 
 const Project = () => {
+	// TODO show new task even when there's a placeholder
+	// TODO click on toolbar to add extra items to task
 	const { projectId } = useParams()
 	const project = projects.find((project) => project.id === Number(projectId))
 
@@ -75,17 +193,42 @@ const Project = () => {
 		.filter((task) => task.projectId === project.id && task.completed)
 		.sort((a, b) => b.completedWhen - a.completedWhen)
 
+	const [selectedTask, setSelectedTask] = useState(0)
+
+	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
+
+	useHotkeys([
+		['alt + n', () => setShowNewTask(true)],
+		[
+			'escape',
+			() => {
+				setSelectedTask(0)
+				setShowNewTask(false)
+			},
+		],
+	])
 
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
+				{showNewTask && <NewTask />}
+
 				{/* Tasks w/o headers */}
 				<div className='mb-8'>
-					{tasks.map((task) => (
-						<Task key={task.title} task={task} showNotesIndicator showWhen />
-					))}
+					{tasks
+						.filter((task) => !task.headerId)
+						.map((task) => (
+							<Task
+								key={task.title}
+								task={task}
+								showNotesIndicator
+								showWhen
+								selected={selectedTask === task.id}
+								onClick={() => setSelectedTask(task.id)}
+							/>
+						))}
 				</div>
 
 				{headers
@@ -116,13 +259,21 @@ const Project = () => {
 							{tasks
 								.filter((task) => task.headerId === header.id)
 								.map((task) => (
-									<Task key={task.title} task={task} showNotesIndicator showWhen />
+									<Task
+										key={task.title}
+										task={task}
+										showNotesIndicator
+										showWhen
+										selected={selectedTask === task.id}
+										onClick={() => setSelectedTask(task.id)}
+									/>
 								))}
 						</div>
 					))}
 
 				{/* Logged tasks */}
 				{loggedTasks.length > 0 && (
+					// TODO show headers with task
 					<div>
 						<button
 							className='px-1 rounded border border-white font-semibold text-xs text-gray-400 hover:border-gray-300 active:bg-gray-300'

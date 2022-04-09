@@ -37,6 +37,7 @@ export const headers = [
 
 export const tasks = [
 	{
+		id: 1,
 		headerId: 1,
 		projectId: 2,
 		title: 'Double-click this to-do',
@@ -46,6 +47,7 @@ export const tasks = [
 		when: new Date(),
 	},
 	{
+		id: 2,
 		headerId: 1,
 		projectId: 2,
 		title: 'Create a new to-do',
@@ -55,6 +57,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1),
 	},
 	{
+		id: 3,
 		headerId: 1,
 		projectId: 2,
 		title: 'Add this to-do to your Today list',
@@ -64,6 +67,7 @@ export const tasks = [
 		when: new Date(),
 	},
 	{
+		id: 4,
 		headerId: 1,
 		projectId: 2,
 		title: 'Plan this to-do for later',
@@ -73,6 +77,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7),
 	},
 	{
+		id: 5,
 		headerId: 1,
 		projectId: 2,
 		title: 'Create a new heading',
@@ -82,6 +87,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 6),
 	},
 	{
+		id: 6,
 		headerId: 1,
 		projectId: 2,
 		title: 'Create a project',
@@ -91,6 +97,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 10),
 	},
 	{
+		id: 7,
 		headerId: null,
 		projectId: 2,
 		title: 'Task without header & without description',
@@ -100,6 +107,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
 	},
 	{
+		id: 8,
 		headerId: 1,
 		projectId: 2,
 		title: 'Organize with areas',
@@ -109,6 +117,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 10),
 	},
 	{
+		id: 9,
 		headerId: 1,
 		projectId: 2,
 		title: "You're done!",
@@ -118,6 +127,7 @@ export const tasks = [
 		when: null,
 	},
 	{
+		id: 10,
 		headerId: 2,
 		projectId: 2,
 		title: 'Show your calendar events',
@@ -127,6 +137,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 4, new Date().getDate()),
 	},
 	{
+		id: 11,
 		headerId: 2,
 		projectId: 2,
 		title: 'Add some widgets',
@@ -136,6 +147,7 @@ export const tasks = [
 		when: new Date(new Date().getFullYear(), new Date().getMonth() + 4, new Date().getDate() + 2),
 	},
 	{
+		id: 12,
 		headerId: 2,
 		projectId: 2,
 		title: 'Sync your devices',
