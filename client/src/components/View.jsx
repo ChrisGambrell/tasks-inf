@@ -1,3 +1,4 @@
+import { Kbd } from '@mantine/core'
 import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -24,7 +25,9 @@ export const toolbarButtons = [
 			<div className='flex flex-col p-2'>
 				<div className='flex justify-between'>
 					<div className='font-semibold'>New To-Do</div>
-					<div>⌥N</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>N</Kbd>
+					</div>
 				</div>
 				<div className='flex-wrap'>You can also just press your spacebar.</div>
 			</div>
@@ -41,7 +44,9 @@ export const toolbarButtons = [
 			<div className='flex flex-col p-2'>
 				<div className='flex justify-between'>
 					<div className='font-semibold'>Quick Find</div>
-					<div>⌥F</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>F</Kbd>
+					</div>
 				</div>
 				<div className='flex-wrap'>Quickly switch lists, find to-dos, or search for tags.</div>
 			</div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, Popover } from '@mantine/core'
+import { Kbd, Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -93,7 +93,7 @@ const Toolbar = () => {
 				Settings Menu - TODO
 			</Modal>
 			<Tooltip
-				className='w-32'
+				className='w-40'
 				target={
 					<button
 						className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'
@@ -103,7 +103,9 @@ const Toolbar = () => {
 				}>
 				<div className='flex justify-between p-2'>
 					<div className='font-semibold'>Settings</div>
-					<div>⌥,</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>,</Kbd>
+					</div>
 				</div>
 			</Tooltip>
 		</div>
