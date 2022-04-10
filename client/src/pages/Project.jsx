@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useHotkeys } from '@mantine/hooks'
+import { Checkbox, Textarea, TextInput } from '@mantine/core'
+import { useClickOutside, useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faArrowRight,
@@ -64,7 +65,7 @@ export const Task = ({
 				}
 			/>
 			<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
-				<input className='ml-3 mr-1' type='checkbox' defaultChecked={task.completed} />
+				<Checkbox className='ml-3 mr-1' size='xs' defaultChecked={task.completed} />
 				{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
 				{showWhen && <WhenDisplay when={task.when} />}
 				<div className='ml-1 mr-1'>
@@ -82,16 +83,23 @@ export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	const [tags, setTags] = useState(defaultTags)
 	const [when, setWhen] = useState(defaultWhen)
 
+	const [focused, setFocused] = useState(-1)
+	const clickOutsideChecklist = useClickOutside(() => setFocused(-1))
+
 	const Checklist = () => (
-		<div className='mb-4'>
-			{checklist.map((item) => (
-				<div
-					key={item}
-					className='flex items-center space-x-2 p-1.5 border border-x-white text-sm focus-within:rounded focus-within:border-gray-300 focus-within:bg-gray-200'>
-					{/* TODO fix borders for multi-item */}
-					<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />
-					<input className='w-full focus:outline-none focus:bg-gray-200' type='text' defaultValue={item} />
-				</div>
+		<div className='mb-4' ref={clickOutsideChecklist}>
+			{checklist.map((item, i) => (
+				<TextInput
+					key={i}
+					classNames={{ input: 'border-none font-semibold' }}
+					variant={focused === i ? 'filled' : 'unstyled'}
+					size='xs'
+					type='text'
+					icon={<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />}
+					defaultValue={item}
+					autoFocus={focused === i}
+					onFocus={() => setFocused(i)}
+				/>
 			))}
 		</div>
 	)
@@ -127,11 +135,11 @@ export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 			{/* Tooltips on toolbar buttons */}
 			<div className='flex space-x-2'>
 				<div className='flex-none'>
-					<input type='checkbox' />
+					<Checkbox className='mt-2.5' size='xs' />
 				</div>
 				<div className='flex-grow flex flex-col'>
-					<input className='focus:outline-none' type='text' placeholder='New To-Do' />
-					<textarea className='focus:outline-none' placeholder='Notes'></textarea>
+					<TextInput variant='unstyled' type='text' placeholder='New To-Do' />
+					<Textarea variant='unstyled' placeholder='Notes' autosize />
 					{checklist?.length > 0 && <Checklist />}
 				</div>
 			</div>
@@ -151,14 +159,14 @@ export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 						/>
 					)}
 					{(!tags || tags?.length === 0) && (
-						<div className='flex items-center w-36 px-1 space-x-1 rounded text-gray-400 bg-gray-100'>
-							<div className='flex-none'>
-								<FontAwesomeIcon icon={faTag} />
-							</div>
-							<div className='flex-grow'>
-								<input className='w-full bg-transparent text-black focus:outline-none' type='text' placeholder='Tags' />
-							</div>
-						</div>
+						<TextInput
+							classNames={{ input: 'border-none font-semibold' }}
+							variant='filled'
+							size='xs'
+							type='text'
+							icon={<FontAwesomeIcon icon={faTag} />}
+							placeholder='Tags'
+						/>
 					)}
 					{/* <button
 				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
