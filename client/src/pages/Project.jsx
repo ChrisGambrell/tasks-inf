@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Checkbox, Textarea, TextInput } from '@mantine/core'
+import { Badge, Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside, useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -34,14 +34,14 @@ const WhenDisplay = ({ when }) => {
 	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
 		<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
 	) : when ? (
-		<div className='ml-1 px-2 rounded text-xs font-semibold text-gray-600 bg-gray-200 select-none'>
+		<Badge classNames={{ root: 'ml-1 px-1.5 text-gray-600 bg-gray-200' }} radius='sm'>
 			{when.toLocaleDateString(
 				'en-us',
 				when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
 					? { weekday: 'short' }
 					: { month: 'short', day: 'numeric' }
 			)}
-		</div>
+		</Badge>
 	) : null
 }
 

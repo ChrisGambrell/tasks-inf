@@ -97,13 +97,13 @@ const Logbook = () => {
 						.map((group) => (
 							<div key={group} className='space-y-2'>
 								<div className='flex space-x-2'>
-									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
+									<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
 										{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
 									</div>
 								</div>
 								<div>
 									{tasksFuture[group].map((task) => (
-										<Task key={task.title} task={task} showProject showWhen />
+										<Task key={task.title} task={task} showCompletedWhen showProject />
 									))}
 								</div>
 							</div>

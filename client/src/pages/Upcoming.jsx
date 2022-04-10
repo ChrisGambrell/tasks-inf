@@ -62,6 +62,7 @@ const Upcoming = () => {
 			<View.Content>
 				<div className='space-y-8'>
 					{/* This week's tasks */}
+					{/* TODO show correct - 'Today', 'Tomorrow' */}
 					{Object.keys(tasksWeek).map((group) => (
 						<div key={group} className='space-y-2'>
 							<div className='flex space-x-2'>
