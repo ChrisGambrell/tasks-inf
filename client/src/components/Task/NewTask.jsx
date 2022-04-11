@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faCircleDot, faFlag, faListUl, faStar, faTag } from '@fortawesome/free-solid-svg-icons'
-import { WhenSelect } from '..'
+import { faCalendarDays, faCircleDot, faCircleQuestion, faFlag, faListUl, faStar, faTag } from '@fortawesome/free-solid-svg-icons'
+import { DateSelect } from '.'
 
 const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	const [checklist, setChecklist] = useState(defaultChecklist)
@@ -45,7 +45,8 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	const SelectedWhen = () => (
 		<div>
 			{/* TODO show actual date */}
-			<WhenSelect
+			<DateSelect
+				title='When'
 				target={
 					<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
 						<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
@@ -55,6 +56,12 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 				}
 			/>
 		</div>
+	)
+
+	const ToolbarButton = ({ icon = faCircleQuestion, onClick = () => {} }) => (
+		<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300' onClick={onClick}>
+			<FontAwesomeIcon icon={icon} />
+		</button>
 	)
 
 	return (
@@ -76,15 +83,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 					{when && <SelectedWhen />}
 				</div>
 				<div className='flex justify-end space-x-2'>
-					{!when && (
-						<WhenSelect
-							target={
-								<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'>
-									<FontAwesomeIcon icon={faCalendarDays} />
-								</button>
-							}
-						/>
-					)}
+					{!when && <DateSelect title='When' target={<ToolbarButton icon={faCalendarDays} />} />}
 					{(!tags || tags?.length === 0) && (
 						<TextInput
 							classNames={{ input: 'border-none font-semibold' }}
@@ -95,23 +94,12 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 							placeholder='Tags'
 						/>
 					)}
-					{/* <button
-				className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-				onClick={() => console.log('TODO')}>
-				<FontAwesomeIcon icon={faTag} />
-			</button> */}
-					{(!checklist || checklist?.length === 0) && (
-						<button
-							className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-							onClick={() => console.log('TODO')}>
-							<FontAwesomeIcon icon={faListUl} />
-						</button>
-					)}
-					<button
-						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-						onClick={() => console.log('TODO')}>
-						<FontAwesomeIcon icon={faFlag} />
-					</button>
+					{(!checklist || checklist?.length === 0) && <ToolbarButton icon={faListUl} onClick={() => console.log('TODO')} />}
+					<DateSelect
+						title='Deadline'
+						hideQuickDates
+						target={<ToolbarButton icon={faFlag} onClick={() => console.log('TODO')} />}
+					/>
 				</div>
 			</div>
 		</div>

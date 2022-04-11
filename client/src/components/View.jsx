@@ -15,7 +15,8 @@ import {
 	faTag,
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { Dropdown, Tooltip, WhenSelect } from '.'
+import { Dropdown, Tooltip } from '.'
+import { DateSelect } from './Task'
 
 export const toolbarButtons = [
 	{
@@ -102,9 +103,16 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 				{actionButton && (
 					<Dropdown>
 						<Dropdown.Item label='Complete Project' icon={faCircleCheck} onClick={() => console.log('TODO')} />
-						<WhenSelect target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />} />
+						<DateSelect
+							title='When'
+							target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />}
+						/>
 						<Dropdown.Item label='Add Tags' icon={faTag} onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Add Deadline' icon={faFlag} onClick={() => console.log('TODO')} />
+						<DateSelect
+							title='Deadline'
+							hideQuickDates
+							target={<Dropdown.Item label='Add Deadline' icon={faFlag} onClick={() => console.log('TODO')} />}
+						/>
 
 						<Dropdown.Divider />
 

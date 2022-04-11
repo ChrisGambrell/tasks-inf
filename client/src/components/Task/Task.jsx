@@ -2,7 +2,7 @@ import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
 import { projects } from '../../app/mockData'
-import { WhenSelect } from '..'
+import { DateSelect } from '.'
 
 const CompletedWhenDisplay = ({ when }) => {
 	return (
@@ -43,7 +43,8 @@ const Task = ({
 
 	return (
 		<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
-			<WhenSelect
+			<DateSelect
+				title='When'
 				target={
 					<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon={faCalendarDays} />
 				}
