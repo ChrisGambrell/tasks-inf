@@ -3,6 +3,7 @@ import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faCircleDot, faCircleQuestion, faFlag, faListUl, faStar, faTag } from '@fortawesome/free-solid-svg-icons'
+import { Tooltip } from '..'
 import { DateSelect } from '.'
 
 const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
@@ -58,11 +59,23 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 		</div>
 	)
 
-	const ToolbarButton = ({ icon = faCircleQuestion, onClick = () => {} }) => (
-		<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300' onClick={onClick}>
-			<FontAwesomeIcon icon={icon} />
-		</button>
-	)
+	const ToolbarButton = ({ label, icon = faCircleQuestion, onClick = () => {} }) =>
+		label ? (
+			<Tooltip
+				target={
+					<button
+						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+						onClick={onClick}>
+						<FontAwesomeIcon icon={icon} />
+					</button>
+				}>
+				<div>{label}</div>
+			</Tooltip>
+		) : (
+			<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300' onClick={onClick}>
+				<FontAwesomeIcon icon={icon} />
+			</button>
+		)
 
 	return (
 		<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
@@ -83,7 +96,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 					{when && <SelectedWhen />}
 				</div>
 				<div className='flex justify-end space-x-2'>
-					{!when && <DateSelect title='When' target={<ToolbarButton icon={faCalendarDays} />} />}
+					{!when && <DateSelect title='When' target={<ToolbarButton label='When' icon={faCalendarDays} />} />}
 					{(!tags || tags?.length === 0) && (
 						<TextInput
 							classNames={{ input: 'border-none font-semibold' }}
@@ -94,11 +107,13 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 							placeholder='Tags'
 						/>
 					)}
-					{(!checklist || checklist?.length === 0) && <ToolbarButton icon={faListUl} onClick={() => console.log('TODO')} />}
+					{(!checklist || checklist?.length === 0) && (
+						<ToolbarButton label='Checklist' icon={faListUl} onClick={() => console.log('TODO')} />
+					)}
 					<DateSelect
 						title='Deadline'
 						hideQuickDates
-						target={<ToolbarButton icon={faFlag} onClick={() => console.log('TODO')} />}
+						target={<ToolbarButton label='Deadline' icon={faFlag} onClick={() => console.log('TODO')} />}
 					/>
 				</div>
 			</div>

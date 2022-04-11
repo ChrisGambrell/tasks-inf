@@ -35,9 +35,55 @@ export const toolbarButtons = [
 		),
 		onClick: () => console.log('TODO'),
 	},
-	{ icon: faCaretSquareRight, disabled: false, onClick: () => console.log('TODO'), show: '/project' },
-	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
-	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
+	{
+		icon: faCaretSquareRight,
+		disabled: false,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>New Heading</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>Shift</Kbd> + <Kbd>N</Kbd>
+					</div>
+				</div>
+				<div className='flex-wrap'>Divide your project into categories or milestones.</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+		show: '/project',
+	},
+	{
+		icon: faCalendarDays,
+		disabled: true,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>When</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>S</Kbd>
+					</div>
+				</div>
+				<div className='flex-wrap'>Decide when to start. Today or later?</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+	},
+	{
+		icon: faArrowRight,
+		disabled: true,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>Move</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>Shift</Kbd> + <Kbd>S</Kbd>
+					</div>
+				</div>
+				<div className='flex-wrap'>Move selected items to another list.</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+	},
 	{
 		icon: faMagnifyingGlass,
 		disabled: false,
@@ -69,7 +115,7 @@ const View = ({ children }) => (
 					<div key={i}>
 						{button.tooltip ? (
 							<Tooltip
-								className='w-52'
+								className='w-64'
 								target={
 									<button
 										className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
