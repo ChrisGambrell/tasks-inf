@@ -17,20 +17,12 @@ const Project = () => {
 		.filter((task) => task.projectId === project.id && task.completed)
 		.sort((a, b) => b.completedWhen - a.completedWhen)
 
-	const [selectedTask, setSelectedTask] = useState(0)
-
 	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
 	useHotkeys([
 		['alt + n', () => setShowNewTask(true)],
-		[
-			'escape',
-			() => {
-				setSelectedTask(0)
-				setShowNewTask(false)
-			},
-		],
+		['escape', () => setShowNewTask(false)],
 	])
 
 	return tasks.length > 0 ? (
