@@ -3,80 +3,10 @@ import { useParams } from 'react-router-dom'
 import { Badge, Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside, useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-	faArrowRight,
-	faCalendarDays,
-	faCheckToSlot,
-	faCircleDot,
-	faFile,
-	faFlag,
-	faListUl,
-	faStar,
-	faTag,
-	faTrash,
-	faUpRightFromSquare,
-} from '@fortawesome/free-solid-svg-icons'
-import { headers, projects, tasks as taskCollection } from '../app/mockData'
-import { Dropdown, View, WhenSelect } from '../components'
+import { faCalendarDays, faCircleDot, faFlag, faListUl, faStar, faTag } from '@fortawesome/free-solid-svg-icons'
+import { projects, tasks as taskCollection } from '../app/mockData'
+import { Task, TaskList, View, WhenSelect } from '../components'
 import Placeholder from './Placeholder'
-
-const CompletedWhenDisplay = ({ when }) => {
-	return (
-		<div className='px-1 text-xs font-semibold text-blue-600'>
-			{when?.toLocaleDateString() === new Date().toLocaleDateString()
-				? 'today'
-				: when.toLocaleDateString('en-us', { month: 'short', day: 'numeric' })}
-		</div>
-	)
-}
-
-const WhenDisplay = ({ when }) => {
-	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
-		<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
-	) : when ? (
-		<Badge classNames={{ root: 'ml-1 px-1.5 text-gray-600 bg-gray-200' }} radius='sm'>
-			{when.toLocaleDateString(
-				'en-us',
-				when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
-					? { weekday: 'short' }
-					: { month: 'short', day: 'numeric' }
-			)}
-		</Badge>
-	) : null
-}
-
-export const Task = ({
-	task,
-	secondary = false,
-	selected = false,
-	showCompletedWhen = false,
-	showNotesIndicator = false,
-	showProject = false,
-	showWhen = false,
-	onClick = () => {},
-}) => {
-	const project = projects.find((project) => project.id === task.projectId)
-
-	return (
-		<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
-			<WhenSelect
-				target={
-					<FontAwesomeIcon className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon={faCalendarDays} />
-				}
-			/>
-			<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
-				<Checkbox className='ml-3 mr-1' size='xs' defaultChecked={task.completed} />
-				{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
-				{showWhen && <WhenDisplay when={task.when} />}
-				<div className='ml-1 mr-1'>
-					<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
-					{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
-				</div>
-				{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
-			</div>
-		</div>
-	)
-}
 
 export const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	const [checklist, setChecklist] = useState(defaultChecklist)
@@ -224,61 +154,7 @@ const Project = () => {
 			<View.Content>
 				{showNewTask && <NewTask />}
 
-				{/* Tasks w/o headers */}
-				<div className='mb-8'>
-					{tasks
-						.filter((task) => !task.headerId)
-						.map((task) => (
-							<Task
-								key={task.title}
-								task={task}
-								showNotesIndicator
-								showWhen
-								selected={selectedTask === task.id}
-								onClick={() => setSelectedTask(task.id)}
-							/>
-						))}
-				</div>
-
-				{headers
-					.filter((header) => header.projectId === project.id)
-					.map((header) => (
-						<div key={header.title} className='mb-8'>
-							{/* Header */}
-							<div
-								key={header.title}
-								className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
-								<div>{header.title}</div>
-								<Dropdown color='text-blue-600'>
-									<Dropdown.Item label='Archive' icon={faCheckToSlot} onClick={() => console.log('TODO')} />
-
-									<Dropdown.Divider />
-
-									<Dropdown.Item label='Move' icon={faArrowRight} onClick={() => console.log('TODO')} />
-									<Dropdown.Item
-										label='Convert to Project...'
-										icon={faUpRightFromSquare}
-										onClick={() => console.log('TODO')}
-									/>
-									<Dropdown.Item label='Delete' icon={faTrash} onClick={() => console.log('TODO')} />
-								</Dropdown>
-							</div>
-
-							{/* Tasks */}
-							{tasks
-								.filter((task) => task.headerId === header.id)
-								.map((task) => (
-									<Task
-										key={task.title}
-										task={task}
-										showNotesIndicator
-										showWhen
-										selected={selectedTask === task.id}
-										onClick={() => setSelectedTask(task.id)}
-									/>
-								))}
-						</div>
-					))}
+				<TaskList tasks={tasks} showHeaders showNotesIndicator showWhen />
 
 				{/* Logged tasks */}
 				{loggedTasks.length > 0 && (
