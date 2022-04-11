@@ -43,7 +43,7 @@ const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 								day: 'font-semibold !text-gray-50 hover:bg-blue-500',
 							}}
 							dayStyle={(date) =>
-								date.toLocaleDateString() === selectedDate.toLocaleDateString()
+								date.toLocaleDateString() === selectedDate?.toLocaleDateString()
 									? {
 											backgroundColor: 'rgb(59 130 246 / var(--tw-bg-opacity))',
 											border: '1px solid white',
