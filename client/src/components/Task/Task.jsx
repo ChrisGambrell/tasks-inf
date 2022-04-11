@@ -51,6 +51,7 @@ const Task = ({
 					<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
 						<DateSelect
 							title='When'
+							date={task.when}
 							target={
 								<FontAwesomeIcon
 									className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400'

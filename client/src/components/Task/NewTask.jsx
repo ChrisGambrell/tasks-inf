@@ -110,6 +110,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 					{(!checklist || checklist?.length === 0) && (
 						<ToolbarButton label='Checklist' icon={faListUl} onClick={() => console.log('TODO')} />
 					)}
+					{/* TODO pass date to DateSelect */}
 					<DateSelect
 						title='Deadline'
 						hideQuickDates

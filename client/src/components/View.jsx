@@ -148,6 +148,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 				{actionButton && (
 					<Dropdown>
 						<Dropdown.Item label='Complete Project' icon={faCircleCheck} onClick={() => console.log('TODO')} />
+						{/* TODO add date to send to DateSelect */}
 						<DateSelect
 							title='When'
 							target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />}

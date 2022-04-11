@@ -4,8 +4,9 @@ import { Calendar } from '@mantine/dates'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faMoon, faPlus, faStar } from '@fortawesome/free-solid-svg-icons'
 
-const DateSelect = ({ title, hideQuickDates = false, target }) => {
+const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 	const [open, setOpen] = useState(false)
+	const [selectedDate, setSelectedDate] = useState(date)
 
 	return (
 		<div>
@@ -42,13 +43,20 @@ const DateSelect = ({ title, hideQuickDates = false, target }) => {
 								day: 'font-semibold !text-gray-50 hover:bg-blue-500',
 							}}
 							dayStyle={(date) =>
-								date.toLocaleDateString() === new Date().toLocaleDateString()
+								date.toLocaleDateString() === selectedDate.toLocaleDateString()
+									? {
+											backgroundColor: 'rgb(59 130 246 / var(--tw-bg-opacity))',
+											border: '1px solid white',
+											borderRadius: 7,
+									  }
+									: date.toLocaleDateString() === new Date().toLocaleDateString()
 									? { border: '1px solid white', borderRadius: 7 }
 									: null
 							}
 							firstDayOfWeek='sunday'
 							hideOutsideDates
-							onChange={() => console.log('TODO')}
+							// Still TODO
+							onChange={(date) => setSelectedDate(date)}
 						/>
 					</div>
 					{!hideQuickDates && (

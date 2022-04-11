@@ -32,14 +32,14 @@ const Divider = () => <hr className='my-1 border-gray-300' />
 
 const Item = ({ label = '', hotKeys = [], disabled, onClick = () => {} }) => (
 	<div
-		className={`flex items-center space-x-2 p-1 px-2 rounded ${disabled && 'text-gray-400'} ${
+		className={`group flex items-center space-x-2 p-1 px-2 rounded ${disabled && 'text-gray-400'} ${
 			!disabled && 'hover:bg-blue-500 hover:text-gray-50'
 		}`}
 		onClick={onClick}>
 		<div className='flex-grow'>{label}</div>
 		{hotKeys.length > 0 && (
 			<div className='flex-none'>
-				<HotKeys className='text-gray-400' keys={hotKeys} simple />
+				<HotKeys className='text-gray-400 group-hover:text-gray-50' keys={hotKeys} simple />
 			</div>
 		)}
 	</div>
