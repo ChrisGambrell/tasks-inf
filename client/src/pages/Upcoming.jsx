@@ -68,11 +68,16 @@ const Upcoming = () => {
 							<div className='flex space-x-2'>
 								<div className='flex-none font-bold text-2xl'>{new Date(group).getDate()}</div>
 								<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm text-gray-500'>
-									{new Date(group).toLocaleDateString(
-										'en-us',
-										new Date(group) <
-											new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
-									)}
+									{new Date(group).toLocaleDateString() === new Date().toLocaleDateString()
+										? 'Today'
+										: new Date(group).toLocaleDateString() ===
+										  new Date(
+												new Date().getFullYear(),
+												new Date().getMonth(),
+												new Date().getDate() + 1
+										  ).toLocaleDateString()
+										? 'Tomorrow'
+										: new Date(group).toLocaleDateString('en-us', { weekday: 'long' })}
 								</div>
 							</div>
 							<TaskList tasks={tasksWeek[group]} showProject />
