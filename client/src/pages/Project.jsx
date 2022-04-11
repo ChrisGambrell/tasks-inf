@@ -165,7 +165,7 @@ const Project = () => {
 							onClick={() => setShowLoggedItems(!showLoggedItems)}>
 							{showLoggedItems ? 'Hide logged items' : `Show ${loggedTasks.length} logged items`}
 						</button>
-						{showLoggedItems && loggedTasks.map((task) => <Task key={task.title} task={task} secondary showCompletedWhen />)}
+						{showLoggedItems && <TaskList tasks={loggedTasks} secondary showCompletedWhen />}
 					</div>
 				)}
 			</View.Content>
