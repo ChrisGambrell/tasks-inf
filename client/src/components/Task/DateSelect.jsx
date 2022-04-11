@@ -4,7 +4,7 @@ import { Calendar } from '@mantine/dates'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArchive, faMoon, faPlus, faStar } from '@fortawesome/free-solid-svg-icons'
 
-const WhenSelect = ({ target }) => {
+const DateSelect = ({ title, hideQuickDates = false, target }) => {
 	const [open, setOpen] = useState(false)
 
 	return (
@@ -18,17 +18,19 @@ const WhenSelect = ({ target }) => {
 				opened={open}
 				onClose={() => setOpen(false)}>
 				<div className='select-none text-sm font-semibold'>
-					<div className='flex justify-center text-gray-400'>When</div>
-					<div>
-						<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
-							<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
-							<div>Today</div>
+					<div className='flex justify-center text-gray-400'>{title}</div>
+					{!hideQuickDates && (
+						<div>
+							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+								<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+								<div>Today</div>
+							</div>
+							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+								<FontAwesomeIcon className='text-blue-200' icon={faMoon} />
+								<div>This Evening</div>
+							</div>
 						</div>
-						<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
-							<FontAwesomeIcon className='text-blue-200' icon={faMoon} />
-							<div>This Evening</div>
-						</div>
-					</div>
+					)}
 					<div>
 						<Calendar
 							classNames={{
@@ -50,29 +52,29 @@ const WhenSelect = ({ target }) => {
 							onChange={() => console.log('TODO')}
 						/>
 					</div>
-					<div>
-						<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
-							<FontAwesomeIcon className='text-yellow-600' icon={faArchive} />
-							<div>Someday</div>
+					{!hideQuickDates && (
+						<div>
+							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+								<FontAwesomeIcon className='text-yellow-600' icon={faArchive} />
+								<div>Someday</div>
+							</div>
+							<div
+								className='flex items-center p-1 space-x-1 rounded text-gray-400 hover:bg-blue-500'
+								onClick={() => console.log('TODO')}>
+								<FontAwesomeIcon icon={faPlus} />
+								<div>Add Reminder</div>
+							</div>
+							<div
+								className='flex justify-center mt-1 p-1 rounded bg-gray-600 active:bg-gray-500'
+								onClick={() => console.log('TODO')}>
+								Clear
+							</div>
 						</div>
-						<div
-							className='flex items-center p-1 space-x-1 rounded text-gray-400 hover:bg-blue-500'
-							onClick={() => console.log('TODO')}>
-							<FontAwesomeIcon icon={faPlus} />
-							<div>Add Reminder</div>
-						</div>
-					</div>
-					<div>
-						<div
-							className='flex justify-center mt-1 p-1 rounded bg-gray-600 active:bg-gray-500'
-							onClick={() => console.log('TODO')}>
-							Clear
-						</div>
-					</div>
+					)}
 				</div>
 			</Popover>
 		</div>
 	)
 }
 
-export default WhenSelect
+export default DateSelect

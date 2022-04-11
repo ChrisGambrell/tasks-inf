@@ -1,3 +1,4 @@
+import { Kbd } from '@mantine/core'
 import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -14,7 +15,8 @@ import {
 	faTag,
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { Dropdown, Tooltip, WhenSelect } from '.'
+import { Dropdown, Tooltip } from '.'
+import { DateSelect } from './Task'
 
 export const toolbarButtons = [
 	{
@@ -24,16 +26,64 @@ export const toolbarButtons = [
 			<div className='flex flex-col p-2'>
 				<div className='flex justify-between'>
 					<div className='font-semibold'>New To-Do</div>
-					<div>⌥N</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>N</Kbd>
+					</div>
 				</div>
 				<div className='flex-wrap'>You can also just press your spacebar.</div>
 			</div>
 		),
 		onClick: () => console.log('TODO'),
 	},
-	{ icon: faCaretSquareRight, disabled: false, onClick: () => console.log('TODO'), show: '/project' },
-	{ icon: faCalendarDays, disabled: true, onClick: () => console.log('TODO') },
-	{ icon: faArrowRight, disabled: true, onClick: () => console.log('TODO') },
+	{
+		icon: faCaretSquareRight,
+		disabled: false,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>New Heading</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>Shift</Kbd> + <Kbd>N</Kbd>
+					</div>
+				</div>
+				<div className='flex-wrap'>Divide your project into categories or milestones.</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+		show: '/project',
+	},
+	{
+		icon: faCalendarDays,
+		disabled: true,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>When</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>S</Kbd>
+					</div>
+				</div>
+				<div className='flex-wrap'>Decide when to start. Today or later?</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+	},
+	{
+		icon: faArrowRight,
+		disabled: true,
+		tooltip: (
+			<div className='flex flex-col p-2'>
+				<div className='flex justify-between'>
+					<div className='font-semibold'>Move</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>Shift</Kbd> + <Kbd>S</Kbd>
+					</div>
+				</div>
+				<div className='flex-wrap'>Move selected items to another list.</div>
+			</div>
+		),
+		onClick: () => console.log('TODO'),
+	},
 	{
 		icon: faMagnifyingGlass,
 		disabled: false,
@@ -41,7 +91,9 @@ export const toolbarButtons = [
 			<div className='flex flex-col p-2'>
 				<div className='flex justify-between'>
 					<div className='font-semibold'>Quick Find</div>
-					<div>⌥F</div>
+					<div>
+						<Kbd>⌥</Kbd> + <Kbd>F</Kbd>
+					</div>
 				</div>
 				<div className='flex-wrap'>Quickly switch lists, find to-dos, or search for tags.</div>
 			</div>
@@ -63,7 +115,7 @@ const View = ({ children }) => (
 					<div key={i}>
 						{button.tooltip ? (
 							<Tooltip
-								className='w-52'
+								className='w-64'
 								target={
 									<button
 										className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
@@ -97,9 +149,16 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 				{actionButton && (
 					<Dropdown>
 						<Dropdown.Item label='Complete Project' icon={faCircleCheck} onClick={() => console.log('TODO')} />
-						<WhenSelect target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />} />
+						<DateSelect
+							title='When'
+							target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />}
+						/>
 						<Dropdown.Item label='Add Tags' icon={faTag} onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Add Deadline' icon={faFlag} onClick={() => console.log('TODO')} />
+						<DateSelect
+							title='Deadline'
+							hideQuickDates
+							target={<Dropdown.Item label='Add Deadline' icon={faFlag} onClick={() => console.log('TODO')} />}
+						/>
 
 						<Dropdown.Divider />
 

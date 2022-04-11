@@ -1,8 +1,8 @@
 import { incompleteTasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
+import { TaskList } from '../components/Task'
 import { Placeholder } from '.'
-import { Task } from './Project'
 
 const Upcoming = () => {
 	const menuItem = menuItems
@@ -62,23 +62,25 @@ const Upcoming = () => {
 			<View.Content>
 				<div className='space-y-8'>
 					{/* This week's tasks */}
+					{/* TODO show correct - 'Today', 'Tomorrow' */}
 					{Object.keys(tasksWeek).map((group) => (
 						<div key={group} className='space-y-2'>
 							<div className='flex space-x-2'>
 								<div className='flex-none font-bold text-2xl'>{new Date(group).getDate()}</div>
 								<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm text-gray-500'>
-									{new Date(group).toLocaleDateString(
-										'en-us',
-										new Date(group) <
-											new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
-									)}
+									{new Date(group).toLocaleDateString() === new Date().toLocaleDateString()
+										? 'Today'
+										: new Date(group).toLocaleDateString() ===
+										  new Date(
+												new Date().getFullYear(),
+												new Date().getMonth(),
+												new Date().getDate() + 1
+										  ).toLocaleDateString()
+										? 'Tomorrow'
+										: new Date(group).toLocaleDateString('en-us', { weekday: 'long' })}
 								</div>
 							</div>
-							<div>
-								{tasksWeek[group].map((task) => (
-									<Task key={task.title} task={task} showProject />
-								))}
-							</div>
+							<TaskList tasks={tasksWeek[group]} showProject />
 						</div>
 					))}
 
@@ -99,11 +101,7 @@ const Upcoming = () => {
 									</div>
 								</div>
 							</div>
-							<div>
-								{tasksMonth.map((task) => (
-									<Task key={task.title} task={task} showProject showWhen />
-								))}
-							</div>
+							<TaskList tasks={tasksMonth} showProject showWhen />
 						</div>
 					)}
 
@@ -115,11 +113,7 @@ const Upcoming = () => {
 									{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
 								</div>
 							</div>
-							<div>
-								{tasksYear[group].map((task) => (
-									<Task key={task.title} task={task} showProject showWhen />
-								))}
-							</div>
+							<TaskList tasks={tasksYear[group]} showProject showWhen />
 						</div>
 					))}
 
@@ -131,11 +125,7 @@ const Upcoming = () => {
 									{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
 								</div>
 							</div>
-							<div>
-								{tasksFuture[group].map((task) => (
-									<Task key={task.title} task={task} showProject showWhen />
-								))}
-							</div>
+							<TaskList tasks={tasksFuture[group]} showProject showWhen />
 						</div>
 					))}
 				</div>

@@ -1,8 +1,8 @@
 import { completeTasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
+import { TaskList } from '../components/Task'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
-import { Task } from './Project'
 
 const Logbook = () => {
 	const menuItem = menuItems
@@ -54,11 +54,7 @@ const Logbook = () => {
 						<div className='flex space-x-2'>
 							<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Today</div>
 						</div>
-						<div>
-							{tasksToday.map((task) => (
-								<Task key={task.title} task={task} showCompletedWhen showProject />
-							))}
-						</div>
+						<TaskList tasks={tasksToday} showCompletedWhen showProject />
 					</div>
 
 					{/* Tasks completed yesterday */}
@@ -66,11 +62,7 @@ const Logbook = () => {
 						<div className='flex space-x-2'>
 							<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Yesterday</div>
 						</div>
-						<div>
-							{tasksYesterday.map((task) => (
-								<Task key={task.title} task={task} showCompletedWhen showProject />
-							))}
-						</div>
+						<TaskList tasks={tasksYesterday} showCompletedWhen showProject />
 					</div>
 
 					{/* Tasks completed this year */}
@@ -79,15 +71,11 @@ const Logbook = () => {
 						.map((group) => (
 							<div key={group} className='space-y-2'>
 								<div className='flex space-x-2'>
-									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
+									<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
 										{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
 									</div>
 								</div>
-								<div>
-									{tasksYear[group].map((task) => (
-										<Task key={task.title} task={task} showCompletedWhen showProject />
-									))}
-								</div>
+								<TaskList tasks={tasksYear[group]} showCompletedWhen showProject />
 							</div>
 						))}
 
@@ -97,15 +85,11 @@ const Logbook = () => {
 						.map((group) => (
 							<div key={group} className='space-y-2'>
 								<div className='flex space-x-2'>
-									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
+									<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
 										{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
 									</div>
 								</div>
-								<div>
-									{tasksFuture[group].map((task) => (
-										<Task key={task.title} task={task} showProject showWhen />
-									))}
-								</div>
+								<TaskList tasks={tasksFuture[group]} showCompletedWhen showProject />
 							</div>
 						))}
 				</div>

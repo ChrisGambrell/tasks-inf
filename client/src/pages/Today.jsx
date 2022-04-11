@@ -3,8 +3,8 @@ import { useHotkeys } from '@mantine/hooks'
 import { incompleteTasks as taskCollection } from '../app/mockData'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
+import { NewTask, TaskList } from '../components/Task'
 import { Placeholder } from '.'
-import { NewTask, Task } from './Project'
 
 const Today = () => {
 	const menuItem = menuItems
@@ -32,9 +32,7 @@ const Today = () => {
 					/>
 				)}
 
-				{tasks.map((task) => (
-					<Task key={task.title} task={task} showProject showWhen />
-				))}
+				<TaskList tasks={tasks} showProject showWhen />
 			</View.Content>
 		</View>
 	) : (
