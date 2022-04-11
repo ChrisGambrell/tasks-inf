@@ -3,22 +3,27 @@ import { Popover } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 
-const Dropdown = ({ color = 'text-gray-400', children }) => {
+const Dropdown = ({ color = 'text-gray-400', children, target }) => {
 	const [open, setOpen] = useState(false)
 
 	return (
 		<Popover
 			classNames={{ popover: 'bg-gray-800 text-gray-50', inner: 'p-1' }}
 			target={
-				<button
-					className={`ml-1 px-2 py-0.5 rounded ${color} active:bg-gray-200 ${open && 'bg-gray-200'}`}
-					onClick={() => setOpen(!open)}>
-					<FontAwesomeIcon className='w-5 h-5' icon={faEllipsis} />
-				</button>
+				target ? (
+					<div onClick={() => setOpen(!open)}>{target}</div>
+				) : (
+					<button
+						className={`ml-1 px-2 py-0.5 rounded ${color} active:bg-gray-200 ${open && 'bg-gray-200'}`}
+						onClick={() => setOpen(!open)}>
+						<FontAwesomeIcon className='w-5 h-5' icon={faEllipsis} />
+					</button>
+				)
 			}
 			position='bottom'
 			placement='center'
 			radius='md'
+			shadow='xl'
 			opened={open}
 			onClose={() => setOpen(false)}>
 			<div className='w-44 select-none text-sm'>{children}</div>

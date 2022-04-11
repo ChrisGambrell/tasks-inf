@@ -22,7 +22,7 @@ const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
 						{Number(headerId) !== -1 && (
 							<div className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
 								<div>{headersCollection.find((header) => header.id === Number(headerId))?.title}</div>
-								<Dropdown color='text-blue-600'>
+								<Dropdown targetColor='text-blue-600'>
 									<Dropdown.Item label='Archive' icon={faCheckToSlot} onClick={() => console.log('TODO')} />
 
 									<Dropdown.Divider />

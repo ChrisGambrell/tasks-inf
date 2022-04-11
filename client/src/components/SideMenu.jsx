@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Kbd, Modal, Popover } from '@mantine/core'
+import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -16,7 +16,7 @@ import {
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
 import { areas, projects, tasks } from '../app/mockData'
-import { Menu, Tooltip } from '.'
+import { HotKeys, Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
 export const menuItems = [
@@ -62,6 +62,7 @@ const Toolbar = () => {
 				position='top'
 				placement='start'
 				radius='md'
+				shadow='xl'
 				opened={newListOpen}
 				onClose={() => setNewListOpen(false)}>
 				<div className='w-80 select-none'>
@@ -104,7 +105,7 @@ const Toolbar = () => {
 				<div className='flex justify-between p-2'>
 					<div className='font-semibold'>Settings</div>
 					<div>
-						<Kbd>⌥</Kbd> + <Kbd>,</Kbd>
+						<HotKeys keys={['alt', ',']} />
 					</div>
 				</div>
 			</Tooltip>

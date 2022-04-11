@@ -1,4 +1,3 @@
-import { Kbd } from '@mantine/core'
 import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -15,7 +14,7 @@ import {
 	faTag,
 	faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { Dropdown, Tooltip } from '.'
+import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 export const toolbarButtons = [
@@ -27,7 +26,7 @@ export const toolbarButtons = [
 				<div className='flex justify-between'>
 					<div className='font-semibold'>New To-Do</div>
 					<div>
-						<Kbd>⌥</Kbd> + <Kbd>N</Kbd>
+						<HotKeys keys={['alt', 'N']} />
 					</div>
 				</div>
 				<div className='flex-wrap'>You can also just press your spacebar.</div>
@@ -43,7 +42,7 @@ export const toolbarButtons = [
 				<div className='flex justify-between'>
 					<div className='font-semibold'>New Heading</div>
 					<div>
-						<Kbd>⌥</Kbd> + <Kbd>Shift</Kbd> + <Kbd>N</Kbd>
+						<HotKeys keys={['alt', 'shift', 'N']} />
 					</div>
 				</div>
 				<div className='flex-wrap'>Divide your project into categories or milestones.</div>
@@ -60,7 +59,7 @@ export const toolbarButtons = [
 				<div className='flex justify-between'>
 					<div className='font-semibold'>When</div>
 					<div>
-						<Kbd>⌥</Kbd> + <Kbd>S</Kbd>
+						<HotKeys keys={['alt', 's']} />
 					</div>
 				</div>
 				<div className='flex-wrap'>Decide when to start. Today or later?</div>
@@ -76,7 +75,7 @@ export const toolbarButtons = [
 				<div className='flex justify-between'>
 					<div className='font-semibold'>Move</div>
 					<div>
-						<Kbd>⌥</Kbd> + <Kbd>Shift</Kbd> + <Kbd>S</Kbd>
+						<HotKeys keys={['alt', 'shift', 'M']} />
 					</div>
 				</div>
 				<div className='flex-wrap'>Move selected items to another list.</div>
@@ -92,7 +91,7 @@ export const toolbarButtons = [
 				<div className='flex justify-between'>
 					<div className='font-semibold'>Quick Find</div>
 					<div>
-						<Kbd>⌥</Kbd> + <Kbd>F</Kbd>
+						<HotKeys keys={['alt', 'F']} />
 					</div>
 				</div>
 				<div className='flex-wrap'>Quickly switch lists, find to-dos, or search for tags.</div>

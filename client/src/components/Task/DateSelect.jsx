@@ -12,9 +12,8 @@ const DateSelect = ({ title, hideQuickDates = false, target }) => {
 			<Popover
 				classNames={{ popover: 'bg-gray-800 text-gray-50', inner: 'p-1', root: 'w-full' }}
 				target={<div onClick={() => setOpen(!open)}>{target}</div>}
-				position='bottom'
-				placement='center'
 				radius='md'
+				shadow='xl'
 				opened={open}
 				onClose={() => setOpen(false)}>
 				<div className='select-none text-sm font-semibold'>
