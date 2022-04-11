@@ -1,6 +1,7 @@
 import { incompleteTasks as taskCollection } from '../app/mockData'
-import { Task, TaskList, View } from '../components'
+import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
+import { TaskList } from '../components/Task'
 import { Placeholder } from '.'
 
 const Upcoming = () => {

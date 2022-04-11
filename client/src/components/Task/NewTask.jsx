@@ -3,7 +3,7 @@ import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faCircleDot, faFlag, faListUl, faStar, faTag } from '@fortawesome/free-solid-svg-icons'
-import { WhenSelect } from '.'
+import { WhenSelect } from '..'
 
 const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	const [checklist, setChecklist] = useState(defaultChecklist)

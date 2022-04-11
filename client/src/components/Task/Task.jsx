@@ -1,8 +1,8 @@
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
-import { projects } from '../app/mockData'
-import { WhenSelect } from '.'
+import { projects } from '../../app/mockData'
+import { WhenSelect } from '..'
 
 const CompletedWhenDisplay = ({ when }) => {
 	return (

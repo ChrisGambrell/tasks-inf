@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useHotkeys } from '@mantine/hooks'
 import { incompleteTasks as taskCollection } from '../app/mockData'
-import { NewTask, TaskList, View } from '../components'
+import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
+import { NewTask, TaskList } from '../components/Task'
 import { Placeholder } from '.'
 
 const Today = () => {

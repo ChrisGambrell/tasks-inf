@@ -1,5 +1,6 @@
 import { completeTasks as taskCollection } from '../app/mockData'
-import { TaskList, View } from '../components'
+import { View } from '../components'
+import { TaskList } from '../components/Task'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
 

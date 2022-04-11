@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useHotkeys } from '@mantine/hooks'
 import { projects, tasks as taskCollection } from '../app/mockData'
-import { NewTask, TaskList, View } from '../components'
+import { View } from '../components'
+import { NewTask, TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
 
 const Project = () => {

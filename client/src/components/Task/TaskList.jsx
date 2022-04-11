@@ -1,6 +1,6 @@
 import { faArrowRight, faCheckToSlot, faUpRightFromSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { headers as headersCollection } from '../app/mockData'
-import { Dropdown } from '.'
+import { headers as headersCollection } from '../../app/mockData'
+import { Dropdown } from '..'
 import { Task } from '.'
 
 const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
