@@ -1,6 +1,5 @@
 import { Badge, Checkbox } from '@mantine/core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faFile, faStar } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { projects } from '../../app/mockData'
 import { ContextMenu } from '..'
 import { DateSelect } from '.'
@@ -17,7 +16,7 @@ const CompletedWhenDisplay = ({ when }) => {
 
 const WhenDisplay = ({ when }) => {
 	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
-		<FontAwesomeIcon className='ml-1 w-3 h-3 text-yellow-400' icon={faStar} />
+		<FA className='ml-1 w-3 h-3 text-yellow-400' icon='star' />
 	) : when ? (
 		<Badge classNames={{ root: 'ml-1 px-1.5 text-gray-600 bg-gray-200' }} radius='sm'>
 			{when.toLocaleDateString(
@@ -53,10 +52,7 @@ const Task = ({
 							title='When'
 							date={task.when}
 							target={
-								<FontAwesomeIcon
-									className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400'
-									icon={faCalendarDays}
-								/>
+								<FA className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon='calendar-days' />
 							}
 						/>
 						<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
@@ -67,7 +63,7 @@ const Task = ({
 								<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
 								{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
 							</div>
-							{showNotesIndicator && task.notes && <FontAwesomeIcon className='w-3 h-3 text-gray-400' icon={faFile} />}
+							{showNotesIndicator && task.notes && <FA className='w-3 h-3 text-gray-400' icon='file' />}
 						</div>
 					</div>
 				}>

@@ -1,25 +1,11 @@
 import { openSpotlight } from '@mantine/spotlight'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-	faArrowRight,
-	faArrowRotateRight,
-	faCalendarDays,
-	faCaretSquareRight,
-	faCircleCheck,
-	faCopy,
-	faFlag,
-	faMagnifyingGlass,
-	faPlus,
-	faShareFromSquare,
-	faTag,
-	faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 export const toolbarButtons = [
 	{
-		icon: faPlus,
+		icon: 'plus',
 		disabled: false,
 		tooltip: (
 			<div className='flex flex-col p-2'>
@@ -35,7 +21,7 @@ export const toolbarButtons = [
 		onClick: () => console.log('TODO'),
 	},
 	{
-		icon: faCaretSquareRight,
+		icon: 'caret-square-right',
 		disabled: false,
 		tooltip: (
 			<div className='flex flex-col p-2'>
@@ -52,7 +38,7 @@ export const toolbarButtons = [
 		show: '/project',
 	},
 	{
-		icon: faCalendarDays,
+		icon: 'calendar-days',
 		disabled: true,
 		tooltip: (
 			<div className='flex flex-col p-2'>
@@ -68,7 +54,7 @@ export const toolbarButtons = [
 		onClick: () => console.log('TODO'),
 	},
 	{
-		icon: faArrowRight,
+		icon: 'arrow-right',
 		disabled: true,
 		tooltip: (
 			<div className='flex flex-col p-2'>
@@ -84,7 +70,7 @@ export const toolbarButtons = [
 		onClick: () => console.log('TODO'),
 	},
 	{
-		icon: faMagnifyingGlass,
+		icon: 'magnifying-glass',
 		disabled: false,
 		tooltip: (
 			<div className='flex flex-col p-2'>
@@ -120,7 +106,7 @@ const View = ({ children }) => (
 										className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
 										disabled={button.disabled}
 										onClick={button.onClick}>
-										<FontAwesomeIcon icon={button.icon} />
+										<FA icon={button.icon} />
 									</button>
 								}>
 								{button.tooltip}
@@ -130,7 +116,7 @@ const View = ({ children }) => (
 								className='flex items-center m-1 py-2 px-10 rounded text-sm border border-white hover:border-gray-200 active:bg-gray-200 disabled:border-white disabled:text-gray-300 disabled:bg-white'
 								disabled={button.disabled}
 								onClick={button.onClick}>
-								<FontAwesomeIcon icon={button.icon} />
+								<FA icon={button.icon} />
 							</button>
 						)}
 					</div>
@@ -143,30 +129,30 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 	return (
 		<div className='flex flex-col space-y-2 mb-8'>
 			<div className='flex items-center'>
-				{icon && <FontAwesomeIcon className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
+				{icon && <FA className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
 				<h2 className='text-3xl font-semibold'>{title}</h2>
 				{actionButton && (
 					<Dropdown>
-						<Dropdown.Item label='Complete Project' icon={faCircleCheck} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
 						{/* TODO add date to send to DateSelect */}
 						<DateSelect
 							title='When'
-							target={<Dropdown.Item label='When' icon={faCalendarDays} onClick={() => console.log('TODO')} />}
+							target={<Dropdown.Item label='When' icon='calendar-days' onClick={() => console.log('TODO')} />}
 						/>
-						<Dropdown.Item label='Add Tags' icon={faTag} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Add Tags' icon='tag' onClick={() => console.log('TODO')} />
 						<DateSelect
 							title='Deadline'
 							hideQuickDates
-							target={<Dropdown.Item label='Add Deadline' icon={faFlag} onClick={() => console.log('TODO')} />}
+							target={<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => console.log('TODO')} />}
 						/>
 
 						<Dropdown.Divider />
 
-						<Dropdown.Item label='Move' icon={faArrowRight} onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Repeat' icon={faArrowRotateRight} onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Duplicate Project' icon={faCopy} onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Delete Project' icon={faTrash} onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Share' icon={faShareFromSquare} onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Delete Project' icon='trash' onClick={() => console.log('TODO')} />
+						<Dropdown.Item label='Share' icon='share-from-square' onClick={() => console.log('TODO')} />
 					</Dropdown>
 				)}
 			</div>

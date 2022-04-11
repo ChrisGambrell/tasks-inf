@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Popover } from '@mantine/core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
 const Dropdown = ({ color = 'text-gray-400', children, target }) => {
 	const [open, setOpen] = useState(false)
@@ -16,7 +15,7 @@ const Dropdown = ({ color = 'text-gray-400', children, target }) => {
 					<button
 						className={`ml-1 px-2 py-0.5 rounded ${color} active:bg-gray-200 ${open && 'bg-gray-200'}`}
 						onClick={() => setOpen(!open)}>
-						<FontAwesomeIcon className='w-5 h-5' icon={faEllipsis} />
+						<FA className='w-5 h-5' icon='ellipsis' />
 					</button>
 				)
 			}
@@ -35,7 +34,7 @@ const Divider = () => <hr className='my-2 border-gray-500' />
 
 const Item = ({ label = '', icon, color = 'text-blue-400', onClick = () => {} }) => (
 	<div className='flex items-center space-x-2 p-1 rounded hover:bg-blue-500' onClick={onClick}>
-		<div>{icon && <FontAwesomeIcon className={color} icon={icon} />}</div>
+		<div>{icon && <FA className={color} icon={icon} />}</div>
 		<div>{label}</div>
 	</div>
 )

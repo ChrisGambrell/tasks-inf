@@ -1,42 +1,29 @@
 import { useState } from 'react'
 import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-	faArchive,
-	faBook,
-	faBox,
-	faCalendarDays,
-	faCircleHalfStroke,
-	faInbox,
-	faLayerGroup,
-	faPlus,
-	faSliders,
-	faStar,
-	faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { areas, projects, tasks } from '../app/mockData'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
 export const menuItems = [
-	[{ title: 'Inbox', icon: faInbox, color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
+	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
 	[
 		{
 			title: 'Today',
-			icon: faStar,
+			icon: 'star',
 			color: 'text-yellow-400',
 			notification: tasks.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString()).length,
 			url: '/today',
 			component: Today,
 		},
-		{ title: 'Upcoming', icon: faCalendarDays, color: 'text-red-600', notification: 0, url: '/upcoming', component: Upcoming },
-		{ title: 'Anytime', icon: faLayerGroup, color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
-		{ title: 'Someday', icon: faArchive, color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
+		{ title: 'Upcoming', icon: 'calendar-days', color: 'text-red-600', notification: 0, url: '/upcoming', component: Upcoming },
+		{ title: 'Anytime', icon: 'layer-group', color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
+		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
 	],
 	[
-		{ title: 'Logbook', icon: faBook, color: 'text-green-600', notification: 0, url: '/logbook', component: Logbook },
-		{ title: 'Trash', icon: faTrash, color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
+		{ title: 'Logbook', icon: 'book', color: 'text-green-600', notification: 0, url: '/logbook', component: Logbook },
+		{ title: 'Trash', icon: 'trash', color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
 	],
 ]
 
@@ -55,7 +42,7 @@ const Toolbar = () => {
 					<button
 						className='flex items-center m-1 py-1 px-2 rounded text-sm border border-gray-100 hover:border-gray-300 active:bg-gray-300'
 						onClick={() => setNewListOpen(!newListOpen)}>
-						<FontAwesomeIcon className='mr-2 w-3 h-3' icon={faPlus} />
+						<FA className='mr-2 w-3 h-3' icon='plus' />
 						New List
 					</button>
 				}
@@ -68,7 +55,7 @@ const Toolbar = () => {
 				<div className='w-80 select-none'>
 					<div className='flex space-x-2 p-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
 						<div>
-							<FontAwesomeIcon className='text-blue-400' icon={faCircleHalfStroke} />
+							<FA className='text-blue-400' icon='circle-half-stroke' />
 						</div>
 						<div className='flex flex-col'>
 							<div>New Project</div>
@@ -78,7 +65,7 @@ const Toolbar = () => {
 					<hr className='my-2 border-gray-500' />
 					<div className='flex space-x-2 p-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
 						<div>
-							<FontAwesomeIcon className='text-green-500' icon={faBox} />
+							<FA className='text-green-500' icon='box' />
 						</div>
 						<div className='flex flex-col'>
 							<div>New Area</div>
@@ -99,7 +86,7 @@ const Toolbar = () => {
 					<button
 						className='flex-none m-1 py-1 px-2 rounded border border-gray-100 hover:border-gray-300 active:bg-gray-300'
 						onClick={() => setSettingsOpen(true)}>
-						<FontAwesomeIcon icon={faSliders} />
+						<FA icon='sliders' />
 					</button>
 				}>
 				<div className='flex justify-between p-2'>

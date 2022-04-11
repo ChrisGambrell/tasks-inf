@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Popover } from '@mantine/core'
 import { Calendar } from '@mantine/dates'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArchive, faMoon, faPlus, faStar } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
 const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 	const [open, setOpen] = useState(false)
@@ -22,11 +21,11 @@ const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 					{!hideQuickDates && (
 						<div>
 							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
-								<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+								<FA className='text-yellow-400' icon='star' />
 								<div>Today</div>
 							</div>
 							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
-								<FontAwesomeIcon className='text-blue-200' icon={faMoon} />
+								<FA className='text-blue-200' icon='moon' />
 								<div>This Evening</div>
 							</div>
 						</div>
@@ -62,13 +61,13 @@ const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 					{!hideQuickDates && (
 						<div>
 							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
-								<FontAwesomeIcon className='text-yellow-600' icon={faArchive} />
+								<FA className='text-yellow-600' icon='archive' />
 								<div>Someday</div>
 							</div>
 							<div
 								className='flex items-center p-1 space-x-1 rounded text-gray-400 hover:bg-blue-500'
 								onClick={() => console.log('TODO')}>
-								<FontAwesomeIcon icon={faPlus} />
+								<FA icon='plus' />
 								<div>Add Reminder</div>
 							</div>
 							<div

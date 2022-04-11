@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBox, faBoxOpen, faChevronRight, faCircleNotch, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
 const Menu = () => <></>
 
@@ -11,11 +10,11 @@ const Dropdown = ({ label = '', children }) => {
 	return (
 		<details className='group flex p-1'>
 			<summary className='flex items-center list-none' onClick={() => setOpen(!open)}>
-				<FontAwesomeIcon className='flex-none h-5 w-5 mr-2 text-gray-400' icon={open ? faBoxOpen : faBox} />
+				<FA className='flex-none h-5 w-5 mr-2 text-gray-400' icon={open ? 'box-open' : 'box'} />
 				<div className='flex-grow truncate font-semibold'>{label}</div>
-				<FontAwesomeIcon
+				<FA
 					className='flex-none invisible group-hover:visible h-3 w-3 text-gray-400 rotate-0 group-open:rotate-90'
-					icon={faChevronRight}
+					icon='chevron-right'
 				/>
 			</summary>
 			<div className='mt-2'>
@@ -34,9 +33,9 @@ const Item = ({ menuItem, type = null }) => {
 				window.location.pathname === menuItem.url && 'bg-gray-200'
 			} hover:bg-gray-200 active:bg-gray-300`}
 			onClick={() => (menuItem.url ? navigate(menuItem.url) : {})}>
-			<FontAwesomeIcon
+			<FA
 				className={`flex-none h-5 w-5 mr-2 ${menuItem.color ? menuItem.color : 'text-gray-400'}`}
-				icon={menuItem.icon ? menuItem.icon : type === 'project' ? faCircleNotch : faCircleQuestion}
+				icon={menuItem.icon ? menuItem.icon : type === 'project' ? 'circle-notch' : 'circle-question'}
 			/>
 			<div className='flex-grow truncate'>{menuItem.title}</div>
 			{menuItem.notification > 0 && (

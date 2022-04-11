@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Popover } from '@mantine/core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { HotKeys } from '.'
 
 const ContextMenu = ({ children, target }) => {
@@ -49,7 +48,7 @@ const SubmenuItem = ({ label = '', onClick = () => {} }) => (
 	<div className='flex items-center space-x-2 p-1 px-2 rounded hover:bg-blue-500 hover:text-gray-50' onClick={onClick}>
 		<div className='flex-grow'>{label}</div>
 		<div className='flex-none'>
-			<FontAwesomeIcon icon={faChevronRight} />
+			<FA icon='chevron-right' />
 		</div>
 	</div>
 )

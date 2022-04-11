@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDays, faCircleDot, faCircleQuestion, faFlag, faListUl, faStar, faTag } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { Tooltip } from '..'
 import { DateSelect } from '.'
 
@@ -23,7 +22,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 					variant={focused === i ? 'filled' : 'unstyled'}
 					size='xs'
 					type='text'
-					icon={<FontAwesomeIcon className='w-2 h-2 text-blue-600' icon={faCircleDot} />}
+					icon={<FA className='w-2 h-2 text-blue-600' icon='circle-dot' />}
 					defaultValue={item}
 					autoFocus={focused === i}
 					onFocus={() => setFocused(i)}
@@ -50,7 +49,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 				title='When'
 				target={
 					<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
-						<FontAwesomeIcon className='text-yellow-400' icon={faStar} />
+						<FA className='text-yellow-400' icon='star' />
 						<div className='font-semibold'>Today</div>
 						{/* TODO - clear X button */}
 					</button>
@@ -59,21 +58,21 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 		</div>
 	)
 
-	const ToolbarButton = ({ label, icon = faCircleQuestion, onClick = () => {} }) =>
+	const ToolbarButton = ({ label, icon = 'circle-question', onClick = () => {} }) =>
 		label ? (
 			<Tooltip
 				target={
 					<button
 						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
 						onClick={onClick}>
-						<FontAwesomeIcon icon={icon} />
+						<FA icon={icon} />
 					</button>
 				}>
 				<div>{label}</div>
 			</Tooltip>
 		) : (
 			<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300' onClick={onClick}>
-				<FontAwesomeIcon icon={icon} />
+				<FA icon={icon} />
 			</button>
 		)
 
@@ -96,25 +95,25 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 					{when && <SelectedWhen />}
 				</div>
 				<div className='flex justify-end space-x-2'>
-					{!when && <DateSelect title='When' target={<ToolbarButton label='When' icon={faCalendarDays} />} />}
+					{!when && <DateSelect title='When' target={<ToolbarButton label='When' icon='calendar-days' />} />}
 					{(!tags || tags?.length === 0) && (
 						<TextInput
 							classNames={{ input: 'border-none font-semibold' }}
 							variant='filled'
 							size='xs'
 							type='text'
-							icon={<FontAwesomeIcon icon={faTag} />}
+							icon={<FA icon='tag' />}
 							placeholder='Tags'
 						/>
 					)}
 					{(!checklist || checklist?.length === 0) && (
-						<ToolbarButton label='Checklist' icon={faListUl} onClick={() => console.log('TODO')} />
+						<ToolbarButton label='Checklist' icon='list-ui' onClick={() => console.log('TODO')} />
 					)}
 					{/* TODO pass date to DateSelect */}
 					<DateSelect
 						title='Deadline'
 						hideQuickDates
-						target={<ToolbarButton label='Deadline' icon={faFlag} onClick={() => console.log('TODO')} />}
+						target={<ToolbarButton label='Deadline' icon='flag' onClick={() => console.log('TODO')} />}
 					/>
 				</div>
 			</div>
