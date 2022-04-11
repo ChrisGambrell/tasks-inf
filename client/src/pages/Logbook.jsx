@@ -1,5 +1,5 @@
 import { completeTasks as taskCollection } from '../app/mockData'
-import { Task, View } from '../components'
+import { TaskList, View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
 
@@ -53,11 +53,7 @@ const Logbook = () => {
 						<div className='flex space-x-2'>
 							<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Today</div>
 						</div>
-						<div>
-							{tasksToday.map((task) => (
-								<Task key={task.title} task={task} showCompletedWhen showProject />
-							))}
-						</div>
+						<TaskList tasks={tasksToday} showCompletedWhen showProject />
 					</div>
 
 					{/* Tasks completed yesterday */}
@@ -65,11 +61,7 @@ const Logbook = () => {
 						<div className='flex space-x-2'>
 							<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Yesterday</div>
 						</div>
-						<div>
-							{tasksYesterday.map((task) => (
-								<Task key={task.title} task={task} showCompletedWhen showProject />
-							))}
-						</div>
+						<TaskList tasks={tasksYesterday} showCompletedWhen showProject />
 					</div>
 
 					{/* Tasks completed this year */}
@@ -82,11 +74,7 @@ const Logbook = () => {
 										{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
 									</div>
 								</div>
-								<div>
-									{tasksYear[group].map((task) => (
-										<Task key={task.title} task={task} showCompletedWhen showProject />
-									))}
-								</div>
+								<TaskList tasks={tasksYear[group]} showCompletedWhen showProject />
 							</div>
 						))}
 
@@ -100,11 +88,7 @@ const Logbook = () => {
 										{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
 									</div>
 								</div>
-								<div>
-									{tasksFuture[group].map((task) => (
-										<Task key={task.title} task={task} showCompletedWhen showProject />
-									))}
-								</div>
+								<TaskList tasks={tasksFuture[group]} showCompletedWhen showProject />
 							</div>
 						))}
 				</div>

@@ -1,5 +1,5 @@
 import { incompleteTasks as taskCollection } from '../app/mockData'
-import { Task, View } from '../components'
+import { Task, TaskList, View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { Placeholder } from '.'
 
@@ -74,11 +74,7 @@ const Upcoming = () => {
 									)}
 								</div>
 							</div>
-							<div>
-								{tasksWeek[group].map((task) => (
-									<Task key={task.title} task={task} showProject />
-								))}
-							</div>
+							<TaskList tasks={tasksWeek[group]} showProject />
 						</div>
 					))}
 
@@ -99,11 +95,7 @@ const Upcoming = () => {
 									</div>
 								</div>
 							</div>
-							<div>
-								{tasksMonth.map((task) => (
-									<Task key={task.title} task={task} showProject showWhen />
-								))}
-							</div>
+							<TaskList tasks={tasksMonth} showProject showWhen />
 						</div>
 					)}
 
@@ -115,11 +107,7 @@ const Upcoming = () => {
 									{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
 								</div>
 							</div>
-							<div>
-								{tasksYear[group].map((task) => (
-									<Task key={task.title} task={task} showProject showWhen />
-								))}
-							</div>
+							<TaskList tasks={tasksYear[group]} showProject showWhen />
 						</div>
 					))}
 
@@ -131,11 +119,7 @@ const Upcoming = () => {
 									{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
 								</div>
 							</div>
-							<div>
-								{tasksFuture[group].map((task) => (
-									<Task key={task.title} task={task} showProject showWhen />
-								))}
-							</div>
+							<TaskList tasks={tasksFuture[group]} showProject showWhen />
 						</div>
 					))}
 				</div>
