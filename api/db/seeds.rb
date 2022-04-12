@@ -6,4 +6,9 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-Area.create(title: 'University of Kentucky')
+area1 = Area.create(title: 'University of Kentucky')
+
+project1 = Project.create(area_id: nil, title: 'Reminders', icon: 'bookmark')
+project2 = Project.create(area_id: nil, title: 'Meet Things for Mac', description: 'This project shows you everything you need to know to hit the ground running. Don’t hesitate to play around in it – you can always create a new one from the Help menu.', icon: 'handshake')
+project3 = Project.create(area_id: 1, title: 'COM 101', icon: 'person-chalkboard')
+project3 = Project.create(area_id: 1, title: 'CS 371', icon: 'network-wired')
