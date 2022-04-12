@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useHotkeys } from '@mantine/hooks'
-import { tasks as taskCollection } from '../app/mockData'
-import { useProject } from '../hooks'
+import { useProject, useTasks } from '../hooks'
 import { View } from '../components'
 import { NewTask, TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
@@ -12,11 +11,12 @@ const Project = () => {
 	// TODO click on toolbar to add extra items to task
 	const { projectId } = useParams()
 	const { data: project = {} } = useProject(Number(projectId))
+	const { data: tasksCollection = [] } = useTasks.all()
 
-	const tasks = taskCollection.filter((task) => task.projectId === project.id && !task.completed)
-	const loggedTasks = taskCollection
-		.filter((task) => task.projectId === project.id && task.completed)
-		.sort((a, b) => b.completedWhen - a.completedWhen)
+	const tasks = tasksCollection.filter((task) => task.project_id === project.id && !task.completed)
+	const loggedTasks = tasksCollection
+		.filter((task) => task.project_id === project.id && task.completed)
+		.sort((a, b) => b.completed_when - a.completed_when)
 
 	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)

@@ -4,23 +4,23 @@ import { Task } from '.'
 
 const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
 	const headers = tasks.reduce((group, task) => {
-		let { headerId } = task
-		headerId = headerId === null ? -1 : headerId
+		let { header_id } = task
+		header_id = header_id === null ? -1 : header_id
 
-		group[headerId] = group[headerId] ?? []
-		group[headerId].push(task)
+		group[header_id] = group[header_id] ?? []
+		group[header_id].push(task)
 		return group
 	}, {})
 
 	return showHeaders
 		? Object.keys(headers)
 				.sort((a, b) => Number(a) - Number(b))
-				.map((headerId) => (
-					<div key={headerId} className='mb-8'>
+				.map((header_id) => (
+					<div key={header_id} className='mb-8'>
 						{/* Header */}
-						{Number(headerId) !== -1 && (
+						{Number(header_id) !== -1 && (
 							<div className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
-								<div>{headersCollection.find((header) => header.id === Number(headerId))?.title}</div>
+								<div>{headersCollection.find((header) => header.id === Number(header_id))?.title}</div>
 								<Dropdown targetColor='text-blue-600'>
 									<Dropdown.Item label='Archive' icon='check-to-slot' onClick={() => console.log('TODO')} />
 
@@ -38,7 +38,7 @@ const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
 						)}
 
 						{/* Tasks */}
-						{headers[headerId].map((task) => (
+						{headers[header_id].map((task) => (
 							<Task key={task.id} task={task} {...options} />
 						))}
 					</div>

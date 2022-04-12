@@ -40,7 +40,7 @@ const Task = ({
 	onClick = () => {},
 }) => {
 	// TODO maybe pass project from list but if no project then query?
-	const { data: project = {} } = useProject(task.projectId, showProject)
+	const { data: project = {} } = useProject(task.project_id, showProject)
 
 	return (
 		<div className='flex items-center' onClick={onClick}>
@@ -58,7 +58,7 @@ const Task = ({
 						/>
 						<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
 							<Checkbox className='ml-3 mr-1' size='xs' defaultChecked={task.completed} />
-							{showCompletedWhen && <CompletedWhenDisplay when={task.completedWhen} />}
+							{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
 							{showWhen && <WhenDisplay when={task.when} />}
 							<div className='ml-1 mr-1'>
 								<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>

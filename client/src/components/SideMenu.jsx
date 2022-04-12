@@ -2,33 +2,35 @@ import { useState } from 'react'
 import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { tasks } from '../app/mockData'
+import { useTasks } from '../hooks'
 import { useAreas, useProjects } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
+// TODO fix notifications
 export const menuItems = [
-	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
+	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', url: '/inbox', component: Placeholder }],
 	[
 		{
 			title: 'Today',
 			icon: 'star',
 			color: 'text-yellow-400',
-			notification: tasks.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString()).length,
 			url: '/today',
 			component: Today,
 		},
-		{ title: 'Upcoming', icon: 'calendar-days', color: 'text-red-600', notification: 0, url: '/upcoming', component: Upcoming },
-		{ title: 'Anytime', icon: 'layer-group', color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
-		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
+		{ title: 'Upcoming', icon: 'calendar-days', color: 'text-red-600', url: '/upcoming', component: Upcoming },
+		{ title: 'Anytime', icon: 'layer-group', color: 'text-teal-600', url: '/anytime', component: Placeholder },
+		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', url: '/someday', component: Placeholder },
 	],
 	[
-		{ title: 'Logbook', icon: 'book', color: 'text-green-600', notification: 0, url: '/logbook', component: Logbook },
-		{ title: 'Trash', icon: 'trash', color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
+		{ title: 'Logbook', icon: 'book', color: 'text-green-600', url: '/logbook', component: Logbook },
+		{ title: 'Trash', icon: 'trash', color: 'text-gray-400', url: '/trash', component: Placeholder },
 	],
 ]
 
 const Toolbar = () => {
+	const { data: tasks = [] } = useTasks()
+
 	const [newListOpen, setNewListOpen] = useState(false)
 	const [settingsOpen, setSettingsOpen] = useState(false)
 

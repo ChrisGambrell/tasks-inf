@@ -1,4 +1,5 @@
-import { completeTasks as taskCollection } from '../app/mockData'
+import { completeTasks as tasksCollection } from '../app/mockData'
+import { useTasks } from '../hooks'
 import { View } from '../components'
 import { TaskList } from '../components/Task'
 import { menuItems } from '../components/SideMenu'
@@ -9,37 +10,39 @@ const Logbook = () => {
 		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/logbook') !== -1)[0]
 		.find((menuItem) => menuItem.url === '/logbook')
 
-	const tasks = taskCollection.filter((task) => task.completedWhen).sort((a, b) => b.completedWhen - a.completedWhen)
+	const { data: tasksCollection = [] } = useTasks.complete()
 
-	const tasksToday = taskCollection.filter((task) => task.completedWhen.toLocaleDateString() === new Date().toLocaleDateString())
+	const tasks = tasksCollection.filter((task) => task.completed_when).sort((a, b) => b.completed_when - a.completed_when)
 
-	const tasksYesterday = taskCollection.filter(
+	const tasksToday = tasks.filter((task) => task.completed_when.toLocaleDateString() === new Date().toLocaleDateString())
+
+	const tasksYesterday = tasks.filter(
 		(task) =>
-			task.completedWhen.toLocaleDateString() ===
+			task.completed_when.toLocaleDateString() ===
 			new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1).toLocaleDateString()
 	)
 
 	const tasksYear = tasks.reduce((group, task) => {
-		let { completedWhen } = task
-		completedWhen = new Date(completedWhen.toLocaleDateString())
+		let { completed_when } = task
+		completed_when = new Date(completed_when.toLocaleDateString())
 
 		if (
-			completedWhen < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1) &&
-			completedWhen > new Date(new Date().getFullYear(), 0, 0)
+			completed_when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1) &&
+			completed_when > new Date(new Date().getFullYear(), 0, 0)
 		) {
-			group[completedWhen.getMonth()] = group[completedWhen.getMonth()] ?? []
-			group[completedWhen.getMonth()].push(task)
+			group[completed_when.getMonth()] = group[completed_when.getMonth()] ?? []
+			group[completed_when.getMonth()].push(task)
 		}
 		return group
 	}, {})
 
 	const tasksFuture = tasks.reduce((group, task) => {
-		let { completedWhen } = task
-		completedWhen = new Date(completedWhen.toLocaleDateString())
+		let { completed_when } = task
+		completed_when = new Date(completed_when.toLocaleDateString())
 
-		if (completedWhen < new Date(new Date().getFullYear(), 1, 1)) {
-			group[completedWhen.getFullYear()] = group[completedWhen.getFullYear()] ?? []
-			group[completedWhen.getFullYear()].push(task)
+		if (completed_when < new Date(new Date().getFullYear(), 1, 1)) {
+			group[completed_when.getFullYear()] = group[completed_when.getFullYear()] ?? []
+			group[completed_when.getFullYear()].push(task)
 		}
 		return group
 	}, {})
