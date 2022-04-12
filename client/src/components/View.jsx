@@ -135,6 +135,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 					<Dropdown>
 						<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
 						{/* TODO add date to send to DateSelect */}
+						{/* TODO send it a taskId */}
 						<DateSelect
 							title='When'
 							target={<Dropdown.Item label='When' icon='calendar-days' onClick={() => console.log('TODO')} />}

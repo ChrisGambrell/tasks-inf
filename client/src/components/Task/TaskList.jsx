@@ -3,6 +3,7 @@ import { Dropdown } from '..'
 import { Task } from '.'
 
 const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
+	// TODO sort todos in section based on date
 	const { data: headersCollection = [] } = useHeaders()
 
 	const headers = tasks.reduce((group, task) => {

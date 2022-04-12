@@ -38,7 +38,6 @@ const Toolbar = () => {
 
 	return (
 		<div className='flex justify-between h-10 px-2 border-t text-gray-500'>
-			{/* TODO */}
 			<Popover
 				classNames={{ popover: 'bg-gray-800 text-gray-50' }}
 				target={
@@ -132,7 +131,6 @@ const SideMenu = () => {
 				<Menu.Section>
 					{areasFromAPI.map((area) => (
 						<Menu.Dropdown key={area.title} label={area.title}>
-							{/* TODO real projects */}
 							{projects
 								.filter((project) => project.area_id === area.id)
 								.map((project) => (

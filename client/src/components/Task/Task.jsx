@@ -1,6 +1,6 @@
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useProject } from '../../hooks'
+import { useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect } from '.'
 
@@ -41,6 +41,9 @@ const Task = ({
 }) => {
 	// TODO maybe pass project from list but if no project then query?
 	const { data: project = {} } = useProject(task.project_id, showProject)
+	const createTask = useCreateTask().mutate
+	const editTask = useEditTask().mutate
+	const deleteTask = useDeleteTask().mutate
 
 	return (
 		<div className='flex items-center' onClick={onClick}>
@@ -51,13 +54,24 @@ const Task = ({
 					<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
 						<DateSelect
 							title='When'
+							taskId={task.id}
 							date={task.when}
 							target={
 								<FA className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon='calendar-days' />
 							}
 						/>
 						<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
-							<Checkbox className='ml-3 mr-1' size='xs' defaultChecked={task.completed} />
+							<Checkbox
+								className='ml-3 mr-1'
+								size='xs'
+								defaultChecked={task.completed}
+								onChange={() =>
+									editTask({
+										taskId: task.id,
+										data: { completed: !task.completed },
+									})
+								}
+							/>
 							{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
 							{showWhen && <WhenDisplay when={task.when} />}
 							<div className='ml-1 mr-1'>
@@ -68,33 +82,48 @@ const Task = ({
 						</div>
 					</div>
 				}>
-				<ContextMenu.Item label='When...' hotKeys={['alt', 'S']} onClick={() => console.log('TODO')} />
+				{/* hotkeys todo */}
+				<DateSelect date={task.when} taskId={task.id} target={<ContextMenu.Item label='When...' hotKeys={['alt', 'S']} />} />
 				<ContextMenu.Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={() => console.log('TODO')} />
 				<ContextMenu.Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
-				<ContextMenu.Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />
-				<ContextMenu.Submenu label='Complete...' onClick={() => console.log('TODO')}>
-					<ContextMenu.Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={() => console.log('TODO')} />
+				<DateSelect
+					target={<ContextMenu.Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />}
+				/>
+				<ContextMenu.Submenu label='Complete...'>
+					<ContextMenu.Item
+						label='Mark as Completed'
+						hotKeys={['alt', 'K']}
+						onClick={() => editTask({ taskId: task.id, data: { completed: true } })}
+					/>
 					{/* TODO Check next hotkey to make sure it isn't conflicting */}
 					<ContextMenu.Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={() => console.log('TODO')} />
 				</ContextMenu.Submenu>
-				<ContextMenu.Submenu title='When' label='Shortcuts...' onClick={() => console.log('TODO')}>
-					<ContextMenu.Item label='Today' hotKeys={['alt', 'T']} onClick={() => console.log('TODO')} />
+				<ContextMenu.Submenu title='When' label='Shortcuts...'>
+					<ContextMenu.Item
+						label='Today'
+						hotKeys={['alt', 'T']}
+						onClick={() => editTask({ taskId: task.id, data: { when: new Date() } })}
+					/>
 					<ContextMenu.Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => console.log('TODO')} />
 					<ContextMenu.Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
-					<ContextMenu.Item label='Clear' hotKeys={['alt', 'R']} onClick={() => console.log('TODO')} />
+					<ContextMenu.Item
+						label='Clear'
+						hotKeys={['alt', 'R']}
+						onClick={() => editTask({ taskId: task.id, data: { when: null } })}
+					/>
 				</ContextMenu.Submenu>
 
 				<ContextMenu.Divider />
 
 				<ContextMenu.Item label='Repeat...' hotKeys={['alt', 'shift', 'R']} onClick={() => console.log('TODO')} />
-				<ContextMenu.Item label='Get Info...' hotKeys={[]} onClick={() => console.log('TODO')} />
-				<ContextMenu.Item label='Duplicate To-Do...' hotKeys={['alt', 'D']} onClick={() => console.log('TODO')} />
-				<ContextMenu.Item label='Convert to Project...' hotKeys={[]} onClick={() => console.log('TODO')} />
-				<ContextMenu.Item label='Delete To-Do...' hotKeys={[]} onClick={() => console.log('TODO')} />
+				<ContextMenu.Item label='Get Info...' onClick={() => console.log('TODO')} />
+				<ContextMenu.Item label='Duplicate To-Do...' hotKeys={['alt', 'D']} onClick={() => createTask(task)} />
+				<ContextMenu.Item label='Convert to Project...' onClick={() => console.log('TODO')} />
+				<ContextMenu.Item label='Delete To-Do...' onClick={() => deleteTask(task.id)} />
 
 				<ContextMenu.Divider />
 
-				<ContextMenu.Item label='Remove From Project...' hotKeys={[]} onClick={() => console.log('TODO')} />
+				<ContextMenu.Item label='Remove From Project...' onClick={() => console.log('TODO')} />
 			</ContextMenu>
 		</div>
 	)

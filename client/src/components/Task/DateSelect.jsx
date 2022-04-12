@@ -2,10 +2,19 @@ import { useState } from 'react'
 import { Popover } from '@mantine/core'
 import { Calendar } from '@mantine/dates'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
+import { useEditTask } from '../../hooks'
 
-const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
+// TODO add support for updating the deadline
+const DateSelect = ({ title, taskId, date, hideQuickDates = false, target }) => {
+	const editTask = useEditTask().mutate
+
 	const [open, setOpen] = useState(false)
-	const [selectedDate, setSelectedDate] = useState(date)
+
+	const handleUpdateDate = (updatingDate) => {
+		if (taskId) editTask({ taskId, data: { when: updatingDate } })
+		else console.log('TODO')
+		setOpen(false)
+	}
 
 	return (
 		<div>
@@ -20,7 +29,9 @@ const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 					<div className='flex justify-center text-gray-400'>{title}</div>
 					{!hideQuickDates && (
 						<div>
-							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+							<div
+								className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500'
+								onClick={() => handleUpdateDate(new Date())}>
 								<FA className='text-yellow-400' icon='star' />
 								<div>Today</div>
 							</div>
@@ -41,21 +52,20 @@ const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 								monthPickerControlActive: 'font-semibold text-gray-50 hover:bg-blue-500',
 								day: 'font-semibold !text-gray-50 hover:bg-blue-500',
 							}}
-							dayStyle={(date) =>
-								date.toLocaleDateString() === selectedDate?.toLocaleDateString()
+							dayStyle={(dateToStyle) =>
+								dateToStyle.toLocaleDateString() === date?.toLocaleDateString()
 									? {
 											backgroundColor: 'rgb(59 130 246 / var(--tw-bg-opacity))',
 											border: '1px solid white',
 											borderRadius: 7,
 									  }
-									: date.toLocaleDateString() === new Date().toLocaleDateString()
+									: dateToStyle.toLocaleDateString() === new Date().toLocaleDateString()
 									? { border: '1px solid white', borderRadius: 7 }
 									: null
 							}
 							firstDayOfWeek='sunday'
 							hideOutsideDates
-							// Still TODO
-							onChange={(date) => setSelectedDate(date)}
+							onChange={(updatingDate) => handleUpdateDate(updatingDate)}
 						/>
 					</div>
 					{!hideQuickDates && (
@@ -72,7 +82,7 @@ const DateSelect = ({ title, date, hideQuickDates = false, target }) => {
 							</div>
 							<div
 								className='flex justify-center mt-1 p-1 rounded bg-gray-600 active:bg-gray-500'
-								onClick={() => console.log('TODO')}>
+								onClick={() => handleUpdateDate(null)}>
 								Clear
 							</div>
 						</div>
