@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useTasks } from '../hooks'
+import { useTasks } from './hooks'
 import { TasksContext } from '../App'
 import { TaskContextMenu, TaskForm, TaskListItem } from '.'
 

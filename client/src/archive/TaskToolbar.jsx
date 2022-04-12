@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Button } from '@mantine/core'
 import { ArrowBarRight, ArrowNarrowRight, Calendar, Dots, Plus, Search, Trash } from 'tabler-icons-react'
-import { useDeleteTask } from '../hooks'
+import { useDeleteTask } from './hooks'
 import { TasksContext } from '../App'
 
 const TaskToolbar = () => {

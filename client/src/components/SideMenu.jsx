@@ -3,6 +3,7 @@ import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { areas, projects, tasks } from '../app/mockData'
+import { useAreas } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
@@ -101,6 +102,8 @@ const Toolbar = () => {
 }
 
 const SideMenu = () => {
+	const { data: areasFromAPI = [] } = useAreas()
+
 	return (
 		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
 			<div className='px-4 space-y-4 select-none overflow-y-scroll'>
@@ -120,10 +123,12 @@ const SideMenu = () => {
 							<Menu.Item key={project.title} menuItem={project} type='project' />
 						))}
 				</Menu.Section>
+
 				{/* Areas */}
 				<Menu.Section>
-					{areas.map((area) => (
+					{areasFromAPI.map((area) => (
 						<Menu.Dropdown key={area.title} label={area.title}>
+							{/* TODO real projects */}
 							{projects
 								.filter((project) => project.areaId === area.id)
 								.map((project) => (

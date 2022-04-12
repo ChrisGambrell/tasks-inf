@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { showNotification } from '@mantine/notifications'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -27,7 +28,7 @@ ReactDOM.render(
 			<BrowserRouter>
 				<App />
 			</BrowserRouter>
-			{/* <ReactQueryDevtools /> */}
+			<ReactQueryDevtools />
 		</QueryClientProvider>
 	</React.StrictMode>,
 	document.getElementById('root')
