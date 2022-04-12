@@ -26,13 +26,14 @@ const Dropdown = ({ label = '', children }) => {
 
 const Item = ({ menuItem, type = null }) => {
 	const navigate = useNavigate()
+	const url = menuItem.url ? menuItem.url : `/${type && type}s/${menuItem.id}`
 
 	return (
 		<div
 			className={`flex items-center p-1 rounded-md ${
-				window.location.pathname === menuItem.url && 'bg-gray-200'
+				window.location.pathname === url && 'bg-gray-200'
 			} hover:bg-gray-200 active:bg-gray-300`}
-			onClick={() => (menuItem.url ? navigate(menuItem.url) : {})}>
+			onClick={() => navigate(url)}>
 			<FA
 				className={`flex-none h-5 w-5 mr-2 ${menuItem.color ? menuItem.color : 'text-gray-400'}`}
 				icon={menuItem.icon ? menuItem.icon : type === 'project' ? 'circle-notch' : 'circle-question'}

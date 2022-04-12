@@ -4,7 +4,7 @@ import { DatePicker } from '@mantine/dates'
 import { showNotification } from '@mantine/notifications'
 import { Calendar, Flag3, List, Tag as TagIcon, X } from 'tabler-icons-react'
 import { TasksContext } from '../App'
-import { useCreateTask, useEditTask } from '../hooks'
+import { useCreateTask, useEditTask } from './hooks'
 
 const TaskForm = ({ type = 'create', as: Tag = 'div', className = '', task = {} }) => {
 	const createTask = useCreateTask().mutate

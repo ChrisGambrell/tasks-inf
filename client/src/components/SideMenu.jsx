@@ -2,32 +2,35 @@ import { useState } from 'react'
 import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { areas, projects, tasks } from '../app/mockData'
+import { useTasks } from '../hooks'
+import { useAreas, useProjects } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
+// TODO fix notifications
 export const menuItems = [
-	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', notification: 0, url: '/inbox', component: Placeholder }],
+	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', url: '/inbox', component: Placeholder }],
 	[
 		{
 			title: 'Today',
 			icon: 'star',
 			color: 'text-yellow-400',
-			notification: tasks.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString()).length,
 			url: '/today',
 			component: Today,
 		},
-		{ title: 'Upcoming', icon: 'calendar-days', color: 'text-red-600', notification: 0, url: '/upcoming', component: Upcoming },
-		{ title: 'Anytime', icon: 'layer-group', color: 'text-teal-600', notification: 0, url: '/anytime', component: Placeholder },
-		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', notification: 0, url: '/someday', component: Placeholder },
+		{ title: 'Upcoming', icon: 'calendar-days', color: 'text-red-600', url: '/upcoming', component: Upcoming },
+		{ title: 'Anytime', icon: 'layer-group', color: 'text-teal-600', url: '/anytime', component: Placeholder },
+		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', url: '/someday', component: Placeholder },
 	],
 	[
-		{ title: 'Logbook', icon: 'book', color: 'text-green-600', notification: 0, url: '/logbook', component: Logbook },
-		{ title: 'Trash', icon: 'trash', color: 'text-gray-400', notification: 0, url: '/trash', component: Placeholder },
+		{ title: 'Logbook', icon: 'book', color: 'text-green-600', url: '/logbook', component: Logbook },
+		{ title: 'Trash', icon: 'trash', color: 'text-gray-400', url: '/trash', component: Placeholder },
 	],
 ]
 
 const Toolbar = () => {
+	const { data: tasks = [] } = useTasks()
+
 	const [newListOpen, setNewListOpen] = useState(false)
 	const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -101,6 +104,9 @@ const Toolbar = () => {
 }
 
 const SideMenu = () => {
+	const { data: areasFromAPI = [] } = useAreas()
+	const { data: projects = [] } = useProjects()
+
 	return (
 		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
 			<div className='px-4 space-y-4 select-none overflow-y-scroll'>
@@ -112,20 +118,23 @@ const SideMenu = () => {
 						))}
 					</Menu.Section>
 				))}
-				{/* Projects */}
+
+				{/* Projects from API */}
 				<Menu.Section>
 					{projects
-						.filter((project) => project.areaId === null)
+						.filter((project) => project.area_id === null)
 						.map((project) => (
 							<Menu.Item key={project.title} menuItem={project} type='project' />
 						))}
 				</Menu.Section>
+
 				{/* Areas */}
 				<Menu.Section>
-					{areas.map((area) => (
+					{areasFromAPI.map((area) => (
 						<Menu.Dropdown key={area.title} label={area.title}>
+							{/* TODO real projects */}
 							{projects
-								.filter((project) => project.areaId === area.id)
+								.filter((project) => project.area_id === area.id)
 								.map((project) => (
 									<Menu.Item key={project.title} menuItem={project} type='project' />
 								))}

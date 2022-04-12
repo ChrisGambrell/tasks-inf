@@ -1,4 +1,4 @@
-import { incompleteTasks as taskCollection } from '../app/mockData'
+import { useTasks } from '../hooks'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { TaskList } from '../components/Task'
@@ -9,7 +9,9 @@ const Upcoming = () => {
 		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/upcoming') !== -1)[0]
 		.find((menuItem) => menuItem.url === '/upcoming')
 
-	const tasks = taskCollection.filter((task) => task.when).sort((a, b) => a.when - b.when)
+	const { data: tasksCollection = [] } = useTasks.incomplete()
+
+	const tasks = tasksCollection.filter((task) => task.when).sort((a, b) => a.when - b.when)
 
 	const tasksWeek = tasks.reduce((group, task) => {
 		let { when } = task

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useHotkeys } from '@mantine/hooks'
-import { incompleteTasks as taskCollection } from '../app/mockData'
+import { useTasks } from '../hooks'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { NewTask, TaskList } from '../components/Task'
@@ -11,7 +11,9 @@ const Today = () => {
 		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/today') !== -1)[0]
 		.find((menuItem) => menuItem.url === '/today')
 
-	const tasks = taskCollection.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString())
+	const { data: tasksCollection = [] } = useTasks.incomplete()
+
+	const tasks = tasksCollection.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString())
 
 	const [showNewTask, setShowNewTask] = useState(false)
 
