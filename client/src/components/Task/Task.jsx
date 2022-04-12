@@ -1,6 +1,6 @@
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
+import { useHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect } from '.'
 
@@ -34,13 +34,15 @@ const Task = ({
 	secondary = false,
 	selected = false,
 	showCompletedWhen = false,
+	showHeader = false,
 	showNotesIndicator = false,
 	showProject = false,
 	showWhen = false,
 	onClick = () => {},
 }) => {
 	// TODO maybe pass project from list but if no project then query?
-	const { data: project = {} } = useProject(task.project_id, showProject)
+	const { data: project = {} } = useProject(task.project_id, Boolean(showProject && task.project_id))
+	const { data: header = {} } = useHeader(task.header_id, Boolean(showHeader && task.header_id))
 	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
@@ -77,6 +79,7 @@ const Task = ({
 							<div className='ml-1 mr-1'>
 								<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
 								{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
+								{showHeader && header && <div className='text-xs text-gray-400 truncate'>{header.title}</div>}
 							</div>
 							{showNotesIndicator && task.notes && <FA className='w-3 h-3 text-gray-400' icon='file' />}
 						</div>

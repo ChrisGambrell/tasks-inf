@@ -1,4 +1,5 @@
 export { default as useAreas } from './useAreas'
+export { default as useHeader } from './useHeader'
 export { default as useHeaders } from './useHeaders'
 export { default as useProject } from './useProject'
 export { default as useProjects } from './useProjects'
