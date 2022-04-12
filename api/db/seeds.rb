@@ -12,3 +12,6 @@ project1 = Project.create(area_id: nil, title: 'Reminders', icon: 'bookmark')
 project2 = Project.create(area_id: nil, title: 'Meet Things for Mac', description: 'This project shows you everything you need to know to hit the ground running. Don’t hesitate to play around in it – you can always create a new one from the Help menu.', icon: 'handshake')
 project3 = Project.create(area_id: 1, title: 'COM 101', icon: 'person-chalkboard')
 project3 = Project.create(area_id: 1, title: 'CS 371', icon: 'network-wired')
+
+header1 = Header.create(project_id: 2, title: 'Learn the basics')
+header2 = Header.create(project_id: 2, title: 'Tune your setup')

@@ -20,7 +20,7 @@ class AreasController < ApplicationController
     if @area.save
       render json: @area, status: :created, location: @area
     else
-      render json: @area.errors, status: :unprocessable_entity
+      render json: { errors: @area.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -29,7 +29,7 @@ class AreasController < ApplicationController
     if @area.update(area_params)
       render json: @area
     else
-      render json: @area.errors, status: :unprocessable_entity
+      render json: { errors: @area.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -41,11 +41,13 @@ class AreasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_area
-      @area = Area.find(params[:id])
+      @area = Area.find(params[:area_id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { errors: ["Couldn't find Area with 'id'=#{params[:area_id]}"] }, status: :not_found
     end
 
     # Only allow a list of trusted parameters through.
     def area_params
-      params.require(:area).permit(:title)
+      params.permit(:title)
     end
 end

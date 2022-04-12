@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :headers
   resources :projects
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -7,6 +8,7 @@ Rails.application.routes.draw do
 
   scope 'api/v1' do
     resources :areas, param: :area_id
+    resources :headers, param: :header_id
     resources :projects, param: :project_id
   end
 end
