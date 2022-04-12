@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  areaId: one
+  title: MyString
+  description: MyText
+  icon: MyString
+
+two:
+  areaId: two
+  title: MyString
+  description: MyText
+  icon: MyString
