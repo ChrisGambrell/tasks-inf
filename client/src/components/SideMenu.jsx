@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { areas, projects, tasks } from '../app/mockData'
-import { useAreas } from '../hooks'
+import { tasks } from '../app/mockData'
+import { useAreas, useProjects } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Logbook, Placeholder, Today, Upcoming } from '../pages'
 
@@ -103,6 +103,7 @@ const Toolbar = () => {
 
 const SideMenu = () => {
 	const { data: areasFromAPI = [] } = useAreas()
+	const { data: projects = [] } = useProjects()
 
 	return (
 		<div className='flex flex-col justify-between w-1/4 pt-8 bg-gray-100 border-r'>
@@ -115,10 +116,11 @@ const SideMenu = () => {
 						))}
 					</Menu.Section>
 				))}
-				{/* Projects */}
+
+				{/* Projects from API */}
 				<Menu.Section>
 					{projects
-						.filter((project) => project.areaId === null)
+						.filter((project) => project.area_id === null)
 						.map((project) => (
 							<Menu.Item key={project.title} menuItem={project} type='project' />
 						))}
@@ -130,7 +132,7 @@ const SideMenu = () => {
 						<Menu.Dropdown key={area.title} label={area.title}>
 							{/* TODO real projects */}
 							{projects
-								.filter((project) => project.areaId === area.id)
+								.filter((project) => project.area_id === area.id)
 								.map((project) => (
 									<Menu.Item key={project.title} menuItem={project} type='project' />
 								))}

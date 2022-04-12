@@ -1,25 +1,3 @@
-export const areas = [
-	{
-		id: 1,
-		title: 'University of Kentucky',
-	},
-]
-
-export const projects = [
-	{ id: 1, areaId: null, title: 'Reminders', icon: 'bookmark', url: '/projects/1' },
-	{
-		id: 2,
-		areaId: null,
-		title: 'Meet Things for Mac',
-		description:
-			'This project shows you everything you need to know to hit the ground running. Don’t hesitate to play around in it – you can always create a new one from the Help menu.',
-		icon: 'handshake',
-		url: '/projects/2',
-	},
-	{ id: 3, areaId: 1, title: 'COM 101', icon: 'person-chalkboard', url: '/projects/3' },
-	{ id: 4, areaId: 1, title: 'CS 371', icon: 'network-wired', url: '/projects/4' },
-]
-
 export const headers = [
 	{
 		id: 1,

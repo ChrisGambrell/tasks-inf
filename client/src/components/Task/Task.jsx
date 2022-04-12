@@ -1,6 +1,6 @@
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { projects } from '../../app/mockData'
+import { useProject } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect } from '.'
 
@@ -39,7 +39,8 @@ const Task = ({
 	showWhen = false,
 	onClick = () => {},
 }) => {
-	const project = projects.find((project) => project.id === task.projectId)
+	// TODO maybe pass project from list but if no project then query?
+	const { data: project = {} } = useProject(task.projectId, showProject)
 
 	return (
 		<div className='flex items-center' onClick={onClick}>
