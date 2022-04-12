@@ -28,6 +28,12 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   def update
     if @task.update(task_params)
+      if params['completed'] and params['completed'] == true
+        @task.update(completed_when: Time.current)
+      elsif params['completed'] and params['completed'] == false
+        @task.update(completed_when: nil)
+      end
+
       render json: @task
     else
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
