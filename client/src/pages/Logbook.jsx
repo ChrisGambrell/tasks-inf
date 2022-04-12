@@ -1,4 +1,3 @@
-import { completeTasks as tasksCollection } from '../app/mockData'
 import { useTasks } from '../hooks'
 import { View } from '../components'
 import { TaskList } from '../components/Task'

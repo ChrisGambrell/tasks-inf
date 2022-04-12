@@ -1,8 +1,10 @@
-import { headers as headersCollection } from '../../app/mockData'
+import { useHeaders } from '../../hooks'
 import { Dropdown } from '..'
 import { Task } from '.'
 
 const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
+	const { data: headersCollection = [] } = useHeaders()
+
 	const headers = tasks.reduce((group, task) => {
 		let { header_id } = task
 		header_id = header_id === null ? -1 : header_id
