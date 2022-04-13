@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Checkbox, Textarea, TextInput } from '@mantine/core'
-import { useClickOutside } from '@mantine/hooks'
+import { useDebouncedValue } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useEditTask } from '../../hooks'
 import { Tooltip } from '..'
@@ -18,6 +18,17 @@ const TaskDetails = ({ task }) => {
 	// const [newCompleted, setNewCompleted] = useState(false)
 
 	const editTask = useEditTask().mutate
+
+	const [title, setTitle] = useState(task.title)
+	const [notes, setNotes] = useState(task.notes)
+
+	const [debouncedTitle] = useDebouncedValue(title, 200)
+	const [debouncedNotes] = useDebouncedValue(notes, 200)
+
+	useEffect(() => debouncedTitle !== task.title && editTask({ taskId: task.id, data: { title: debouncedTitle } }), [debouncedTitle])
+	useEffect(() => debouncedNotes !== task.notes && editTask({ taskId: task.id, data: { notes: debouncedNotes } }), [debouncedNotes])
+
+	const handleEditCompleted = () => editTask({ taskId: task.id, data: { completed: !task.completed } })
 
 	const handleEditWhen = (when) => {
 		editTask({ taskId: task.id, data: { when } })
@@ -114,11 +125,23 @@ const TaskDetails = ({ task }) => {
 			{/* Tooltips on toolbar buttons */}
 			<div className='flex space-x-2'>
 				<div className='flex-none'>
-					<Checkbox className='mt-2.5' size='xs' value={task.completed} />
+					<Checkbox className='mt-2.5' size='xs' value={task.completed} onChange={handleEditCompleted} />
 				</div>
 				<div className='flex-grow flex flex-col'>
-					<TextInput variant='unstyled' type='text' placeholder='New To-Do' value={task.title} />
-					<Textarea variant='unstyled' placeholder='Notes' value={task.notes} autosize />
+					<TextInput
+						variant='unstyled'
+						type='text'
+						placeholder='New To-Do'
+						value={title || ''}
+						onChange={(e) => setTitle(e.target.value)}
+					/>
+					<Textarea
+						variant='unstyled'
+						placeholder='Notes'
+						value={notes || ''}
+						onChange={(e) => setNotes(e.target.value)}
+						autosize
+					/>
 					{/* {checklist?.length > 0 && <Checklist />} */}
 				</div>
 			</div>
