@@ -17,8 +17,6 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	const [newCompleted, setNewCompleted] = useState(false)
 	const [newWhen, setNewWhen] = useState(defaultWhen)
 
-	useEffect(() => console.log(newWhen), [newWhen, setNewWhen])
-
 	// const Checklist = () => (
 	// 	<div className='mb-4' ref={clickOutsideChecklist}>
 	// 		{checklist.map((item, i) => (
@@ -56,7 +54,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 				value={newWhen}
 				onChange={setNewWhen}
 				target={
-					<button className='group flex items-center space-x-1 px-1 rounded border border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+					<div className='group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
 						<FA
 							className={
 								newWhen.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-yellow-400' : 'text-red-500'
@@ -76,8 +74,12 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 											: { month: 'long', day: 'numeric' }
 								  )}
 						</div>
-						{/* TODO - clear X button */}
-					</button>
+						<FA
+							className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+							icon='x'
+							onClick={() => setNewWhen(null)}
+						/>
+					</div>
 				}
 			/>
 		</div>
