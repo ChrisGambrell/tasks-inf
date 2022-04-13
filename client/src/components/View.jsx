@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react'
-import { Button, Checkbox, Modal, Select, Textarea, TextInput } from '@mantine/core'
-import { useHotkeys } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useProjects, useCreateTask } from '../hooks'
@@ -10,8 +7,6 @@ import { DateSelect } from './Task'
 // TODO fix new task
 
 const View = ({ children }) => {
-	const [newTaskOpen, setNewTaskOpen] = useState(false)
-
 	const toolbarButtons = [
 		{
 			icon: 'plus',

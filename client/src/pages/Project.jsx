@@ -22,7 +22,7 @@ const Project = () => {
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
 	useHotkeys([
-		// TODO ['alt + n', () => setShowNewTask(true)],
+		['alt + n', () => setShowNewTask(true)],
 		['escape', () => setShowNewTask(false)],
 	])
 

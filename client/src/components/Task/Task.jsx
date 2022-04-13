@@ -54,6 +54,10 @@ const Task = ({
 		return state.contexted === task.id ? event() : state.contexted === -1 && state.selected.includes(task.id) ? event() : null
 	}
 
+	const handleEditWhen = (when) => {
+		editTask({ taskId: task.id, data: { when } })
+	}
+
 	useHotkeys([
 		[
 			// FIXME this might be broken
@@ -97,8 +101,8 @@ const Task = ({
 						<div className='-translate-x-1'>
 							<DateSelect
 								title='When'
-								taskId={task.id}
-								date={task.when}
+								value={task.when}
+								onChange={handleEditWhen}
 								target={<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />}
 							/>
 						</div>
@@ -128,7 +132,11 @@ const Task = ({
 						</div>
 					</div>
 				}>
-				<DateSelect date={task.when} taskId={task.id} target={<ContextMenu.Item label='When...' hotKeys={['alt', 'S']} />} />
+				<DateSelect
+					value={task.when}
+					onChange={handleEditWhen}
+					target={<ContextMenu.Item label='When...' hotKeys={['alt', 'S']} />}
+				/>
 				<ContextMenu.Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={() => console.log('TODO')} />
 				<ContextMenu.Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
 				<DateSelect
