@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Checkbox, Modal, Select, Textarea, TextInput } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
@@ -106,6 +106,11 @@ const View = ({ children }) => {
 	const [newCompleted, setNewCompleted] = useState(false)
 	const [newProjectId, setNewProjectId] = useState(-1)
 
+	useEffect(() => {
+		if (projects.length > 1) setNewProjectId(2)
+		else if (projects.length === 1) setNewProjectId(1)
+	}, [projects])
+
 	const handleNewTaskSubmit = async () => {
 		try {
 			await createTask({ title: newTitle, notes: newNotes, completed: newCompleted, project_id: newProjectId })
@@ -136,6 +141,7 @@ const View = ({ children }) => {
 							<TextInput type='text' placeholder='New To-Do' value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
 							<Textarea placeholder='Notes' value={newNotes} onChange={(e) => setNewNotes(e.target.value)} autosize />
 							<Select
+								label='Required... will fail without'
 								placeholder='Project'
 								data={projects.map((project) => ({ value: project.id, label: project.title }))}
 								value={newProjectId}
