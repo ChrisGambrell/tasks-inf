@@ -9,7 +9,7 @@ import { DateSelect } from './Task'
 // TODO fix new task
 
 const View = ({ children }) => {
-	const [state, dispatch] = useContext(TasksContext)
+	const [_, dispatch] = useContext(TasksContext)
 
 	const createTask = useCreateTask().mutateAsync
 

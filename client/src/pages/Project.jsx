@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useHotkeys } from '@mantine/hooks'
 import { useProject, useTasks } from '../hooks'
 import { View } from '../components'
-import { TaskDetails, TaskList } from '../components/Task'
+import { TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
 
 const Project = () => {
@@ -18,21 +17,12 @@ const Project = () => {
 		.filter((task) => task.project_id === project.id && task.completed)
 		.sort((a, b) => b.completed_when - a.completed_when)
 
-	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
-
-	// todo
-	// useHotkeys([
-	// 	['alt + n', () => setShowNewTask(true)],
-	// 	['escape', () => setShowNewTask(false)],
-	// ])
 
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
-				{showNewTask && <TaskDetails />}
-
 				<TaskList tasks={tasks} showHeaders showNotesIndicator showWhen />
 
 				{/* Logged tasks */}
