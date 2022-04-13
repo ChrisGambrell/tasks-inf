@@ -35,7 +35,7 @@ const Today = () => {
 					/>
 				)}
 
-				<TaskList tasks={tasks} showProject showWhen />
+				<TaskList tasks={tasks} values={{ when: new Date() }} showProject showWhen />
 			</View.Content>
 		</View>
 	) : (

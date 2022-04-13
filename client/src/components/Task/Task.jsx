@@ -50,8 +50,6 @@ const Task = ({
 
 	const [state, dispatch] = useContext(TasksContext)
 
-	const [showDetails, setShowDetails] = useState(false)
-
 	const handleHotKey = (event) => {
 		return state.contexted === task.id ? event() : state.contexted === -1 && state.selected.includes(task.id) ? event() : null
 	}
@@ -66,7 +64,7 @@ const Task = ({
 			'backspace',
 			() => handleHotKey(() => deleteTask(task.id)),
 		],
-		['escape', () => setShowDetails(false)],
+		['escape', () => dispatch({ type: 'reset' })],
 		['alt + D', () => handleHotKey(() => createTask(task))],
 		['alt + K', () => handleHotKey(() => editTask({ taskId: task.id, data: { completed: true } }))],
 		['alt + R', () => handleHotKey(() => editTask({ taskId: task.id, data: { when: null } }))],
@@ -74,21 +72,18 @@ const Task = ({
 	])
 
 	const clickOutsideRef = useClickOutside(() => {
-		if (state.selected.includes(task.id)) {
-			setShowDetails(false)
-			dispatch({ type: 'set', payload: { selected: [] } })
-		}
+		if (state.selected.includes(task.id)) dispatch({ type: 'reset' })
 	})
 
 	return (
 		<div ref={clickOutsideRef}>
-			{showDetails ? (
+			{state.open === task.id ? (
 				<TaskDetails task={task} />
 			) : (
 				<div
 					className='flex items-center select-none'
 					onClick={() => dispatch({ type: 'set', payload: { selected: [task.id] } })}
-					onDoubleClick={() => setShowDetails(true)}>
+					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id } })}>
 					<ContextMenu
 						taskId={task.id}
 						target={

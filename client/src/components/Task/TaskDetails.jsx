@@ -125,7 +125,7 @@ const TaskDetails = ({ task }) => {
 			{/* Tooltips on toolbar buttons */}
 			<div className='flex space-x-2'>
 				<div className='flex-none'>
-					<Checkbox className='mt-2.5' size='xs' value={task.completed} onChange={handleEditCompleted} />
+					<Checkbox className='mt-2.5' size='xs' value={task.completed || false} onChange={handleEditCompleted} />
 				</div>
 				<div className='flex-grow flex flex-col'>
 					<TextInput

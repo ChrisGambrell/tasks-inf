@@ -1,16 +1,22 @@
+import { useContext } from 'react'
 import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useProjects, useCreateTask } from '../hooks'
+import { useCreateTask } from '../hooks'
+import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 // TODO fix new task
 
 const View = ({ children }) => {
+	const [state, dispatch] = useContext(TasksContext)
+
+	const createTask = useCreateTask().mutateAsync
+
 	const toolbarButtons = [
 		{
 			icon: 'plus',
-			disabled: false,
+			disabled: ['anytime', 'someday', 'logbook', 'trash'].some((endpoint) => window.location.pathname.includes(endpoint)),
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -22,7 +28,24 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>You can also just press your spacebar.</div>
 				</div>
 			),
-			onClick: () => console.log('todo'),
+			onClick: async () => {
+				let values = {}
+				if (window.location.pathname.includes('today')) values['when'] = new Date()
+				else if (window.location.pathname.includes('upcoming'))
+					values['when'] = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
+				// TODO anytime
+				// TODO someday
+				else if (window.location.pathname.includes('projects/'))
+					values['project_id'] =
+						window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'projects') + 1]
+
+				try {
+					let { id } = await createTask(values)
+					dispatch({ type: 'set', payload: { selected: [id], open: id } })
+				} catch (err) {
+					console.error(err)
+				}
+			},
 		},
 		{
 			icon: 'caret-square-right',
