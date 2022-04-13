@@ -27,11 +27,11 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>You can also just press your spacebar.</div>
 				</div>
 			),
-			onClick: () => setNewTaskOpen(true),
+			onClick: () => console.log('todo'),
 		},
 		{
 			icon: 'caret-square-right',
-			disabled: true,
+			disabled: false,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -96,64 +96,11 @@ const View = ({ children }) => {
 		},
 	]
 
-	useHotkeys([['alt + N', () => setNewTaskOpen(true)]])
-
-	const { data: projects = [] } = useProjects()
-	const createTask = useCreateTask().mutateAsync
-
-	const [newTitle, setNewTitle] = useState('')
-	const [newNotes, setNewNotes] = useState('')
-	const [newCompleted, setNewCompleted] = useState(false)
-	const [newProjectId, setNewProjectId] = useState(-1)
-
-	useEffect(() => {
-		if (projects.length > 1) setNewProjectId(2)
-		else if (projects.length === 1) setNewProjectId(1)
-	}, [projects])
-
-	const handleNewTaskSubmit = async () => {
-		try {
-			await createTask({ title: newTitle, notes: newNotes, completed: newCompleted, project_id: newProjectId })
-			setNewTitle('')
-			setNewNotes('')
-			setNewCompleted(false)
-			setNewProjectId(-1)
-			setNewTaskOpen(false)
-		} catch (err) {
-			window.alert(err)
-		}
-	}
-
 	return (
 		<div className='flex flex-col justify-between w-3/4 shadow-lg'>
 			<div className='flex justify-center overflow-y-scroll h-full'>
 				<div className='flex flex-col mt-6 w-3/4 px-4'>{children}</div>
 			</div>
-
-			<Modal opened={newTaskOpen} onClose={() => setNewTaskOpen(false)} withCloseButton={false}>
-				<div className='flex flex-col space-y-4'>
-					<div>New task</div>
-					<div className='flex space-x-2'>
-						<div className='flex-none'>
-							<Checkbox className='mt-2.5' size='xs' value={newCompleted} onChange={(e) => setNewCompleted(e.target.value)} />
-						</div>
-						<div className='flex-grow flex flex-col space-y-2'>
-							<TextInput type='text' placeholder='New To-Do' value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-							<Textarea placeholder='Notes' value={newNotes} onChange={(e) => setNewNotes(e.target.value)} autosize />
-							<Select
-								label='Required... will fail without'
-								placeholder='Project'
-								data={projects.map((project) => ({ value: project.id, label: project.title }))}
-								value={newProjectId}
-								onChange={(e) => setNewProjectId(e)}
-							/>
-							<Button className='bg-blue-500' onClick={handleNewTaskSubmit}>
-								Submit
-							</Button>
-						</div>
-					</div>
-				</div>
-			</Modal>
 
 			<div className='flex justify-center items-center h-10 px-2 border-t text-gray-500'>
 				{/* TODO */}
