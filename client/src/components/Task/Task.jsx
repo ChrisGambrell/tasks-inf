@@ -1,5 +1,7 @@
+import { useContext } from 'react'
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
+import { TasksContext } from '../../App'
 import { useHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect } from '.'
@@ -32,13 +34,11 @@ const WhenDisplay = ({ when }) => {
 const Task = ({
 	task,
 	secondary = false,
-	selected = false,
 	showCompletedWhen = false,
 	showHeader = false,
 	showNotesIndicator = false,
 	showProject = false,
 	showWhen = false,
-	onClick = () => {},
 }) => {
 	// TODO maybe pass project from list but if no project then query?
 	const { data: project = {} } = useProject(task.project_id, Boolean(showProject && task.project_id))
@@ -47,24 +47,28 @@ const Task = ({
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
 
+	const [state, dispatch] = useContext(TasksContext)
+
 	return (
-		<div className='flex items-center' onClick={onClick}>
+		<div className='flex items-center' onClick={() => dispatch({ type: 'set', payload: { selected: [task.id] } })}>
 			<ContextMenu
-				color='text-gray-900'
-				background='bg-gray-100'
+				taskId={task.id}
 				target={
-					<div className='flex items-center -mx-6 mt-1.5' onClick={onClick}>
-						<DateSelect
-							title='When'
-							taskId={task.id}
-							date={task.when}
-							target={
-								<FA className='opacity-0 hover:opacity-100 w-3 h-3 p-1 -m-1 -ml-2 text-gray-400' icon='calendar-days' />
-							}
-						/>
-						<div className={`flex-grow flex items-center ml-1 ${selected && 'rounded-md bg-blue-200'}`}>
+					<div className='relative flex items-center w-full -translate-x-5 mt-1.5'>
+						<div className='-translate-x-1'>
+							<DateSelect
+								title='When'
+								taskId={task.id}
+								date={task.when}
+								target={<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />}
+							/>
+						</div>
+						<div
+							className={`flex items-center w-full p-0.25 rounded-md ${state.selected.includes(task.id) && 'bg-blue-200'} ${
+								state.contexted === task.id && 'bg-gray-200'
+							}`}>
 							<Checkbox
-								className='ml-3 mr-1'
+								className='ml-2 mr-1'
 								size='xs'
 								defaultChecked={task.completed}
 								onChange={() =>

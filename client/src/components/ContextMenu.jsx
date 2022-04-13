@@ -1,18 +1,22 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Popover } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
+import { TasksContext } from '../App'
 import { HotKeys } from '.'
 
-const ContextMenu = ({ children, target }) => {
+const ContextMenu = ({ children, taskId, target }) => {
+	const [state, dispatch] = useContext(TasksContext)
+
 	const [open, setOpen] = useState(false)
 
 	return (
 		<Popover
-			classNames={{ body: 'w-60 border-gray-300', popover: 'bg-gray-100', inner: 'p-1' }}
+			classNames={{ body: 'w-60 border-gray-300', popover: 'bg-gray-100', inner: 'p-1', root: 'w-full' }}
 			target={
 				<div
 					onContextMenu={(e) => {
 						e.preventDefault()
+						dispatch({ type: 'set', payload: { contexted: taskId } })
 						setOpen(!open)
 					}}>
 					{target}
@@ -21,7 +25,10 @@ const ContextMenu = ({ children, target }) => {
 			radius='md'
 			shadow='xl'
 			opened={open}
-			onClose={() => setOpen(false)}>
+			onClose={() => {
+				dispatch({ type: 'set', payload: { contexted: -1 } })
+				setOpen(false)
+			}}>
 			<div className='flex flex-col select-none text-sm'>{children}</div>
 		</Popover>
 	)
