@@ -1,6 +1,10 @@
 # tasks-inf
 
+## Under Construction 🚧
+
 This is still a work-in-progress. The app is mostly functional, but some features are still disabled or marked as "TODO."
+
+If you have any feedback at all, whether it is new features, bugs, or anything else, please help me make this app better and open an issue.
 
 ## What is Tasks-Inf?
 
