@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { Badge, Checkbox } from '@mantine/core'
+import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { TasksContext } from '../../App'
 import { useHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
@@ -49,6 +50,44 @@ const Task = ({
 
 	const [state, dispatch] = useContext(TasksContext)
 
+	const handleHotKey = (event) => {
+		return state.contexted === task.id ? event() : state.contexted === -1 && state.selected.includes(task.id) ? event() : null
+	}
+
+	useHotkeys([
+		[
+			// FIXME this might be broken
+			'backspace',
+			() => {
+				handleHotKey(() => deleteTask(task.id))
+			},
+		],
+		[
+			'alt + D',
+			() => {
+				handleHotKey(() => createTask(task))
+			},
+		],
+		[
+			'alt + K',
+			() => {
+				handleHotKey(() => editTask({ taskId: task.id, data: { completed: true } }))
+			},
+		],
+		[
+			'alt + R',
+			() => {
+				handleHotKey(() => editTask({ taskId: task.id, data: { when: null } }))
+			},
+		],
+		[
+			'alt + T',
+			() => {
+				handleHotKey(() => editTask({ taskId: task.id, data: { when: new Date() } }))
+			},
+		],
+	])
+
 	return (
 		<div className='flex items-center' onClick={() => dispatch({ type: 'set', payload: { selected: [task.id] } })}>
 			<ContextMenu
@@ -89,7 +128,6 @@ const Task = ({
 						</div>
 					</div>
 				}>
-				{/* hotkeys todo */}
 				<DateSelect date={task.when} taskId={task.id} target={<ContextMenu.Item label='When...' hotKeys={['alt', 'S']} />} />
 				<ContextMenu.Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={() => console.log('TODO')} />
 				<ContextMenu.Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
@@ -111,7 +149,9 @@ const Task = ({
 						hotKeys={['alt', 'T']}
 						onClick={() => editTask({ taskId: task.id, data: { when: new Date() } })}
 					/>
+					{/* TODO hotkey */}
 					<ContextMenu.Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => console.log('TODO')} />
+					{/* TODO hotkey */}
 					<ContextMenu.Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
 					<ContextMenu.Item
 						label='Clear'
@@ -122,6 +162,7 @@ const Task = ({
 
 				<ContextMenu.Divider />
 
+				{/* TODO hotkey */}
 				<ContextMenu.Item label='Repeat...' hotKeys={['alt', 'shift', 'R']} onClick={() => console.log('TODO')} />
 				<ContextMenu.Item label='Get Info...' onClick={() => console.log('TODO')} />
 				<ContextMenu.Item label='Duplicate To-Do...' hotKeys={['alt', 'D']} onClick={() => createTask(task)} />
@@ -130,6 +171,7 @@ const Task = ({
 
 				<ContextMenu.Divider />
 
+				{/* TODO hotkey */}
 				<ContextMenu.Item label='Remove From Project...' onClick={() => console.log('TODO')} />
 			</ContextMenu>
 		</div>

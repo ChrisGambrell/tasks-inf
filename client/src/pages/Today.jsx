@@ -18,7 +18,7 @@ const Today = () => {
 	const [showNewTask, setShowNewTask] = useState(false)
 
 	useHotkeys([
-		['alt + n', () => setShowNewTask(true)],
+		// TODO ['alt + n', () => setShowNewTask(true)],
 		['escape', () => setShowNewTask(false)],
 	])
 
