@@ -2,18 +2,14 @@ import { useState } from 'react'
 import { Popover } from '@mantine/core'
 import { Calendar } from '@mantine/dates'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useEditTask } from '../../hooks'
 
 // TODO add support for updating the deadline
-const DateSelect = ({ title, taskId, date, hideQuickDates = false, target }) => {
-	const editTask = useEditTask().mutate
-
+const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false, target }) => {
 	const [open, setOpen] = useState(false)
 
-	const handleUpdateDate = (updatingDate) => {
-		if (taskId) editTask({ taskId, data: { when: updatingDate } })
-		else console.log('TODO')
+	const handleOnChange = (date) => {
 		setOpen(false)
+		onChange(date)
 	}
 
 	return (
@@ -31,7 +27,7 @@ const DateSelect = ({ title, taskId, date, hideQuickDates = false, target }) => 
 						<div>
 							<div
 								className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500'
-								onClick={() => handleUpdateDate(new Date())}>
+								onClick={() => handleOnChange(new Date())}>
 								<FA className='text-yellow-400' icon='star' />
 								<div>Today</div>
 							</div>
@@ -53,7 +49,7 @@ const DateSelect = ({ title, taskId, date, hideQuickDates = false, target }) => 
 								day: 'font-semibold !text-gray-50 hover:bg-blue-500',
 							}}
 							dayStyle={(dateToStyle) =>
-								dateToStyle.toLocaleDateString() === date?.toLocaleDateString()
+								dateToStyle.toLocaleDateString() === value?.toLocaleDateString()
 									? {
 											backgroundColor: 'rgb(59 130 246 / var(--tw-bg-opacity))',
 											border: '1px solid white',
@@ -65,7 +61,7 @@ const DateSelect = ({ title, taskId, date, hideQuickDates = false, target }) => 
 							}
 							firstDayOfWeek='sunday'
 							hideOutsideDates
-							onChange={(updatingDate) => handleUpdateDate(updatingDate)}
+							onChange={handleOnChange}
 						/>
 					</div>
 					{!hideQuickDates && (
@@ -82,7 +78,7 @@ const DateSelect = ({ title, taskId, date, hideQuickDates = false, target }) => 
 							</div>
 							<div
 								className='flex justify-center mt-1 p-1 rounded bg-gray-600 active:bg-gray-500'
-								onClick={() => handleUpdateDate(null)}>
+								onClick={() => handleOnChange(null)}>
 								Clear
 							</div>
 						</div>

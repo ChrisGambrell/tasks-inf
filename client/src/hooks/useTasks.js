@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 import { BASE_URL } from '../app/utils'

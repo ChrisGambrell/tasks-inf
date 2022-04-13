@@ -1,9 +1,7 @@
-import { useState } from 'react'
-import { useHotkeys } from '@mantine/hooks'
 import { useTasks } from '../hooks'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
-import { NewTask, TaskList } from '../components/Task'
+import { TaskList } from '../components/Task'
 import { Placeholder } from '.'
 
 const Today = () => {
@@ -15,26 +13,11 @@ const Today = () => {
 
 	const tasks = tasksCollection.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString())
 
-	const [showNewTask, setShowNewTask] = useState(false)
-
-	useHotkeys([
-		// TODO ['alt + n', () => setShowNewTask(true)],
-		['escape', () => setShowNewTask(false)],
-	])
-
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
-				{showNewTask && (
-					<NewTask
-						defaultChecklist={['first item', 'second item in checklist']}
-						defaultTags={['foo', 'this is a test']}
-						defaultWhen={new Date()}
-					/>
-				)}
-
-				<TaskList tasks={tasks} showProject showWhen />
+				<TaskList tasks={tasks} values={{ when: new Date() }} showProject showWhen />
 			</View.Content>
 		</View>
 	) : (

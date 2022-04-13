@@ -1,4 +1,4 @@
-const initialState = { selected: [], contexted: -1 }
+const initialState = { selected: [], open: -1, contexted: -1 }
 
 const reducer = (state, action) => {
 	switch (action.type) {
