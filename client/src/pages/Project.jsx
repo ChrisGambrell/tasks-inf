@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useHotkeys } from '@mantine/hooks'
 import { useProject, useTasks } from '../hooks'
 import { View } from '../components'
-import { NewTask, TaskList } from '../components/Task'
+import { TaskDetails, TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
 
 const Project = () => {
@@ -21,16 +21,17 @@ const Project = () => {
 	const [showNewTask, setShowNewTask] = useState(false)
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
-	useHotkeys([
-		['alt + n', () => setShowNewTask(true)],
-		['escape', () => setShowNewTask(false)],
-	])
+	// todo
+	// useHotkeys([
+	// 	['alt + n', () => setShowNewTask(true)],
+	// 	['escape', () => setShowNewTask(false)],
+	// ])
 
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
-				{showNewTask && <NewTask />}
+				{showNewTask && <TaskDetails />}
 
 				<TaskList tasks={tasks} showHeaders showNotesIndicator showWhen />
 

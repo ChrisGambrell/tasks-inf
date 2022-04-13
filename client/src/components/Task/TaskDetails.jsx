@@ -2,20 +2,26 @@ import { useEffect, useState } from 'react'
 import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
+import { useEditTask } from '../../hooks'
 import { Tooltip } from '..'
 import { DateSelect } from '.'
 
-const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
-	const [checklist, setChecklist] = useState(defaultChecklist)
-	const [tags, setTags] = useState(defaultTags)
+const TaskDetails = ({ task }) => {
+	// const [checklist, setChecklist] = useState(defaultChecklist)
+	// const [tags, setTags] = useState(defaultTags)
 
-	const [focused, setFocused] = useState(-1)
-	const clickOutsideChecklist = useClickOutside(() => setFocused(-1))
+	// const [focused, setFocused] = useState(-1)
+	// const clickOutsideChecklist = useClickOutside(() => setFocused(-1))
 
-	const [newTitle, setNewTitle] = useState('')
-	const [newNotes, setNewNotes] = useState('')
-	const [newCompleted, setNewCompleted] = useState(false)
-	const [newWhen, setNewWhen] = useState(defaultWhen)
+	// const [newTitle, setNewTitle] = useState('')
+	// const [newNotes, setNewNotes] = useState('')
+	// const [newCompleted, setNewCompleted] = useState(false)
+
+	const editTask = useEditTask().mutate
+
+	const handleEditWhen = (when) => {
+		editTask({ taskId: task.id, data: { when } })
+	}
 
 	// const Checklist = () => (
 	// 	<div className='mb-4' ref={clickOutsideChecklist}>
@@ -51,25 +57,25 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 			{/* TODO show actual date */}
 			<DateSelect
 				title='When'
-				value={newWhen}
-				onChange={setNewWhen}
+				value={task.when}
+				onChange={handleEditWhen}
 				target={
 					<div className='group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
 						<FA
 							className={
-								newWhen.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-yellow-400' : 'text-red-500'
+								task.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-yellow-400' : 'text-red-500'
 							}
-							icon={newWhen.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
+							icon={task.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
 						/>
 						<div className='font-semibold'>
-							{newWhen.toLocaleDateString() === new Date().toLocaleDateString()
+							{task.when.toLocaleDateString() === new Date().toLocaleDateString()
 								? 'Today'
-								: newWhen.toLocaleDateString() ===
+								: task.when.toLocaleDateString() ===
 								  new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1).toLocaleDateString()
 								? 'Tomorrow'
-								: newWhen.toLocaleDateString(
+								: task.when.toLocaleDateString(
 										'en-us',
-										newWhen < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+										task.when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
 											? { weekday: 'long' }
 											: { month: 'long', day: 'numeric' }
 								  )}
@@ -77,7 +83,7 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 						<FA
 							className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
 							icon='x'
-							onClick={() => setNewWhen(null)}
+							onClick={() => handleEditWhen(null)}
 						/>
 					</div>
 				}
@@ -104,29 +110,29 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 		)
 
 	return (
-		<div className='flex flex-col mb-12 rounded p-4 space-y-1 border shadow-md'>
+		<div className='flex flex-col mt-8 mb-12 rounded p-4 space-y-1 border shadow-md'>
 			{/* Tooltips on toolbar buttons */}
 			<div className='flex space-x-2'>
 				<div className='flex-none'>
-					<Checkbox className='mt-2.5' size='xs' />
+					<Checkbox className='mt-2.5' size='xs' value={task.completed} />
 				</div>
 				<div className='flex-grow flex flex-col'>
-					<TextInput variant='unstyled' type='text' placeholder='New To-Do' />
-					<Textarea variant='unstyled' placeholder='Notes' autosize />
+					<TextInput variant='unstyled' type='text' placeholder='New To-Do' value={task.title} />
+					<Textarea variant='unstyled' placeholder='Notes' value={task.notes} autosize />
 					{/* {checklist?.length > 0 && <Checklist />} */}
 				</div>
 			</div>
 			<div className='flex justify-between items-end'>
 				<div className='flex flex-col space-y-2'>
 					{/* {tags?.length > 0 && <Tags />} */}
-					{newWhen && <SelectedWhen />}
+					{task.when && <SelectedWhen />}
 				</div>
 				<div className='flex justify-end space-x-2'>
-					{!newWhen && (
+					{!task.when && (
 						<DateSelect
 							title='When'
-							value={newWhen}
-							onChange={setNewWhen}
+							value={task.when}
+							onChange={handleEditWhen}
 							target={<ToolbarButton label='When' icon='calendar-days' />}
 						/>
 					)}
@@ -157,4 +163,4 @@ const NewTask = ({ defaultChecklist, defaultTags, defaultWhen }) => {
 	)
 }
 
-export default NewTask
+export default TaskDetails

@@ -3,7 +3,7 @@ import { useHotkeys } from '@mantine/hooks'
 import { useTasks } from '../hooks'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
-import { NewTask, TaskList } from '../components/Task'
+import { TaskDetails, TaskList } from '../components/Task'
 import { Placeholder } from '.'
 
 const Today = () => {
@@ -17,17 +17,18 @@ const Today = () => {
 
 	const [showNewTask, setShowNewTask] = useState(false)
 
-	useHotkeys([
-		// TODO ['alt + n', () => setShowNewTask(true)],
-		['escape', () => setShowNewTask(false)],
-	])
+	// todo
+	// useHotkeys([
+	// 	// TODO ['alt + n', () => setShowNewTask(true)],
+	// 	// ['escape', () => setShowNewTask(false)],
+	// ])
 
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
 				{showNewTask && (
-					<NewTask
+					<TaskDetails
 						defaultChecklist={['first item', 'second item in checklist']}
 						defaultTags={['foo', 'this is a test']}
 						defaultWhen={new Date()}
