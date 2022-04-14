@@ -10,14 +10,6 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 	const { data: headersCollection = [] } = useHeaders()
 	const deleteHeader = useDeleteHeader().mutate
 
-	console.log(
-		headersCollection.reduce((group, header) => {
-			let { id } = header
-			group[id] = []
-			return group
-		}, {})
-	)
-
 	const headers = showLogged
 		? incompleteTasks.reduce(
 				(group, task) => {
@@ -49,7 +41,6 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 					return group
 				}, {})
 		  )
-	console.log(headers)
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
@@ -65,10 +56,9 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 								{Number(header_id) !== -1 && (
 									<div className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
 										<div
-											className={
-												!headersCollection.find((header) => header.id === Number(header_id))?.title &&
-												'text-blue-200'
-											}>
+											className={`
+												${!headersCollection.find((header) => header.id === Number(header_id))?.title && 'text-blue-200'}
+											`}>
 											{headersCollection.find((header) => header.id === Number(header_id))?.title || 'New Heading'}
 										</div>
 										<Dropdown targetColor='text-blue-600'>
