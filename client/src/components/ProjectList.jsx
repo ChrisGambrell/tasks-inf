@@ -28,7 +28,7 @@ const Project = ({ project }) => {
 				onDoubleClick={() => navigate(`/projects/${project.id}`)}>
 				<ContextMenu
 					// TODO fix the passing of project to context menu
-					taskId={project.id}
+					project={project}
 					target={
 						<div className='relative flex items-center w-full -translate-x-5 mt-1.5'>
 							<div className='-translate-x-1'>
@@ -63,61 +63,8 @@ const Project = ({ project }) => {
 								</div>
 							</div>
 						</div>
-					}>
-					{/* TODO should this be its own component? */}
-					<DateSelect
-						value={project.when}
-						// onChange={handleEditWhen}
-						target={<ContextMenu.Item label='When...' hotKeys={['alt', 'S']} />}
-					/>
-					<ContextMenu.Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={() => console.log('TODO')} />
-					<ContextMenu.Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
-					<DateSelect
-						target={
-							<ContextMenu.Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />
-						}
-					/>
-					<ContextMenu.Submenu label='Complete...'>
-						<ContextMenu.Item
-							label='Mark as Completed'
-							hotKeys={['alt', 'K']}
-							// onClick={() => editTask({ taskId: task.id, data: { completed: true } })}
-						/>
-						<ContextMenu.Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={() => console.log('TODO')} />
-					</ContextMenu.Submenu>
-					<ContextMenu.Submenu title='When' label='Shortcuts...'>
-						<ContextMenu.Item
-							label='Today'
-							hotKeys={['alt', 'T']}
-							// onClick={() => editTask({ taskId: task.id, data: { when: new Date() } })}
-						/>
-						{/* TODO hotkey */}
-						<ContextMenu.Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => console.log('TODO')} />
-						{/* TODO hotkey */}
-						<ContextMenu.Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
-						<ContextMenu.Item
-							label='Clear'
-							hotKeys={['alt', 'R']}
-							// onClick={() => editTask({ taskId: task.id, data: { when: null } })}
-						/>
-					</ContextMenu.Submenu>
-
-					<ContextMenu.Divider />
-
-					{/* TODO hotkey */}
-					<ContextMenu.Item label='Repeat...' hotKeys={['alt', 'shift', 'R']} onClick={() => console.log('TODO')} />
-					<ContextMenu.Item label='Get Info...' onClick={() => console.log('TODO')} />
-					{/* <ContextMenu.Item label='Duplicate To-Do...' hotKeys={['alt', 'D']} onClick={() => createTask(task)} /> */}
-					<ContextMenu.Item label='Convert to Project...' onClick={() => console.log('TODO')} />
-					{/* <ContextMenu.Item label='Delete To-Do...' onClick={() => deleteTask(task.id)} /> */}
-
-					<ContextMenu.Divider />
-
-					<ContextMenu.Item
-						label='Remove From Project...'
-						// onClick={() => editTask({ taskId: task.id, data: { project_id: null } })}
-					/>
-				</ContextMenu>
+					}
+				/>
 			</div>
 		</div>
 	)
