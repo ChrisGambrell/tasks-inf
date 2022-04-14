@@ -13,6 +13,7 @@ const Area = () => {
 	const { data: tasksCollection = [] } = useTasks()
 
 	const projects = projectsCollection.filter((project) => project.area_id === area.id)
+	// TODO logged? completed?
 	const tasks = tasksCollection.filter((task) => task.area_id === area.id)
 	console.log(tasks)
 

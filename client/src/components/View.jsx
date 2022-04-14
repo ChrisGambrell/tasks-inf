@@ -6,8 +6,6 @@ import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
-// TODO fix new task
-
 const View = ({ children }) => {
 	const [_, dispatch] = useContext(TasksContext)
 
