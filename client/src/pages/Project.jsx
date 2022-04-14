@@ -19,7 +19,7 @@ const Project = () => {
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
-	return tasks.length > 0 ? (
+	return tasks.length > 0 || loggedTasks.length > 0 ? (
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
@@ -27,7 +27,6 @@ const Project = () => {
 
 				{/* Logged tasks */}
 				{loggedTasks.length > 0 && (
-					// TODO show headers with task
 					<div>
 						<button
 							className='px-1 rounded border border-white font-semibold text-xs text-gray-400 hover:border-gray-300 active:bg-gray-300'

@@ -5,6 +5,8 @@ import { menuItems } from '../components/SideMenu'
 import { TaskList } from '../components/Task'
 import { Placeholder } from '.'
 
+// TODO tasks can be assigned to areas eventually
+// so needs to be filter => !task.project_id && !task.area_id
 const Inbox = () => {
 	const menuItem = menuItems
 		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/inbox') !== -1)[0]
@@ -18,7 +20,7 @@ const Inbox = () => {
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
-	return tasks.length > 0 ? (
+	return tasks.length > 0 || loggedTasks.length > 0 ? (
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
@@ -26,14 +28,13 @@ const Inbox = () => {
 
 				{/* Logged tasks */}
 				{loggedTasks.length > 0 && (
-					// TODO show headers with task
 					<div>
 						<button
 							className='px-1 rounded border border-white font-semibold text-xs text-gray-400 hover:border-gray-300 active:bg-gray-300'
 							onClick={() => setShowLoggedItems(!showLoggedItems)}>
 							{showLoggedItems ? 'Hide logged items' : `Show ${loggedTasks.length} logged items`}
 						</button>
-						{showLoggedItems && <TaskList tasks={loggedTasks} secondary showCompletedWhen showHeader />}
+						{showLoggedItems && <TaskList tasks={loggedTasks} secondary showCompletedWhen />}
 					</div>
 				)}
 			</View.Content>
