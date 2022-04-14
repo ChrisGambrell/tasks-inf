@@ -48,6 +48,6 @@ class AreasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def area_params
-      params.permit(:title)
+      params.permit(:title, :open)
     end
 end

@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_14_191102) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_14_200051) do
   create_table "areas", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "open"
   end
 
   create_table "headers", force: :cascade do |t|
