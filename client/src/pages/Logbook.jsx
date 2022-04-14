@@ -52,48 +52,54 @@ const Logbook = () => {
 			<View.Content>
 				<div className='space-y-8'>
 					{/* Tasks completed today */}
-					<div className='space-y-2'>
-						<div className='flex space-x-2'>
-							<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Today</div>
+					{tasksToday.length > 0 && (
+						<div className='space-y-2'>
+							<div className='flex space-x-2'>
+								<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Today</div>
+							</div>
+							<TaskList tasks={tasksToday} showCompletedWhen showProject />
 						</div>
-						<TaskList tasks={tasksToday} showCompletedWhen showProject />
-					</div>
+					)}
 
 					{/* Tasks completed yesterday */}
-					<div className='space-y-2'>
-						<div className='flex space-x-2'>
-							<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Yesterday</div>
+					{tasksYesterday.length > 0 && (
+						<div className='space-y-2'>
+							<div className='flex space-x-2'>
+								<div className='flex-grow mt-1.5 pb-0.5 border-b font-bold text-sm'>Yesterday</div>
+							</div>
+							<TaskList tasks={tasksYesterday} showCompletedWhen showProject />
 						</div>
-						<TaskList tasks={tasksYesterday} showCompletedWhen showProject />
-					</div>
+					)}
 
 					{/* Tasks completed this year */}
-					{Object.keys(tasksYear)
-						.reverse()
-						.map((group) => (
-							<div key={group} className='space-y-2'>
-								<div className='flex space-x-2'>
-									<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
-										{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
+					{Object.keys(tasksYear).length > 0 &&
+						Object.keys(tasksYear)
+							.reverse()
+							.map((group) => (
+								<div key={group} className='space-y-2'>
+									<div className='flex space-x-2'>
+										<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
+											{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
+										</div>
 									</div>
+									<TaskList tasks={tasksYear[group]} showCompletedWhen showProject />
 								</div>
-								<TaskList tasks={tasksYear[group]} showCompletedWhen showProject />
-							</div>
-						))}
+							))}
 
 					{/* The remaining completed tasks */}
-					{Object.keys(tasksFuture)
-						.reverse()
-						.map((group) => (
-							<div key={group} className='space-y-2'>
-								<div className='flex space-x-2'>
-									<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
-										{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
+					{Object.keys(tasksFuture).length > 0 &&
+						Object.keys(tasksFuture)
+							.reverse()
+							.map((group) => (
+								<div key={group} className='space-y-2'>
+									<div className='flex space-x-2'>
+										<div className='flex-grow mt-1.5 pt-0.5 border-b font-bold text-sm'>
+											{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
+										</div>
 									</div>
+									<TaskList tasks={tasksFuture[group]} showCompletedWhen showProject />
 								</div>
-								<TaskList tasks={tasksFuture[group]} showCompletedWhen showProject />
-							</div>
-						))}
+							))}
 				</div>
 			</View.Content>
 		</View>
