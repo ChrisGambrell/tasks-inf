@@ -4,7 +4,7 @@ import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
 import { SideMenu, SpotlightWrapper } from './components'
 import { menuItems } from './components/SideMenu'
-import { Project } from './pages'
+import { Area, Project } from './pages'
 
 export const TasksContext = createContext()
 
@@ -25,6 +25,7 @@ const App = () => {
 										<Route exact path={menuItem.url} element={<Component {...menuItem} />} />
 									))
 								)}
+								<Route exact path='/areas/:areaId' element={<Area />} />
 								<Route exact path='/projects/:projectId' element={<Project />} />
 
 								<Route path='*' element={<Navigate to='/inbox' />} />
