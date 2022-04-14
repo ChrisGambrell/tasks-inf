@@ -5,11 +5,11 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useTasks } from '../hooks'
 import { useAreas, useProjects } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
-import { Logbook, Placeholder, Today, Upcoming } from '../pages'
+import { Inbox, Logbook, Placeholder, Today, Upcoming } from '../pages'
 
 // TODO fix notifications
 export const menuItems = [
-	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', url: '/inbox', component: Placeholder }],
+	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', url: '/inbox', component: Inbox }],
 	[
 		{
 			title: 'Today',
