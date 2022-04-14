@@ -41,7 +41,7 @@ const View = ({ children }) => {
 
 				try {
 					let { id } = await createTask(values)
-					dispatch({ type: 'set', payload: { selected: [id], open: id } })
+					dispatch({ type: 'set', payload: { selectedTask: [id], open: id } })
 				} catch (err) {
 					console.error(err)
 				}

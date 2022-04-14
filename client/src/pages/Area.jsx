@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useArea, useProjects, useTasks } from '../hooks'
-import { View } from '../components'
+import { ProjectList, View } from '../components'
 import { TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
 
@@ -17,9 +17,9 @@ const Area = () => {
 			{/* TODO check actionButtons */}
 			<View.Header title={area.title} icon='box' color='text-green-500' actionButton />
 			<View.Content>
-				{/* <TaskList tasks={tasks} showHeaders showNotesIndicator showWhen /> */}
-				testing
+				<ProjectList projects={projects} />
 			</View.Content>
+			{/* TODO toolbar buttons should be project instead of header */}
 		</View>
 	) : (
 		<Placeholder title={area.title} icon={area.icon} color='text-blue-600' />

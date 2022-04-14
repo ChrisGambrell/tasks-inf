@@ -51,7 +51,7 @@ const Task = ({
 	const [state, dispatch] = useContext(TasksContext)
 
 	const handleHotKey = (event) => {
-		return state.contexted === task.id ? event() : state.contexted === -1 && state.selected.includes(task.id) ? event() : null
+		return state.contexted === task.id ? event() : state.contexted === -1 && state.selectedTask.includes(task.id) ? event() : null
 	}
 
 	const handleEditWhen = (when) => {
@@ -68,8 +68,8 @@ const Task = ({
 	])
 
 	const clickOutsideRef = useClickOutside(() => {
-		if (state.selected.includes(task.id) && state.open === task.id) dispatch({ type: 'set', payload: { open: -1 } })
-		else if (state.selected.includes(task.id)) dispatch({ type: 'reset' })
+		if (state.selectedTask.includes(task.id) && state.open === task.id) dispatch({ type: 'set', payload: { open: -1 } })
+		else if (state.selectedTask.includes(task.id)) dispatch({ type: 'reset' })
 	})
 
 	return (
@@ -79,7 +79,7 @@ const Task = ({
 			) : (
 				<div
 					className='flex items-center select-none'
-					onClick={() => dispatch({ type: 'set', payload: { selected: [task.id] } })}
+					onClick={() => dispatch({ type: 'set', payload: { selectedTask: [task.id] } })}
 					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id } })}>
 					<ContextMenu
 						taskId={task.id}
@@ -95,7 +95,7 @@ const Task = ({
 								</div>
 								<div
 									className={`flex items-center w-full p-0.25 rounded-md ${
-										state.selected.includes(task.id) && 'bg-blue-200'
+										state.selectedTask.includes(task.id) && 'bg-blue-200'
 									} ${state.contexted === task.id && 'bg-gray-200'}`}>
 									<Checkbox
 										className='ml-2 mr-1'
