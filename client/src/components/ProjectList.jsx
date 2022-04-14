@@ -11,7 +11,7 @@ import { DateSelect } from './Task'
 const Project = ({ project }) => {
 	const navigate = useNavigate()
 
-	const { data: tasks } = useTasks.all()
+	const { data: tasks = [] } = useTasks.all()
 	const numTasks = tasks.filter((task) => task.project_id === project.id).length
 
 	const [state, dispatch] = useContext(TasksContext)
