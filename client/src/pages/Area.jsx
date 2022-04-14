@@ -15,7 +15,6 @@ const Area = () => {
 	const projects = projectsCollection.filter((project) => project.area_id === area.id)
 	// TODO logged? completed?
 	const tasks = tasksCollection.filter((task) => task.area_id === area.id)
-	console.log(tasks)
 
 	return projects.length > 0 ? (
 		<View>
