@@ -43,6 +43,8 @@ const TaskList = ({ tasks = [], showHeaders = false, ...options }) => {
 						{headers[header_id].map((task) => (
 							<Task key={task.id} task={task} {...options} />
 						))}
+
+						{/* TODO hide later items */}
 					</div>
 				))
 		: tasks.map((task) => <Task key={task.id} task={task} {...options} />)

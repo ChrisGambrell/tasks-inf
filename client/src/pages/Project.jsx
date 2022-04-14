@@ -6,8 +6,6 @@ import { TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
 
 const Project = () => {
-	// TODO show new task even when there's a placeholder
-	// TODO click on toolbar to add extra items to task
 	const { projectId } = useParams()
 	const { data: project = {} } = useProject(Number(projectId))
 	const { data: tasksCollection = [] } = useTasks.all()

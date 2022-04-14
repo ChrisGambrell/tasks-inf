@@ -59,11 +59,7 @@ const Task = ({
 	}
 
 	useHotkeys([
-		[
-			// FIXME this might be broken
-			'backspace',
-			() => handleHotKey(() => deleteTask(task.id)),
-		],
+		['backspace', () => handleHotKey(() => deleteTask(task.id))],
 		['escape', () => dispatch({ type: 'reset' })],
 		['alt + D', () => handleHotKey(() => createTask(task))],
 		['alt + K', () => handleHotKey(() => editTask({ taskId: task.id, data: { completed: true } }))],
@@ -146,7 +142,6 @@ const Task = ({
 								hotKeys={['alt', 'K']}
 								onClick={() => editTask({ taskId: task.id, data: { completed: true } })}
 							/>
-							{/* TODO Check next hotkey to make sure it isn't conflicting */}
 							<ContextMenu.Item
 								label='Mark as Canceled'
 								hotKeys={['alt', 'shift', 'K']}
@@ -181,8 +176,10 @@ const Task = ({
 
 						<ContextMenu.Divider />
 
-						{/* TODO hotkey */}
-						<ContextMenu.Item label='Remove From Project...' onClick={() => console.log('TODO')} />
+						<ContextMenu.Item
+							label='Remove From Project...'
+							onClick={() => editTask({ taskId: task.id, data: { project_id: null } })}
+						/>
 					</ContextMenu>
 				</div>
 			)}

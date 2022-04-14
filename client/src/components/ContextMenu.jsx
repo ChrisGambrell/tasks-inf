@@ -9,6 +9,8 @@ const ContextMenu = ({ children, taskId, target }) => {
 
 	const [open, setOpen] = useState(false)
 
+	// TODO add handler to close context menu on click
+
 	return (
 		<Popover
 			classNames={{ body: 'w-60 border-gray-300', popover: 'bg-gray-100', inner: 'p-1', root: 'w-full' }}

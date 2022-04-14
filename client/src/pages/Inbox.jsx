@@ -27,6 +27,8 @@ const Inbox = () => {
 				<TaskList tasks={tasks} showNotesIndicator showWhen />
 
 				{/* Logged tasks */}
+				{/* TODO spacing issue with headers in task list going into logged items  Should be fixed if included in tasklist component */}
+				{/* TODO can this be a component? maybe part of the task list to auto-include a flag for */}
 				{loggedTasks.length > 0 && (
 					<div>
 						<button
