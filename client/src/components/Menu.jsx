@@ -4,15 +4,19 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
 const Menu = () => <></>
 
-const Dropdown = ({ label = '', children }) => {
+const Dropdown = ({ menuItem, type = null, children }) => {
+	const url = menuItem.url ? menuItem.url : `/${type && type}s/${menuItem.id}`
+
+	const navigate = useNavigate()
+
 	const [open, setOpen] = useState(false)
 
 	return (
 		<div className='flex flex-col'>
 			<div className='group flex items-center p-1 rounded-md'>
-				<div className='flex-grow flex items-center space-x-2' onClick={() => console.log('link')}>
+				<div className='flex-grow flex items-center space-x-2' onClick={() => navigate(url)}>
 					<FA className='flex-none w-5 h-5 text-gray-400' icon={open ? 'box-open' : 'box'} />
-					<div className='flex-grow truncate font-semibold'>{label}</div>
+					<div className='flex-grow truncate font-semibold'>{menuItem.title}</div>
 				</div>
 				<FA
 					className={`flex-none w-3 h-3 opacity-0 group-hover:opacity-100 text-gray-400 ${open && 'rotate-90'}`}

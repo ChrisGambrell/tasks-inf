@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Accordion, Modal, Popover } from '@mantine/core'
+import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useTasks } from '../hooks'
 import { useAreas, useProjects } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Inbox, Logbook, Placeholder, Today, Upcoming } from '../pages'
@@ -29,8 +28,6 @@ export const menuItems = [
 ]
 
 const Toolbar = () => {
-	const { data: tasks = [] } = useTasks()
-
 	const [newListOpen, setNewListOpen] = useState(false)
 	const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -103,7 +100,7 @@ const Toolbar = () => {
 }
 
 const SideMenu = () => {
-	const { data: areasFromAPI = [] } = useAreas()
+	const { data: areas = [] } = useAreas()
 	const { data: projects = [] } = useProjects()
 
 	return (
@@ -129,8 +126,8 @@ const SideMenu = () => {
 
 				{/* Areas */}
 				<Menu.Section>
-					{areasFromAPI.map((area) => (
-						<Menu.Dropdown key={area.title} label={area.title}>
+					{areas.map((area) => (
+						<Menu.Dropdown key={area.title} menuItem={area} type='area'>
 							{projects
 								.filter((project) => project.area_id === area.id)
 								.map((project) => (
