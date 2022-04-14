@@ -7,7 +7,7 @@ import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 const View = ({ children }) => {
-	const [_, dispatch] = useContext(TasksContext)
+	const [, dispatch] = useContext(TasksContext)
 
 	const createTask = useCreateTask().mutateAsync
 

@@ -1,12 +1,9 @@
-import { useState } from 'react'
 import { useTasks } from '../hooks'
 import { View } from '../components'
 import { menuItems } from '../components/SideMenu'
 import { TaskList } from '../components/Task'
 import { Placeholder } from '.'
 
-// TODO tasks can be assigned to areas eventually
-// so needs to be filter => !task.project_id && !task.area_id
 const Inbox = () => {
 	const menuItem = menuItems
 		.filter((sections) => sections.findIndex((menuItem) => menuItem.url === '/inbox') !== -1)[0]

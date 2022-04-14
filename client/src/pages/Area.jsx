@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useArea, useProjects, useTasks } from '../hooks'
 import { ProjectList, View } from '../components'
@@ -13,7 +12,6 @@ const Area = () => {
 	const { data: tasksCollection = [] } = useTasks()
 
 	const projects = projectsCollection.filter((project) => project.area_id === area.id)
-	// TODO logged? completed?
 	const tasks = tasksCollection.filter((task) => task.area_id === area.id)
 
 	return projects.length > 0 ? (
