@@ -10,23 +10,46 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 	const { data: headersCollection = [] } = useHeaders()
 	const deleteHeader = useDeleteHeader().mutate
 
+	console.log(
+		headersCollection.reduce((group, header) => {
+			let { id } = header
+			group[id] = []
+			return group
+		}, {})
+	)
+
 	const headers = showLogged
-		? incompleteTasks.reduce((group, task) => {
-				let { header_id } = task
-				header_id = header_id === null ? -1 : header_id
+		? incompleteTasks.reduce(
+				(group, task) => {
+					let { header_id } = task
+					header_id = header_id === null ? -1 : header_id
 
-				group[header_id] = group[header_id] ?? []
-				group[header_id].push(task)
-				return group
-		  }, {})
-		: tasks.reduce((group, task) => {
-				let { header_id } = task
-				header_id = header_id === null ? -1 : header_id
+					group[header_id] = group[header_id] ?? []
+					group[header_id].push(task)
+					return group
+				},
+				headersCollection.reduce((group, header) => {
+					let { id } = header
+					group[id] = []
+					return group
+				}, {})
+		  )
+		: tasks.reduce(
+				(group, task) => {
+					let { header_id } = task
+					header_id = header_id === null ? -1 : header_id
 
-				group[header_id] = group[header_id] ?? []
-				group[header_id].push(task)
-				return group
-		  }, {})
+					group[header_id] = group[header_id] ?? []
+					group[header_id].push(task)
+					return group
+				},
+				headersCollection.reduce((group, header) => {
+					let { id } = header
+					group[id] = []
+					return group
+				}, {})
+		  )
+	console.log(headers)
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
@@ -41,7 +64,13 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 								{/* Header */}
 								{Number(header_id) !== -1 && (
 									<div className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
-										<div>{headersCollection.find((header) => header.id === Number(header_id))?.title}</div>
+										<div
+											className={
+												!headersCollection.find((header) => header.id === Number(header_id))?.title &&
+												'text-blue-200'
+											}>
+											{headersCollection.find((header) => header.id === Number(header_id))?.title || 'New Heading'}
+										</div>
 										<Dropdown targetColor='text-blue-600'>
 											<Dropdown.Item label='Archive' icon='check-to-slot' onClick={() => console.log('TODO')} />
 

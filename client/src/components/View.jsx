@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { openSpotlight } from '@mantine/spotlight'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useCreateTask } from '../hooks'
+import { useCreateHeader, useCreateTask } from '../hooks'
 import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
@@ -9,7 +9,8 @@ import { DateSelect } from './Task'
 const View = ({ children }) => {
 	const [, dispatch] = useContext(TasksContext)
 
-	const createTask = useCreateTask().mutateAsync
+	const createHeader = useCreateHeader()
+	const createTask = useCreateTask()
 
 	const toolbarButtons = [
 		{
@@ -43,9 +44,7 @@ const View = ({ children }) => {
 				console.log(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1])
 
 				try {
-					let response = await createTask(values)
-					let { id } = response
-					console.log(response)
+					let { id } = await createTask.mutateAsync(values)
 					dispatch({ type: 'set', payload: { selectedTask: [id], open: id } })
 				} catch (err) {
 					console.error(err)
@@ -66,7 +65,11 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Divide your project into categories or milestones.</div>
 				</div>
 			),
-			onClick: () => console.log('TODO'),
+			onClick: () => {
+				let projectId =
+					window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'projects') + 1]
+				createHeader.mutate({ project_id: projectId })
+			},
 			show: '/projects',
 		},
 		{

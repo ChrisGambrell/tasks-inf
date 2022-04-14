@@ -5,11 +5,9 @@ import { TasksContext } from '../App'
 import { HotKeys } from '.'
 
 const ContextMenu = ({ children, taskId, target }) => {
-	const [state, dispatch] = useContext(TasksContext)
+	const [, dispatch] = useContext(TasksContext)
 
 	const [open, setOpen] = useState(false)
-
-	// TODO add handler to close context menu on click
 
 	return (
 		<Popover
