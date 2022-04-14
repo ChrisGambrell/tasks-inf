@@ -15,8 +15,10 @@ const Inbox = () => {
 	const { data: tasksCollectionIncomplete = [] } = useTasks.incomplete()
 	const { data: tasksCollectionComplete = [] } = useTasks.complete()
 
-	const tasks = tasksCollectionIncomplete.filter((task) => !task.project_id)
-	const loggedTasks = tasksCollectionComplete.filter((task) => !task.project_id).sort((a, b) => b.completed_when - a.completed_when)
+	const tasks = tasksCollectionIncomplete.filter((task) => !task.area_id && !task.project_id)
+	const loggedTasks = tasksCollectionComplete
+		.filter((task) => !task.area_id && !task.project_id)
+		.sort((a, b) => b.completed_when - a.completed_when)
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 

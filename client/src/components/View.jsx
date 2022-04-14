@@ -35,12 +35,19 @@ const View = ({ children }) => {
 					values['when'] = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
 				// TODO anytime
 				// TODO someday
+				else if (window.location.pathname.includes('areas/'))
+					values['area_id'] =
+						window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1]
 				else if (window.location.pathname.includes('projects/'))
 					values['project_id'] =
 						window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'projects') + 1]
 
+				console.log(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1])
+
 				try {
-					let { id } = await createTask(values)
+					let response = await createTask(values)
+					let { id } = response
+					console.log(response)
 					dispatch({ type: 'set', payload: { selectedTask: [id], open: id } })
 				} catch (err) {
 					console.error(err)
@@ -173,7 +180,7 @@ const View = ({ children }) => {
 
 const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
 	return (
-		<div className='flex flex-col space-y-2 mb-8'>
+		<div className='flex flex-col space-y-2'>
 			<div className='flex items-center'>
 				{icon && <FA className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
 				<h2 className='text-3xl font-semibold'>{title}</h2>

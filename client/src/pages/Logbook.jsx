@@ -50,7 +50,7 @@ const Logbook = () => {
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
-				<div className='space-y-8'>
+				<div className='mt-8 space-y-8'>
 					{/* Tasks completed today */}
 					{tasksToday.length > 0 && (
 						<div className='space-y-2'>

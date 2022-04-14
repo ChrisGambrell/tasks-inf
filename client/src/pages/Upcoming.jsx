@@ -64,7 +64,7 @@ const Upcoming = () => {
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
-				<div className='space-y-8'>
+				<div className='mt-8 space-y-8'>
 					{/* This week's tasks */}
 					{Object.keys(tasksWeek).length > 0 &&
 						Object.keys(tasksWeek).map((group) => (
