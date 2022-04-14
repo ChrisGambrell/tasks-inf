@@ -72,7 +72,8 @@ const Task = ({
 	])
 
 	const clickOutsideRef = useClickOutside(() => {
-		if (state.selected.includes(task.id)) dispatch({ type: 'reset' })
+		if (state.selected.includes(task.id) && state.open === task.id) dispatch({ type: 'set', payload: { open: -1 } })
+		else if (state.selected.includes(task.id)) dispatch({ type: 'reset' })
 	})
 
 	return (
@@ -114,7 +115,12 @@ const Task = ({
 									{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
 									{showWhen && <WhenDisplay when={task.when} />}
 									<div className='ml-1 mr-1'>
-										<div className={`${secondary ? 'text-gray-400' : 'text-gray-800'} truncate`}>{task.title}</div>
+										<div
+											className={`${secondary || !task.title ? 'text-gray-400' : 'text-gray-800'} ${
+												!task.title && 'font-light'
+											} truncate`}>
+											{task.title || 'New To-Do'}
+										</div>
 										{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
 										{showHeader && header && <div className='text-xs text-gray-400 truncate'>{header.title}</div>}
 									</div>
