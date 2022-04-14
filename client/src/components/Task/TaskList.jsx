@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useHeaders } from '../../hooks'
+import { useHeaders, useDeleteHeader } from '../../hooks'
 import { Dropdown } from '..'
 import { Task } from '.'
 
@@ -8,6 +8,7 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 	const completedTasks = tasks.filter((task) => task.completed).sort((a, b) => b.completed_when - a.completed_when)
 
 	const { data: headersCollection = [] } = useHeaders()
+	const deleteHeader = useDeleteHeader().mutate
 
 	const headers = showLogged
 		? incompleteTasks.reduce((group, task) => {
@@ -52,7 +53,7 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 												icon='up-right-from-square'
 												onClick={() => console.log('TODO')}
 											/>
-											<Dropdown.Item label='Delete' icon='trash' onClick={() => console.log('TODO')} />
+											<Dropdown.Item label='Delete' icon='trash' onClick={() => deleteHeader(Number(header_id))} />
 										</Dropdown>
 									</div>
 								)}
