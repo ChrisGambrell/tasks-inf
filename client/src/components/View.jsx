@@ -41,14 +41,14 @@ const View = ({ children }) => {
 
 				try {
 					let { id } = await createTask(values)
-					dispatch({ type: 'set', payload: { selected: [id], open: id } })
+					dispatch({ type: 'set', payload: { selectedTask: [id], open: id } })
 				} catch (err) {
 					console.error(err)
 				}
 			},
 		},
 		{
-			icon: 'caret-square-right',
+			icon: 'square-plus',
 			disabled: false,
 			tooltip: (
 				<div className='flex flex-col p-2'>
@@ -62,7 +62,24 @@ const View = ({ children }) => {
 				</div>
 			),
 			onClick: () => console.log('TODO'),
-			show: '/project',
+			show: '/projects',
+		},
+		{
+			icon: 'circle-plus',
+			disabled: false,
+			tooltip: (
+				<div className='flex flex-col p-2'>
+					<div className='flex justify-between'>
+						<div className='font-semibold'>New Project</div>
+						<div>
+							<HotKeys keys={['meta', 'alt', 'N']} />
+						</div>
+					</div>
+					<div className='flex-wrap'>Create a new project.</div>
+				</div>
+			),
+			onClick: () => console.log('TODO'),
+			show: '/areas',
 		},
 		{
 			icon: 'calendar-days',

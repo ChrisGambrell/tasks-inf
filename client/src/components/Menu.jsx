@@ -4,23 +4,28 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
 const Menu = () => <></>
 
-const Dropdown = ({ label = '', children }) => {
+const Dropdown = ({ menuItem, type = null, children }) => {
+	const url = menuItem.url ? menuItem.url : `/${type && type}s/${menuItem.id}`
+
+	const navigate = useNavigate()
+
 	const [open, setOpen] = useState(false)
 
 	return (
-		<details className='group flex p-1'>
-			<summary className='flex items-center list-none' onClick={() => setOpen(!open)}>
-				<FA className='flex-none h-5 w-5 mr-2 text-gray-400' icon={open ? 'box-open' : 'box'} />
-				<div className='flex-grow truncate font-semibold'>{label}</div>
+		<div className='flex flex-col'>
+			<div className='group flex items-center p-1 rounded-md'>
+				<div className='flex-grow flex items-center space-x-2' onClick={() => navigate(url)}>
+					<FA className='flex-none w-5 h-5 text-gray-400' icon={open ? 'box-open' : 'box'} />
+					<div className='flex-grow truncate font-semibold'>{menuItem.title}</div>
+				</div>
 				<FA
-					className='flex-none invisible group-hover:visible h-3 w-3 text-gray-400 rotate-0 group-open:rotate-90'
+					className={`flex-none w-3 h-3 opacity-0 group-hover:opacity-100 text-gray-400 ${open && 'rotate-90'}`}
 					icon='chevron-right'
+					onClick={() => setOpen(!open)}
 				/>
-			</summary>
-			<div className='mt-2'>
-				<div className='ml-2 pl-3 border-l-2 border-gray-400'>{children}</div>
 			</div>
-		</details>
+			{open && <div className='mt-2 ml-3 pl-3 border-l-2 border-gray-400'>{children}</div>}
+		</div>
 	)
 }
 
