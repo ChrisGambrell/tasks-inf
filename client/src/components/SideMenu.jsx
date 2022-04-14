@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, Popover } from '@mantine/core'
+import { Accordion, Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useTasks } from '../hooks'
