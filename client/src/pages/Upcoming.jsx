@@ -64,28 +64,29 @@ const Upcoming = () => {
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
-				<div className='space-y-8'>
+				<div className='mt-8 space-y-8'>
 					{/* This week's tasks */}
-					{Object.keys(tasksWeek).map((group) => (
-						<div key={group} className='space-y-2'>
-							<div className='flex space-x-2'>
-								<div className='flex-none font-bold text-2xl'>{new Date(group).getDate()}</div>
-								<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm text-gray-500'>
-									{new Date(group).toLocaleDateString() === new Date().toLocaleDateString()
-										? 'Today'
-										: new Date(group).toLocaleDateString() ===
-										  new Date(
-												new Date().getFullYear(),
-												new Date().getMonth(),
-												new Date().getDate() + 1
-										  ).toLocaleDateString()
-										? 'Tomorrow'
-										: new Date(group).toLocaleDateString('en-us', { weekday: 'long' })}
+					{Object.keys(tasksWeek).length > 0 &&
+						Object.keys(tasksWeek).map((group) => (
+							<div key={group} className='space-y-2'>
+								<div className='flex space-x-2'>
+									<div className='flex-none font-bold text-2xl'>{new Date(group).getDate()}</div>
+									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm text-gray-500'>
+										{new Date(group).toLocaleDateString() === new Date().toLocaleDateString()
+											? 'Today'
+											: new Date(group).toLocaleDateString() ===
+											  new Date(
+													new Date().getFullYear(),
+													new Date().getMonth(),
+													new Date().getDate() + 1
+											  ).toLocaleDateString()
+											? 'Tomorrow'
+											: new Date(group).toLocaleDateString('en-us', { weekday: 'long' })}
+									</div>
 								</div>
+								<TaskList tasks={tasksWeek[group]} showProject />
 							</div>
-							<TaskList tasks={tasksWeek[group]} showProject />
-						</div>
-					))}
+						))}
 
 					{/* Tasks for the rest of the month */}
 					{tasksMonth.length > 0 && (
@@ -109,28 +110,30 @@ const Upcoming = () => {
 					)}
 
 					{/* Tasks for the rest of the year */}
-					{Object.keys(tasksYear).map((group) => (
-						<div key={group} className='space-y-2'>
-							<div className='flex space-x-2'>
-								<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
-									{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
+					{Object.keys(tasksYear).length > 0 &&
+						Object.keys(tasksYear).map((group) => (
+							<div key={group} className='space-y-2'>
+								<div className='flex space-x-2'>
+									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
+										{new Date(new Date().getFullYear(), group, 1).toLocaleDateString('en-us', { month: 'long' })}
+									</div>
 								</div>
+								<TaskList tasks={tasksYear[group]} showProject showWhen />
 							</div>
-							<TaskList tasks={tasksYear[group]} showProject showWhen />
-						</div>
-					))}
+						))}
 
 					{/* Tasks anything more than a year from now */}
-					{Object.keys(tasksFuture).map((group) => (
-						<div key={group} className='space-y-2'>
-							<div className='flex space-x-2'>
-								<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
-									{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
+					{Object.keys(tasksFuture).length > 0 &&
+						Object.keys(tasksFuture).map((group) => (
+							<div key={group} className='space-y-2'>
+								<div className='flex space-x-2'>
+									<div className='flex-grow mt-1.5 pt-0.5 border-t font-bold text-sm'>
+										{new Date(group, 1, 1).toLocaleDateString('en-us', { year: 'numeric' })}
+									</div>
 								</div>
+								<TaskList tasks={tasksFuture[group]} showProject showWhen />
 							</div>
-							<TaskList tasks={tasksFuture[group]} showProject showWhen />
-						</div>
-					))}
+						))}
 				</div>
 			</View.Content>
 		</View>

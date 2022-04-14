@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
+import { useEditArea } from '../hooks'
 
 const Menu = () => <></>
 
@@ -9,7 +10,9 @@ const Dropdown = ({ menuItem, type = null, children }) => {
 
 	const navigate = useNavigate()
 
-	const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState(menuItem.open || false)
+
+	const editArea = useEditArea().mutate
 
 	return (
 		<div className='flex flex-col'>
@@ -21,7 +24,10 @@ const Dropdown = ({ menuItem, type = null, children }) => {
 				<FA
 					className={`flex-none w-3 h-3 opacity-0 group-hover:opacity-100 text-gray-400 ${open && 'rotate-90'}`}
 					icon='chevron-right'
-					onClick={() => setOpen(!open)}
+					onClick={() => {
+						setOpen(!open)
+						editArea({ areaId: menuItem.id, data: { open: !open } })
+					}}
 				/>
 			</div>
 			{open && <div className='mt-2 ml-3 pl-3 border-l-2 border-gray-400'>{children}</div>}

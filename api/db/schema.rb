@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_12_035100) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_14_200051) do
   create_table "areas", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "open"
   end
 
   create_table "headers", force: :cascade do |t|
@@ -45,12 +46,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_035100) do
     t.datetime "updated_at", null: false
     t.integer "header_id"
     t.integer "project_id"
+    t.integer "area_id"
+    t.index ["area_id"], name: "index_tasks_on_area_id"
     t.index ["header_id"], name: "index_tasks_on_header_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 
   add_foreign_key "headers", "projects"
   add_foreign_key "projects", "areas"
+  add_foreign_key "tasks", "areas"
   add_foreign_key "tasks", "headers"
   add_foreign_key "tasks", "projects"
 end
