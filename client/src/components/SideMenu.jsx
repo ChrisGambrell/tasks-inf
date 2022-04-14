@@ -120,18 +120,18 @@ const SideMenu = () => {
 					{projects
 						.filter((project) => project.area_id === null)
 						.map((project) => (
-							<Menu.Item key={project.title} menuItem={project} type='project' />
+							<Menu.Item key={project.id} menuItem={project} type='project' />
 						))}
 				</Menu.Section>
 
 				{/* Areas */}
 				<Menu.Section>
 					{areas.map((area) => (
-						<Menu.Dropdown key={area.title} menuItem={area} type='area'>
+						<Menu.Dropdown key={area.id} menuItem={area} type='area'>
 							{projects
 								.filter((project) => project.area_id === area.id)
 								.map((project) => (
-									<Menu.Item key={project.title} menuItem={project} type='project' />
+									<Menu.Item key={project.id} menuItem={project} type='project' />
 								))}
 						</Menu.Dropdown>
 					))}
