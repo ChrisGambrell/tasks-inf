@@ -51,7 +51,11 @@ const Task = ({
 	const [state, dispatch] = useContext(TasksContext)
 
 	const handleHotKey = (event) => {
-		return state.contexted === task.id ? event() : state.contexted === -1 && state.selectedTask.includes(task.id) ? event() : null
+		return state.contextedTask === task.id
+			? event()
+			: state.contextedTask === -1 && state.selectedTask.includes(task.id)
+			? event()
+			: null
 	}
 
 	const handleEditWhen = (when) => {
@@ -96,7 +100,7 @@ const Task = ({
 								<div
 									className={`flex items-center w-full p-0.25 rounded-md ${
 										state.selectedTask.includes(task.id) && 'bg-blue-200'
-									} ${state.contexted === task.id && 'bg-gray-200'}`}>
+									} ${state.contextedTask === task.id && 'bg-gray-200'}`}>
 									<Checkbox
 										className='ml-2 mr-1'
 										size='xs'

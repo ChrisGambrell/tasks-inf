@@ -96,9 +96,11 @@ const ContextMenu = ({ project, task, target }) => {
 				<div
 					onContextMenu={(e) => {
 						e.preventDefault()
-						// TODO
-						// dispatch({ type: 'set', payload: { contexted: task.id } })
-						setOpen(!open)
+						dispatch({
+							type: 'set',
+							payload: (project && { contextedProject: project.id }) || (task && { contextedTask: task.id }) || {},
+						})
+						setOpen(true)
 					}}>
 					{target}
 				</div>
@@ -107,7 +109,7 @@ const ContextMenu = ({ project, task, target }) => {
 			shadow='xl'
 			opened={open}
 			onClose={() => {
-				dispatch({ type: 'set', payload: { contexted: -1 } })
+				dispatch({ type: 'set', payload: (project && { contextedProject: -1 }) || (task && { contextedTask: -1 }) || {} })
 				setOpen(false)
 			}}>
 			<div className='flex flex-col select-none text-sm'>
