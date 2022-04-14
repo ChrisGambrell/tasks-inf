@@ -15,11 +15,13 @@ const useTasksQuery = (select) => {
 
 const useAll = () =>
 	useTasksQuery((data) =>
-		data.map((task) => ({
-			...task,
-			when: task.when ? new Date(task.when) : null,
-			completed_when: task.completed_when ? new Date(task.completed_when) : null,
-		}))
+		data
+			.map((task) => ({
+				...task,
+				when: task.when ? new Date(task.when) : null,
+				completed_when: task.completed_when ? new Date(task.completed_when) : null,
+			}))
+			.sort((a, b) => a.when - b.when)
 	)
 const useComplete = () =>
 	useTasksQuery((data) =>
@@ -30,6 +32,7 @@ const useComplete = () =>
 				when: task.when ? new Date(task.when) : null,
 				completed_when: task.completed_when ? new Date(task.completed_when) : null,
 			}))
+			.sort((a, b) => a.when - b.when)
 	)
 const useIncomplete = () =>
 	useTasksQuery((data) =>
@@ -40,6 +43,7 @@ const useIncomplete = () =>
 				when: task.when ? new Date(task.when) : null,
 				completed_when: task.completed_when ? new Date(task.completed_when) : null,
 			}))
+			.sort((a, b) => a.when - b.when)
 	)
 
 useTasksQuery.all = useAll

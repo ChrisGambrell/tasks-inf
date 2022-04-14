@@ -11,7 +11,9 @@ const Upcoming = () => {
 
 	const { data: tasksCollection = [] } = useTasks.incomplete()
 
-	const tasks = tasksCollection.filter((task) => task.when).sort((a, b) => a.when - b.when)
+	const tasks = tasksCollection.filter(
+		(task) => task.when && task.when >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
+	)
 
 	const tasksWeek = tasks.reduce((group, task) => {
 		let { when } = task
@@ -64,7 +66,6 @@ const Upcoming = () => {
 			<View.Content>
 				<div className='space-y-8'>
 					{/* This week's tasks */}
-					{/* TODO show correct - 'Today', 'Tomorrow' */}
 					{Object.keys(tasksWeek).map((group) => (
 						<div key={group} className='space-y-2'>
 							<div className='flex space-x-2'>
