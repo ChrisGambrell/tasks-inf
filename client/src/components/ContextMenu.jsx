@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Popover } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask } from '../hooks'
+import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask, useProject } from '../hooks'
 import { TasksContext } from '../App'
 import { HotKeys } from '.'
 import { DateSelect } from './Task'
@@ -58,6 +58,7 @@ const Submenu = ({ children, title, label }) => {
 const ContextMenu = ({ project, task, target }) => {
 	const [, dispatch] = useContext(TasksContext)
 
+	const { data: taskProject = {} } = useProject(task?.project_id, Boolean(task?.project_id))
 	const createProject = useCreateProject().mutate
 	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
@@ -144,7 +145,15 @@ const ContextMenu = ({ project, task, target }) => {
 				<Item label='Repeat...' hotKeys={['alt', 'shift', 'R']} onClick={() => console.log('TODO')} />
 				<Item label='Get Info...' onClick={() => console.log('TODO')} />
 				<Item label={`Duplicate ${(project && 'Project') || (task && 'To-Do')}...`} hotKeys={['alt', 'D']} onClick={handleCreate} />
-				{task && <Item label='Convert to Project...' onClick={() => console.log('TODO')} />}
+				{task && (
+					<Item
+						label='Convert to Project...'
+						onClick={() => {
+							createProject({ ...task, description: task.notes, area_id: taskProject.area_id })
+							deleteTask(task.id)
+						}}
+					/>
+				)}
 				<Item label={`Delete ${(project && 'Project') || (task && 'To-Do')}...`} onClick={handleDelete} />
 
 				<Divider />
