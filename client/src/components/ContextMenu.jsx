@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Popover } from '@mantine/core'
+import { Modal, Popover } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask, useProject } from '../hooks'
 import { TasksContext } from '../App'
@@ -143,7 +143,22 @@ const ContextMenu = ({ project, task, target }) => {
 
 				{/* TODO hotkey */}
 				<Item label='Repeat...' hotKeys={['alt', 'shift', 'R']} onClick={() => console.log('TODO')} />
-				<Item label='Get Info...' onClick={() => console.log('TODO')} />
+				{/* TODO kinda buggy may need to update project dates to actual dates */}
+				<Item
+					label='Get Info...'
+					onClick={() =>
+						window.alert(
+							`Created on: ${
+								(project && project.created_at.toLocaleDateString()) || (task && task.created_at.toLocaleDateString())
+							}\nCompleted on: ${
+								(project && project.completed_when.toLocaleDateString()) ||
+								'-' ||
+								(task && task.completed_when.toLocaleDateString()) ||
+								'asdf'
+							}`
+						)
+					}
+				/>
 				<Item label={`Duplicate ${(project && 'Project') || (task && 'To-Do')}...`} hotKeys={['alt', 'D']} onClick={handleCreate} />
 				{task && (
 					<Item
