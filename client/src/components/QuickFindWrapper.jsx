@@ -5,7 +5,7 @@ import { SpotlightProvider } from '@mantine/spotlight'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { menuItems } from './SideMenu'
 
-const SpotlightItem = ({ action, styles, classNames, hovered, onTrigger, ...others }) => (
+const QuickFindItem = ({ action, styles, classNames, hovered, onTrigger, ...others }) => (
 	<div className='flex align-center px-1 space-x-1.5 rounded hover:bg-blue-200' onClick={onTrigger}>
 		<div className='flex-none'>
 			<FA className={action.color} icon={action.icon} />
@@ -19,7 +19,7 @@ const SpotlightItem = ({ action, styles, classNames, hovered, onTrigger, ...othe
 	</div>
 )
 
-const SpotlightWrapper = ({ children }) => {
+const QuickFindWrapper = ({ children }) => {
 	const navigate = useNavigate()
 
 	return (
@@ -29,7 +29,7 @@ const SpotlightWrapper = ({ children }) => {
 				(arr, menuItem) => arr.concat(menuItem.map((menuItem) => ({ ...menuItem, onTrigger: () => navigate(menuItem.url) }))),
 				[]
 			)}
-			actionComponent={SpotlightItem}
+			actionComponent={QuickFindItem}
 			searchPlaceholder='Quick Find'
 			searchIcon={<FA icon='magnifying-glass' />}
 			shortcut='alt + f'
@@ -39,4 +39,4 @@ const SpotlightWrapper = ({ children }) => {
 	)
 }
 
-export default SpotlightWrapper
+export default QuickFindWrapper
