@@ -207,6 +207,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 		else if (space === 'project') deleteProject(spaceId)
 
 		navigate('/')
+		window.location.reload()
 	}
 
 	useEffect(() => debouncedTitle !== title && handleEditTitle(), [debouncedTitle])
