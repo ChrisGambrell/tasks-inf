@@ -210,8 +210,8 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 		window.location.reload()
 	}
 
-	useEffect(() => debouncedTitle !== title && handleEditTitle(), [debouncedTitle])
-	useEffect(() => setEditableTitle(title), [window.location.pathname])
+	useEffect(() => debouncedTitle !== title && debouncedTitle.trim() !== '' && handleEditTitle(), [debouncedTitle])
+	useEffect(() => setEditableTitle(title || ''), [title])
 
 	return (
 		<div className='flex flex-col space-y-2'>

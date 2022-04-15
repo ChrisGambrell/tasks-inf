@@ -25,8 +25,16 @@ const TaskDetails = ({ task }) => {
 	const [debouncedTitle] = useDebouncedValue(title, 200)
 	const [debouncedNotes] = useDebouncedValue(notes, 200)
 
-	useEffect(() => debouncedTitle !== task.title && editTask({ taskId: task.id, data: { title: debouncedTitle } }), [debouncedTitle])
-	useEffect(() => debouncedNotes !== task.notes && editTask({ taskId: task.id, data: { notes: debouncedNotes } }), [debouncedNotes])
+	useEffect(
+		() =>
+			debouncedTitle !== task.title && debouncedTitle.trim() !== '' && editTask({ taskId: task.id, data: { title: debouncedTitle } }),
+		[debouncedTitle]
+	)
+	useEffect(
+		() =>
+			debouncedNotes !== task.notes && debouncedNotes.trim() !== '' && editTask({ taskId: task.id, data: { notes: debouncedNotes } }),
+		[debouncedNotes]
+	)
 
 	const handleEditCompleted = () => editTask({ taskId: task.id, data: { completed: !task.completed } })
 
