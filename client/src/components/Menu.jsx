@@ -19,7 +19,9 @@ const Dropdown = ({ menuItem, type = null, children }) => {
 			<div className='group flex items-center p-1 rounded-md'>
 				<div className='flex-grow flex items-center space-x-2' onClick={() => navigate(url)}>
 					<FA className='flex-none w-5 h-5 text-gray-400' icon={open ? 'box-open' : 'box'} />
-					<div className='flex-grow truncate font-semibold'>{menuItem.title}</div>
+					<div className={`flex-grow truncate font-semibold ${!menuItem.title && 'font-gray-400'}`}>
+						{menuItem.title || 'New Area'}
+					</div>
 				</div>
 				<FA
 					className={`flex-none w-3 h-3 opacity-0 group-hover:opacity-100 text-gray-400 ${open && 'rotate-90'}`}
@@ -49,7 +51,7 @@ const Item = ({ menuItem, type = null }) => {
 				className={`flex-none h-5 w-5 mr-2 ${menuItem.color ? menuItem.color : 'text-gray-400'}`}
 				icon={menuItem.icon ? menuItem.icon : type === 'project' ? 'circle-notch' : 'circle-question'}
 			/>
-			<div className='flex-grow truncate'>{menuItem.title}</div>
+			<div className={`flex-grow truncate ${!menuItem.title && 'text-gray-400'}`}>{menuItem.title || 'New Project'}</div>
 			{menuItem.notification > 0 && (
 				<div className='flex-none pr-1 text-sm text-gray-400'>{menuItem.notification > 99 ? '99+' : menuItem.notification}</div>
 			)}
