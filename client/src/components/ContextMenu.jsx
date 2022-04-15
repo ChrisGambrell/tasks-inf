@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Popover } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useCreateTask, useEditTask, useDeleteTask } from '../hooks'
+import { useCreateProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 import { HotKeys } from '.'
 import { DateSelect } from './Task'
@@ -58,6 +58,9 @@ const Submenu = ({ children, title, label }) => {
 const ContextMenu = ({ project, task, target }) => {
 	const [, dispatch] = useContext(TasksContext)
 
+	const createProject = useCreateProject().mutate
+	const deleteProject = useDeleteProject().mutate
+
 	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
@@ -65,17 +68,17 @@ const ContextMenu = ({ project, task, target }) => {
 	const [open, setOpen] = useState(false)
 
 	const handleCreate = () => {
-		if (project) console.log('TODO')
+		if (project) createProject(project)
 		else if (task) createTask(task)
 	}
 
 	const handleEditComplete = () => {
-		if (project) console.log('TODO')
+		if (project) console.log('ENHANCEMENT')
 		else if (task) editTask({ taskId: task.id, data: { completed: true } })
 	}
 
 	const handleEditWhen = (when) => {
-		if (project) console.log('TODO')
+		if (project) console.log('ENHANCEMENT')
 		else if (task) editTask({ taskId: task.id, data: { when } })
 	}
 
@@ -85,7 +88,7 @@ const ContextMenu = ({ project, task, target }) => {
 	}
 
 	const handleDelete = () => {
-		if (project) console.log('TODO')
+		if (project) deleteProject(project.id)
 		else if (task) deleteTask(task.id)
 	}
 

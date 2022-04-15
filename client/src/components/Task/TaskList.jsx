@@ -44,6 +44,11 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
+	// FIXME this is only showing content when there are tasks
+	// if there are no tasks but there are headers, no headers will be visible
+
+	// FIXME make sure only headers pertaining to this proejct show
+
 	return (
 		<div className='mt-8'>
 			<div>
