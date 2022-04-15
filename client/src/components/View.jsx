@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDebouncedValue } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
 import AutoSizeInput from 'react-input-autosize'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useEditArea, useCreateHeader, useEditProject, useCreateTask } from '../hooks'
+import { useEditArea, useDeleteArea, useCreateHeader, useEditProject, useCreateTask, useDeleteProject } from '../hooks'
 import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
@@ -182,18 +183,30 @@ const View = ({ children }) => {
 }
 
 const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
-	const spaceId =
-		window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas' || i === 'projects') + 1]
+	const space =
+		(window.location.pathname.includes('/areas') && 'area') || (window.location.pathname.includes('/projects') && 'project') || null
+	const spaceId = window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === `${space}s`) + 1]
+
+	const navigate = useNavigate()
 
 	const editArea = useEditArea().mutate
+	const deleteArea = useDeleteArea().mutate
 	const editProject = useEditProject().mutate
+	const deleteProject = useDeleteProject().mutate
 
 	const [editableTitle, setEditableTitle] = useState(title || '')
 	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
 
 	const handleEditTitle = () => {
-		if (window.location.pathname.includes('/areas')) editArea({ area: spaceId, data: { title: debouncedTitle } })
-		else if (window.location.pathname.includes('/projects')) editProject({ projectId: spaceId, data: { title: debouncedTitle } })
+		if (space === 'area') editArea({ area: spaceId, data: { title: debouncedTitle } })
+		else if (space === 'project') editProject({ projectId: spaceId, data: { title: debouncedTitle } })
+	}
+
+	const handleDelete = () => {
+		if (space === 'area') deleteArea(spaceId)
+		else if (space === 'project') deleteProject(spaceId)
+
+		navigate('/')
 	}
 
 	useEffect(() => debouncedTitle !== title && handleEditTitle(), [debouncedTitle])
@@ -203,16 +216,13 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 		<div className='flex flex-col space-y-2'>
 			<div className='flex items-center'>
 				{icon && <FA className={`flex-none w-6 h-6 mr-3 ${color}`} icon={icon} />}
-				{window.location.pathname.includes('/areas') || window.location.pathname.includes('/projects') ? (
+				{space === 'area' || space === 'project' ? (
 					<div className='flex-none font-semibold text-3xl'>
 						<AutoSizeInput
 							inputStyle={{ outline: 'none', fontWeight: 600 }}
 							value={editableTitle}
 							onChange={(e) => setEditableTitle(e.target.value)}
-							placeholder={
-								(window.location.pathname.includes('/areas') && 'New Area') ||
-								(window.location.pathname.includes('/projects') && 'New Project')
-							}
+							placeholder={(space === 'area' && 'New Area') || (space === 'project' && 'New Project')}
 						/>
 					</div>
 				) : (
@@ -220,27 +230,38 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 				)}
 				{actionButton && (
 					<Dropdown>
-						<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
+						{space === 'project' && (
+							<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
+						)}
 						{/* TODO add date to send to DateSelect */}
 						{/* TODO send it a taskId */}
-						<DateSelect
-							title='When'
-							target={<Dropdown.Item label='When' icon='calendar-days' onClick={() => console.log('TODO')} />}
-						/>
+						{space === 'project' && (
+							<DateSelect
+								title='When'
+								target={<Dropdown.Item label='When' icon='calendar-days' onClick={() => console.log('TODO')} />}
+							/>
+						)}
 						<Dropdown.Item label='Add Tags' icon='tag' onClick={() => console.log('TODO')} />
-						<DateSelect
-							title='Deadline'
-							hideQuickDates
-							target={<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => console.log('TODO')} />}
-						/>
+						{space === 'project' && (
+							<DateSelect
+								title='Deadline'
+								hideQuickDates
+								target={<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => console.log('TODO')} />}
+							/>
+						)}
 
 						<Dropdown.Divider />
 
-						<Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Delete Project' icon='trash' onClick={() => console.log('TODO')} />
-						<Dropdown.Item label='Share' icon='share-from-square' onClick={() => console.log('TODO')} />
+						{space === 'project' && <Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />}
+						{space === 'project' && (
+							<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
+						)}
+						{space === 'project' && <Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => console.log('TODO')} />}
+						<Dropdown.Item
+							label={`Delete ${(space === 'area' && 'Area') || (space === 'project' && 'Project')}`}
+							icon='trash'
+							onClick={handleDelete}
+						/>
 					</Dropdown>
 				)}
 			</div>

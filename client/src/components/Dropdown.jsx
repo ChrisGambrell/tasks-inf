@@ -30,7 +30,7 @@ const Dropdown = ({ color = 'text-gray-400', children, target }) => {
 	)
 }
 
-const Divider = () => <hr className='my-2 border-gray-500' />
+const Divider = () => <hr className='my-0.5 border-gray-500' />
 
 const Item = ({ label = '', icon, color = 'text-blue-400', onClick = () => {} }) => (
 	<div className='flex items-center space-x-2 p-1 rounded hover:bg-blue-500' onClick={onClick}>
