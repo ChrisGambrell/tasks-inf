@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Popover } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useCreateProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask } from '../hooks'
+import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 import { HotKeys } from '.'
 import { DateSelect } from './Task'
@@ -59,6 +59,7 @@ const ContextMenu = ({ project, task, target }) => {
 	const [, dispatch] = useContext(TasksContext)
 
 	const createProject = useCreateProject().mutate
+	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
 
 	const createTask = useCreateTask().mutate
@@ -83,7 +84,7 @@ const ContextMenu = ({ project, task, target }) => {
 	}
 
 	const handleRemove = () => {
-		if (project) console.log('TODO')
+		if (project) editProject({ projectId: project.id, data: { area_id: null } })
 		else if (task) editTask({ taskId: task.id, data: { project_id: null } })
 	}
 

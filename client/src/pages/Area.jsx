@@ -24,7 +24,7 @@ const Area = () => {
 			</View.Content>
 		</View>
 	) : (
-		<Placeholder title={area.title} icon={area.icon} color='text-blue-600' />
+		<Placeholder title={area.title} icon='box' color='text-green-500' />
 	)
 }
 
