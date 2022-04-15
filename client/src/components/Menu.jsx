@@ -19,7 +19,7 @@ const Dropdown = ({ menuItem, type = null, children }) => {
 			<div className='group flex items-center p-1 rounded-md'>
 				<div className='flex-grow flex items-center space-x-2' onClick={() => navigate(url)}>
 					<FA className='flex-none w-5 h-5 text-gray-400' icon={open ? 'box-open' : 'box'} />
-					<div className={`flex-grow truncate font-semibold ${!menuItem.title && 'font-gray-400'}`}>
+					<div className={`flex-grow truncate font-semibold ${!menuItem.title && 'text-gray-400'}`}>
 						{menuItem.title || 'New Area'}
 					</div>
 				</div>

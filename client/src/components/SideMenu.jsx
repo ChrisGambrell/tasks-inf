@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useAreas, useProjects, useCreateProject } from '../hooks'
+import { useAreas, useCreateArea, useProjects, useCreateProject } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Inbox, Logbook, Placeholder, Today, Upcoming } from '../pages'
 
@@ -31,6 +31,7 @@ export const menuItems = [
 const Toolbar = () => {
 	const navigate = useNavigate()
 
+	const createArea = useCreateArea().mutateAsync
 	const createProject = useCreateProject().mutateAsync
 
 	const [newListOpen, setNewListOpen] = useState(false)
@@ -59,6 +60,7 @@ const Toolbar = () => {
 				<div className='w-80 select-none'>
 					<div
 						className='flex space-x-2 p-1 rounded hover:bg-blue-500'
+						// TODO focus input on creation
 						onClick={async () => {
 							try {
 								let area_id =
@@ -81,7 +83,18 @@ const Toolbar = () => {
 						</div>
 					</div>
 					<hr className='my-2 border-gray-500' />
-					<div className='flex space-x-2 p-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+					<div
+						className='flex space-x-2 p-1 rounded hover:bg-blue-500'
+						// TODO focus input on creation
+						onClick={async () => {
+							try {
+								let { id } = await createArea()
+								setNewListOpen(false)
+								navigate(`/areas/${id}`)
+							} catch (err) {
+								console.error(err)
+							}
+						}}>
 						<div>
 							<FA className='text-green-500' icon='box' />
 						</div>
@@ -144,17 +157,17 @@ const SideMenu = () => {
 				</Menu.Section>
 
 				{/* Areas */}
-				<Menu.Section>
-					{areas.map((area) => (
-						<Menu.Dropdown key={area.id} menuItem={area} type='area'>
+				{areas.map((area) => (
+					<Menu.Section key={area.id}>
+						<Menu.Dropdown menuItem={area} type='area'>
 							{projects
 								.filter((project) => project.area_id === area.id)
 								.map((project) => (
 									<Menu.Item key={project.id} menuItem={project} type='project' />
 								))}
 						</Menu.Dropdown>
-					))}
-				</Menu.Section>
+					</Menu.Section>
+				))}
 			</div>
 			<Toolbar />
 		</div>

@@ -1,5 +1,6 @@
 export { default as useArea } from './useArea'
 export { default as useAreas } from './useAreas'
+export { default as useCreateArea } from './useCreateArea'
 export { default as useEditArea } from './useEditArea'
 export { default as useHeader } from './useHeader'
 export { default as useHeaders } from './useHeaders'
