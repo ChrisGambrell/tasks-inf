@@ -19,7 +19,7 @@ const Project = () => {
 			</View.Content>
 		</View>
 	) : (
-		<Placeholder title={project.title} icon={project.icon} color='text-blue-600' />
+		<Placeholder {...project} color='text-blue-600' actionButton />
 	)
 }
 
