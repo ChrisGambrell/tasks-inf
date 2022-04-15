@@ -4,7 +4,6 @@ import { ProjectList, View } from '../components'
 import { TaskList } from '../components/Task'
 import Placeholder from './Placeholder'
 
-// TODO 'opened' is a key of area?
 const Area = () => {
 	const { areaId } = useParams()
 	const { data: area = {} } = useArea(Number(areaId))
@@ -25,7 +24,7 @@ const Area = () => {
 			</View.Content>
 		</View>
 	) : (
-		<Placeholder title={area.title} icon={area.icon} color='text-blue-600' />
+		<Placeholder {...area} icon='box' color='text-green-500' actionButton />
 	)
 }
 
