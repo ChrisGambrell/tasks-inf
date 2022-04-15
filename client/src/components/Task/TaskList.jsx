@@ -3,11 +3,13 @@ import { useHeaders, useDeleteHeader } from '../../hooks'
 import { Dropdown } from '..'
 import { Task } from '.'
 
-const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...options }) => {
+const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, ...options }) => {
 	const incompleteTasks = tasks.filter((task) => !task.completed)
 	const completedTasks = tasks.filter((task) => task.completed).sort((a, b) => b.completed_when - a.completed_when)
 
 	const { data: headersCollection = [] } = useHeaders()
+	const headersForProject = headersCollection.filter((header) => header.project_id === projectId)
+
 	const deleteHeader = useDeleteHeader().mutate
 
 	const headers = showLogged
@@ -20,7 +22,7 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 					group[header_id].push(task)
 					return group
 				},
-				headersCollection.reduce((group, header) => {
+				headersForProject.reduce((group, header) => {
 					let { id } = header
 					group[id] = []
 					return group
@@ -35,7 +37,7 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 					group[header_id].push(task)
 					return group
 				},
-				headersCollection.reduce((group, header) => {
+				headersForProject.reduce((group, header) => {
 					let { id } = header
 					group[id] = []
 					return group
@@ -62,9 +64,9 @@ const TaskList = ({ tasks = [], showHeaders = false, showLogged = false, ...opti
 									<div className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
 										<div
 											className={`
-												${!headersCollection.find((header) => header.id === Number(header_id))?.title && 'text-blue-200'}
+												${!headersForProject.find((header) => header.id === Number(header_id))?.title && 'text-blue-200'}
 											`}>
-											{headersCollection.find((header) => header.id === Number(header_id))?.title || 'New Heading'}
+											{headersForProject.find((header) => header.id === Number(header_id))?.title || 'New Heading'}
 										</div>
 										<Dropdown targetColor='text-blue-600'>
 											<Dropdown.Item label='Archive' icon='check-to-slot' onClick={() => console.log('TODO')} />

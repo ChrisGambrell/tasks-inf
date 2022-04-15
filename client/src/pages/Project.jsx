@@ -15,7 +15,7 @@ const Project = () => {
 		<View>
 			<View.Header title={project.title} description={project.description} icon={project.icon} color='text-blue-600' actionButton />
 			<View.Content>
-				<TaskList tasks={tasks} showHeaders showLogged showNotesIndicator showWhen />
+				<TaskList tasks={tasks} projectId={project.id} showHeaders showLogged showNotesIndicator showWhen />
 			</View.Content>
 		</View>
 	) : (
