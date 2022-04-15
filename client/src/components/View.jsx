@@ -1,7 +1,9 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { useDebouncedValue } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
+import AutoSizeInput from 'react-input-autosize'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useCreateHeader, useCreateTask } from '../hooks'
+import { useEditArea, useCreateHeader, useEditProject, useCreateTask } from '../hooks'
 import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
@@ -180,11 +182,42 @@ const View = ({ children }) => {
 }
 
 const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
+	const spaceId =
+		window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas' || i === 'projects') + 1]
+
+	const editArea = useEditArea().mutate
+	const editProject = useEditProject().mutate
+
+	const [editableTitle, setEditableTitle] = useState(title || '')
+	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
+
+	const handleEditTitle = () => {
+		if (window.location.pathname.includes('/areas')) editArea({ area: spaceId, data: { title: debouncedTitle } })
+		else if (window.location.pathname.includes('/projects')) editProject({ projectId: spaceId, data: { title: debouncedTitle } })
+	}
+
+	useEffect(() => debouncedTitle !== title && handleEditTitle(), [debouncedTitle])
+	useEffect(() => setEditableTitle(title), [window.location.pathname])
+
 	return (
 		<div className='flex flex-col space-y-2'>
 			<div className='flex items-center'>
-				{icon && <FA className={`w-6 h-6 mr-3 ${color}`} icon={icon} />}
-				<h2 className='text-3xl font-semibold'>{title}</h2>
+				{icon && <FA className={`flex-none w-6 h-6 mr-3 ${color}`} icon={icon} />}
+				{window.location.pathname.includes('/areas') || window.location.pathname.includes('/projects') ? (
+					<div className='flex-none font-semibold text-3xl'>
+						<AutoSizeInput
+							inputStyle={{ outline: 'none', fontWeight: 600 }}
+							value={editableTitle}
+							onChange={(e) => setEditableTitle(e.target.value)}
+							placeholder={
+								(window.location.pathname.includes('/areas') && 'New Area') ||
+								(window.location.pathname.includes('/projects') && 'New Project')
+							}
+						/>
+					</div>
+				) : (
+					<h2 className='text-3xl font-semibold'>{title}</h2>
+				)}
 				{actionButton && (
 					<Dropdown>
 						<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
@@ -212,7 +245,6 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 				)}
 			</div>
 			{description && <div className='text-sm text-gray-700'>{description}</div>}
-			{actionButton && actionButton}
 		</div>
 	)
 }
