@@ -41,7 +41,6 @@ const Task = ({
 	showProject = false,
 	showWhen = false,
 }) => {
-	// TODO maybe pass project from list but if no project then query?
 	const { data: project = {} } = useProject(task.project_id, Boolean(showProject && task.project_id))
 	const { data: header = {} } = useHeader(task.header_id, Boolean(showHeader && task.header_id))
 	const createTask = useCreateTask().mutate

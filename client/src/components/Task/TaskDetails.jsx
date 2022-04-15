@@ -73,7 +73,6 @@ const TaskDetails = ({ task }) => {
 
 	const SelectedWhen = () => (
 		<div>
-			{/* TODO show actual date */}
 			<DateSelect
 				title='When'
 				value={task.when}

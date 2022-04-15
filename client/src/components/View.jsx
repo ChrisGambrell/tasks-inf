@@ -4,7 +4,16 @@ import { useDebouncedValue } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
 import AutoSizeInput from 'react-input-autosize'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useEditArea, useDeleteArea, useCreateHeader, useEditProject, useCreateTask, useDeleteProject } from '../hooks'
+import {
+	useEditArea,
+	useDeleteArea,
+	useCreateHeader,
+	useProject,
+	useCreateProject,
+	useEditProject,
+	useCreateTask,
+	useDeleteProject,
+} from '../hooks'
 import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
@@ -185,12 +194,15 @@ const View = ({ children }) => {
 const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
 	const space =
 		(window.location.pathname.includes('/areas') && 'area') || (window.location.pathname.includes('/projects') && 'project') || null
-	const spaceId = window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === `${space}s`) + 1]
+	const spaceId = Number(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === `${space}s`) + 1])
 
 	const navigate = useNavigate()
 
+	const { data: project = {} } = useProject(spaceId, Boolean(space === 'project'))
+
 	const editArea = useEditArea().mutate
 	const deleteArea = useDeleteArea().mutate
+	const createProject = useCreateProject().mutate
 	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
 
@@ -257,7 +269,10 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 						{space === 'project' && (
 							<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
 						)}
-						{space === 'project' && <Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => console.log('TODO')} />}
+						{space === 'project' && (
+							// TODO should also duplicate all tasks and headers
+							<Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => createProject(project)} />
+						)}
 						<Dropdown.Item
 							label={`Delete ${(space === 'area' && 'Area') || (space === 'project' && 'Project')}`}
 							icon='trash'
