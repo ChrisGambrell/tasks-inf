@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useAreas, useProjects } from '../hooks'
+import { useAreas, useProjects, useCreateProject } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
 import { Inbox, Logbook, Placeholder, Today, Upcoming } from '../pages'
 
@@ -28,6 +29,10 @@ export const menuItems = [
 ]
 
 const Toolbar = () => {
+	const navigate = useNavigate()
+
+	const createProject = useCreateProject().mutateAsync
+
 	const [newListOpen, setNewListOpen] = useState(false)
 	const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -52,7 +57,21 @@ const Toolbar = () => {
 				opened={newListOpen}
 				onClose={() => setNewListOpen(false)}>
 				<div className='w-80 select-none'>
-					<div className='flex space-x-2 p-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+					<div
+						className='flex space-x-2 p-1 rounded hover:bg-blue-500'
+						onClick={async () => {
+							try {
+								let area_id =
+									window.location.pathname.split('/')[
+										window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1
+									]
+								let { id } = await createProject({ icon: 'circle', area_id: area_id || null })
+								setNewListOpen(false)
+								navigate(`/projects/${id}`)
+							} catch (err) {
+								console.error(err)
+							}
+						}}>
 						<div>
 							<FA className='text-blue-400' icon='circle-half-stroke' />
 						</div>
