@@ -19,7 +19,7 @@ import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 const View = ({ children }) => {
-	const [, dispatch] = useContext(TasksContext)
+	const [state, dispatch] = useContext(TasksContext)
 
 	const createHeader = useCreateHeader()
 	const createTask = useCreateTask()
@@ -119,7 +119,7 @@ const View = ({ children }) => {
 		},
 		{
 			icon: 'arrow-right',
-			disabled: true,
+			disabled: state.selectedTask.length === 0,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -131,7 +131,7 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Move selected items to another list.</div>
 				</div>
 			),
-			onClick: () => console.log('TODO'),
+			onClick: () => dispatch({ type: 'set', payload: { move: state.selectedTask[0] } }),
 		},
 		{
 			icon: 'magnifying-glass',
@@ -162,7 +162,7 @@ const View = ({ children }) => {
 				{toolbarButtons
 					.filter((button) => window.location.pathname.includes(button.show ? button.show : ''))
 					.map((button, i) => (
-						<div key={i}>
+						<div key={i} id='toolbar-button'>
 							{button.tooltip ? (
 								<Tooltip
 									className='w-64'

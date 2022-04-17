@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { Badge, Checkbox } from '@mantine/core'
 import { useClickOutside, useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
@@ -70,7 +70,31 @@ const Task = ({
 		['alt + T', () => handleHotKey(() => editTask({ taskId: task.id, data: { when: new Date() } }))],
 	])
 
-	const clickOutsideRef = useClickOutside(() => {
+	function useOnClickOutside(ref, handler) {
+		useEffect(() => {
+			const listener = (event) => {
+				if (!ref.current || ref.current.contains(event.target)) return
+
+				let current = event.srcElement
+				while (current.parentElement) {
+					if (['move-menu-body', 'toolbar-button'].some((id) => current.id && current.id === id)) return
+					current = current.parentElement
+				}
+
+				handler(event)
+			}
+			document.addEventListener('mousedown', listener)
+			document.addEventListener('touchstart', listener)
+			return () => {
+				document.removeEventListener('mousedown', listener)
+				document.removeEventListener('touchstart', listener)
+			}
+		}, [ref, handler])
+	}
+
+	const clickOutsideRef = useRef()
+
+	useOnClickOutside(clickOutsideRef, () => {
 		if (state.selectedTask.includes(task.id) && state.open === task.id) dispatch({ type: 'set', payload: { open: -1 } })
 		else if (state.selectedTask.includes(task.id)) dispatch({ type: 'reset' })
 	})

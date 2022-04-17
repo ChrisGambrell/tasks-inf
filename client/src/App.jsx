@@ -2,7 +2,7 @@ import { createContext, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'
-import { QuickFindWrapper, SideMenu } from './components'
+import { MoveMenu, QuickFindWrapper, SideMenu } from './components'
 import { menuItems } from './components/SideMenu'
 import { Area, Project } from './pages'
 
@@ -19,6 +19,7 @@ const App = () => {
 						<SideMenu />
 
 						<QuickFindWrapper>
+							<MoveMenu />
 							<Routes>
 								{menuItems.map((section) =>
 									section.map(({ component: Component, ...menuItem }) => (

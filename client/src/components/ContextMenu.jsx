@@ -94,6 +94,12 @@ const ContextMenu = ({ project, task, target }) => {
 		else if (task) deleteTask(task.id)
 	}
 
+	const showMove = () => {
+		if (project) console.log('TODO')
+		else if (task) dispatch({ type: 'set', payload: { move: task.id } })
+		setOpen(false)
+	}
+
 	return (
 		<Popover
 			classNames={{ body: 'w-60 border-gray-300', popover: 'bg-gray-100', inner: 'p-1', root: 'w-full' }}
@@ -123,7 +129,7 @@ const ContextMenu = ({ project, task, target }) => {
 					onChange={handleEditWhen}
 					target={<Item label='When...' hotKeys={['alt', 'S']} />}
 				/>
-				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={() => console.log('TODO')} />
+				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
 				<DateSelect target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />} />
 				<Submenu label='Complete...'>

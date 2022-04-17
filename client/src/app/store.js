@@ -1,4 +1,11 @@
-const initialState = { selectedProject: [], selectedTask: [], open: -1, contextedProject: -1, contextedTask: -1 }
+const initialState = {
+	selectedProject: [],
+	selectedTask: [],
+	open: -1,
+	contextedProject: -1,
+	contextedTask: -1,
+	move: -1,
+}
 
 const reducer = (state, action) => {
 	switch (action.type) {

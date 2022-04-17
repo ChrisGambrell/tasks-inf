@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useEditTask } from '../../hooks'
+import { TasksContext } from '../../App'
 import { Tooltip } from '..'
 import { DateSelect } from '.'
 
@@ -16,6 +17,10 @@ const TaskDetails = ({ task }) => {
 	// const [newTitle, setNewTitle] = useState('')
 	// const [newNotes, setNewNotes] = useState('')
 	// const [newCompleted, setNewCompleted] = useState(false)
+
+	const [state, dispatch] = useContext(TasksContext)
+
+	useEffect(() => console.log(state), [state, dispatch])
 
 	const editTask = useEditTask().mutate
 
@@ -36,7 +41,11 @@ const TaskDetails = ({ task }) => {
 		[debouncedNotes]
 	)
 
-	const handleEditCompleted = () => editTask({ taskId: task.id, data: { completed: !task.completed } })
+	const handleEditCompleted = () => {
+		if (task.completed === false) dispatch({ type: 'set', payload: { selectedTask: [] } })
+		editTask({ taskId: task.id, data: { completed: !task.completed } })
+		dispatch({ type: 'set', payload: { open: -1 } })
+	}
 
 	const handleEditWhen = (when) => {
 		editTask({ taskId: task.id, data: { when } })
