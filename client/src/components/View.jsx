@@ -213,7 +213,7 @@ const View = ({ children }) => {
 	)
 }
 
-const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
+const Header = ({ title, description, when, actionButton = false, icon, color = 'text-gray-400' }) => {
 	const space =
 		(window.location.pathname.includes('/areas') && 'area') || (window.location.pathname.includes('/projects') && 'project') || null
 	const spaceId = Number(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === `${space}s`) + 1])
@@ -271,12 +271,12 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 						{space === 'project' && (
 							<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
 						)}
-						{/* TODO add date to send to DateSelect */}
-						{/* TODO send it a taskId */}
 						{space === 'project' && (
 							<DateSelect
 								title='When'
-								target={<Dropdown.Item label='When' icon='calendar-days' onClick={() => console.log('TODO')} />}
+								value={project.when}
+								onChange={(when) => editProject({ projectId: project.id, data: { when } })}
+								target={<Dropdown.Item label='When' icon='calendar-days' />}
 							/>
 						)}
 						<Dropdown.Item label='Add Tags' icon='tag' onClick={() => console.log('TODO')} />
@@ -312,6 +312,50 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 					</Dropdown>
 				)}
 			</div>
+			{when && (
+				<div className='border-y py-0.5'>
+					<DateSelect
+						title='When'
+						value={project.when}
+						onChange={(when) => editProject({ projectId: project.id, data: { when } })}
+						target={
+							<div className='group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+								<FA
+									className={
+										project.when.toLocaleDateString() === new Date().toLocaleDateString()
+											? 'text-yellow-400'
+											: 'text-red-500'
+									}
+									icon={project.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
+								/>
+								<div className='font-semibold'>
+									{project.when.toLocaleDateString() === new Date().toLocaleDateString()
+										? 'Today'
+										: project.when.toLocaleDateString() ===
+										  new Date(
+												new Date().getFullYear(),
+												new Date().getMonth(),
+												new Date().getDate() + 1
+										  ).toLocaleDateString()
+										? 'Tomorrow'
+										: project.when.toLocaleDateString(
+												'en-us',
+												project.when <
+													new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+													? { weekday: 'long' }
+													: { weekday: 'short', month: 'long', day: 'numeric' }
+										  )}
+								</div>
+								<FA
+									className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+									icon='x'
+									onClick={() => editProject({ projectId: project.id, data: { when: null } })}
+								/>
+							</div>
+						}
+					/>
+				</div>
+			)}
 			{description && <div className='text-sm text-gray-700'>{description}</div>}
 		</div>
 	)

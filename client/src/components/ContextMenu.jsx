@@ -81,7 +81,7 @@ const ContextMenu = ({ project, task, target }) => {
 	}
 
 	const handleEditWhen = (when) => {
-		if (project) console.log('ENHANCEMENT')
+		if (project) editProject({ projectId: project.id, data: { when } })
 		else if (task) editTask({ taskId: task.id, data: { when } })
 	}
 

@@ -2,13 +2,16 @@ import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useTasks } from '../hooks'
+import { useEditProject, useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
 import { DateSelect } from './Task'
 
+// TODO show when dates
 const Project = ({ project }) => {
 	const navigate = useNavigate()
+
+	const editProject = useEditProject().mutate
 
 	const { data: tasks = [] } = useTasks.all()
 	const numTasks = tasks.filter((task) => task.project_id === project.id).length
@@ -59,7 +62,7 @@ const Project = ({ project }) => {
 								<DateSelect
 									title='When'
 									value={project.when}
-									// TODO onChange={handleEditWhen}
+									onChange={(when) => editProject({ projectId: project.id, data: { when } })}
 									target={<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />}
 								/>
 							</div>
