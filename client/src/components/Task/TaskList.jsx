@@ -1,9 +1,10 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeaders, useDeleteHeader, useCreateProject, useTasks, useEditTask } from '../../hooks'
 import { TasksContext } from '../../App'
 import { Dropdown } from '..'
 import { Task } from '.'
+import { useClickOutside } from '@mantine/hooks'
 
 const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, noMargin = false, ...options }) => {
 	const navigate = useNavigate()
@@ -71,6 +72,36 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 		}
 	}
 
+	const useOnClickOutside = (ref, handler) => {
+		useEffect(() => {
+			const listener = (event) => {
+				if (!ref.current || ref.current.contains(event.target)) return
+
+				let current = event.srcElement
+				while (current.parentElement) {
+					if (['context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) => current.id.includes(id))) {
+						return
+					}
+					current = current.parentElement
+				}
+
+				handler(event)
+			}
+			document.addEventListener('mousedown', listener)
+			document.addEventListener('touchstart', listener)
+			return () => {
+				document.removeEventListener('mousedown', listener)
+				document.removeEventListener('touchstart', listener)
+			}
+		}, [ref, handler])
+	}
+
+	const clickOutsideRef = useRef()
+
+	useOnClickOutside(clickOutsideRef, () => {
+		dispatch({ type: 'reset' })
+	})
+
 	return (
 		<div className={`${!noMargin && 'mt-8'}`}>
 			<div>
@@ -81,7 +112,14 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 							<div key={header_id} className='mb-8'>
 								{/* Header */}
 								{Number(header_id) !== -1 && (
-									<div className='flex justify-between items-center pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none'>
+									<div
+										className={`flex justify-between items-center px-0.5 pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none ${
+											state.selectedHeader.includes(Number(header_id)) && 'rounded-md bg-blue-200'
+										} ${state.contextedHeader === Number(header_id) && 'bg-gray-200'}`}
+										onClick={() =>
+											dispatch({ type: 'set', payload: { selectedHeader: [Number(header_id)], moveType: 'header' } })
+										}
+										ref={clickOutsideRef}>
 										<div
 											className={`
 												${!headersForProject.find((header) => header.id === Number(header_id))?.title && 'text-blue-200'}

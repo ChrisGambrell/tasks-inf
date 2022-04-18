@@ -131,7 +131,7 @@ const View = ({ children }) => {
 		},
 		{
 			icon: 'arrow-right',
-			disabled: state.selectedProject.length === 0 && state.selectedTask.length === 0,
+			disabled: state.selectedProject.length === 0 && state.selectedHeader.length === 0 && state.selectedTask.length === 0,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -149,6 +149,7 @@ const View = ({ children }) => {
 					payload: {
 						moveId:
 							(state.selectedProject.length > 0 && state.selectedProject[0]) ||
+							(state.selectedHeader.length > 0 && state.selectedHeader[0]) ||
 							(state.selectedTask.length > 0 && state.selectedTask[0]),
 					},
 				}),

@@ -1,8 +1,10 @@
 const initialState = {
 	selectedProject: [],
+	selectedHeader: [],
 	selectedTask: [],
 	open: -1,
 	contextedProject: -1,
+	// contextedHeader: -1,
 	contextedTask: -1,
 	moveType: null,
 	moveId: -1,
