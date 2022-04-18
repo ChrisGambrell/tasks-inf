@@ -3,10 +3,13 @@ import { Popover } from '@mantine/core'
 import { Calendar } from '@mantine/dates'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
+// TODO this should be an independent modal instead of a popup
+// the open state should be determined by store.js state
 const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false, target }) => {
 	const [open, setOpen] = useState(false)
 
 	const handleOnChange = (date) => {
+		console.log('onchange')
 		setOpen(false)
 		onChange(date)
 	}
@@ -15,7 +18,8 @@ const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false,
 		<div>
 			<Popover
 				classNames={{ popover: 'bg-gray-800 text-gray-50', inner: 'p-1', root: 'w-full' }}
-				target={<div onClick={() => setOpen(!open)}>{target}</div>}
+				id='date-select'
+				target={<div onClick={() => setOpen(true)}>{target}</div>}
 				radius='md'
 				shadow='xl'
 				opened={open}
@@ -36,7 +40,7 @@ const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false,
 							</div>
 						</div>
 					)}
-					<div id='date-select'>
+					<div>
 						<Calendar
 							classNames={{
 								calendarHeaderControl: 'font-semibold text-gray-50 hover:bg-blue-500',

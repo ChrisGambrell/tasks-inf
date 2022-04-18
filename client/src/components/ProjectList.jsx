@@ -48,6 +48,7 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 					current = current.parentElement
 				}
 
+				console.log('executing handler')
 				handler(event)
 			}
 			document.addEventListener('mousedown', listener)
