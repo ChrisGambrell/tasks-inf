@@ -97,7 +97,7 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 			</div>
 
 			{/* Logged tasks */}
-			{showLogged && (
+			{showLogged && completedTasks.length > 0 && (
 				<div>
 					<button
 						className='px-1 rounded border border-white font-semibold text-xs text-gray-400 hover:border-gray-300 active:bg-gray-300'
