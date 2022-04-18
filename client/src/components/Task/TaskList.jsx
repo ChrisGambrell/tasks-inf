@@ -2,9 +2,8 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeaders, useDeleteHeader, useCreateProject, useTasks, useEditTask } from '../../hooks'
 import { TasksContext } from '../../App'
-import { Dropdown } from '..'
+import { ContextMenu, Dropdown } from '..'
 import { Task } from '.'
-import { useClickOutside } from '@mantine/hooks'
 
 const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, noMargin = false, ...options }) => {
 	const navigate = useNavigate()
@@ -112,40 +111,60 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 							<div key={header_id} className='mb-8'>
 								{/* Header */}
 								{Number(header_id) !== -1 && (
-									<div
-										className={`flex justify-between items-center px-0.5 pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none ${
-											state.selectedHeader.includes(Number(header_id)) && 'rounded-md bg-blue-200'
-										} ${state.contextedHeader === Number(header_id) && 'bg-gray-200'}`}
-										onClick={() =>
-											dispatch({ type: 'set', payload: { selectedHeader: [Number(header_id)], moveType: 'header' } })
-										}
-										ref={clickOutsideRef}>
-										<div
-											className={`
+									<ContextMenu
+										header={headersCollection.find((header) => header.id === Number(header_id))}
+										target={
+											<div
+												className={`flex justify-between items-center px-0.5 pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none ${
+													state.selectedHeader.includes(Number(header_id)) && 'rounded-md bg-blue-200'
+												} ${state.contextedHeader === Number(header_id) && 'rounded-md bg-gray-200'}`}
+												onClick={() =>
+													dispatch({
+														type: 'set',
+														payload: { selectedHeader: [Number(header_id)], moveType: 'header' },
+													})
+												}
+												ref={clickOutsideRef}>
+												<div
+													className={`
 												${!headersForProject.find((header) => header.id === Number(header_id))?.title && 'text-blue-200'}
 											`}>
-											{headersForProject.find((header) => header.id === Number(header_id))?.title || 'New Heading'}
-										</div>
-										<Dropdown targetColor='text-blue-600'>
-											<Dropdown.Item label='Archive' icon='check-to-slot' onClick={() => console.log('TODO')} />
+													{headersForProject.find((header) => header.id === Number(header_id))?.title ||
+														'New Heading'}
+												</div>
+												<Dropdown targetColor='text-blue-600'>
+													<Dropdown.Item
+														label='Archive'
+														icon='check-to-slot'
+														onClick={() => console.log('TODO')}
+													/>
 
-											<Dropdown.Divider />
+													<Dropdown.Divider />
 
-											<Dropdown.Item
-												label='Move'
-												icon='arrow-right'
-												onClick={() =>
-													dispatch({ type: 'set', payload: { moveType: 'header', moveId: Number(header_id) } })
-												}
-											/>
-											<Dropdown.Item
-												label='Convert to Project...'
-												icon='up-right-from-square'
-												onClick={() => handleConvertToProject(header_id)}
-											/>
-											<Dropdown.Item label='Delete' icon='trash' onClick={() => deleteHeader(Number(header_id))} />
-										</Dropdown>
-									</div>
+													<Dropdown.Item
+														label='Move'
+														icon='arrow-right'
+														onClick={() =>
+															dispatch({
+																type: 'set',
+																payload: { moveType: 'header', moveId: Number(header_id) },
+															})
+														}
+													/>
+													<Dropdown.Item
+														label='Convert to Project...'
+														icon='up-right-from-square'
+														onClick={() => handleConvertToProject(header_id)}
+													/>
+													<Dropdown.Item
+														label='Delete'
+														icon='trash'
+														onClick={() => deleteHeader(Number(header_id))}
+													/>
+												</Dropdown>
+											</div>
+										}
+									/>
 								)}
 
 								{/* Tasks */}
