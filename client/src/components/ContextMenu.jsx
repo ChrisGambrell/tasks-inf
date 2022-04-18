@@ -56,7 +56,7 @@ const Submenu = ({ children, title, label }) => {
 }
 
 const ContextMenu = ({ project, task, target }) => {
-	const [, dispatch] = useContext(TasksContext)
+	const [state, dispatch] = useContext(TasksContext)
 
 	const { data: taskProject = {} } = useProject(task?.project_id, Boolean(task?.project_id))
 	const createProject = useCreateProject().mutate
@@ -95,8 +95,8 @@ const ContextMenu = ({ project, task, target }) => {
 	}
 
 	const showMove = () => {
-		if (project) console.log('TODO')
-		else if (task) dispatch({ type: 'set', payload: { move: task.id } })
+		if (project) dispatch({ type: 'set', payload: { moveId: project.id } })
+		else if (task) dispatch({ type: 'set', payload: { moveId: task.id } })
 		setOpen(false)
 	}
 
@@ -109,7 +109,10 @@ const ContextMenu = ({ project, task, target }) => {
 						e.preventDefault()
 						dispatch({
 							type: 'set',
-							payload: (project && { contextedProject: project.id }) || (task && { contextedTask: task.id }) || {},
+							payload:
+								(project && { contextedProject: project.id, moveType: 'project' }) ||
+								(task && { contextedTask: task.id, moveType: 'task' }) ||
+								{},
 						})
 						setOpen(true)
 					}}>
@@ -123,7 +126,7 @@ const ContextMenu = ({ project, task, target }) => {
 				dispatch({ type: 'set', payload: (project && { contextedProject: -1 }) || (task && { contextedTask: -1 }) || {} })
 				setOpen(false)
 			}}>
-			<div className='flex flex-col select-none text-sm'>
+			<div className='flex flex-col select-none text-sm' id='context-menu'>
 				<DateSelect
 					value={(project && project.when) || (task && task.when)}
 					onChange={handleEditWhen}

@@ -57,7 +57,7 @@ const View = ({ children }) => {
 
 				try {
 					let { id } = await createTask.mutateAsync(values)
-					dispatch({ type: 'set', payload: { selectedTask: [id], open: id } })
+					dispatch({ type: 'set', payload: { selectedTask: [id], open: id, moveType: 'task' } })
 				} catch (err) {
 					console.error(err)
 				}
@@ -131,7 +131,7 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Move selected items to another list.</div>
 				</div>
 			),
-			onClick: () => dispatch({ type: 'set', payload: { move: state.selectedTask[0] } }),
+			onClick: () => dispatch({ type: 'set', payload: { moveId: state.selectedTask[0] } }),
 		},
 		{
 			icon: 'magnifying-glass',

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
@@ -24,7 +24,7 @@ const Project = ({ project }) => {
 		<div ref={clickOutsideRef}>
 			<div
 				className='flex items-center select-none'
-				onClick={() => dispatch({ type: 'set', payload: { selectedProject: [project.id] } })}
+				onClick={() => dispatch({ type: 'set', payload: { selectedProject: [project.id], moveType: 'project' } })}
 				onDoubleClick={() => navigate(`/projects/${project.id}`)}>
 				<ContextMenu
 					project={project}

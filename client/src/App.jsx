@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react'
+import { createContext, useEffect, useReducer } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { NotificationsProvider } from '@mantine/notifications'
 import store from './app/store'

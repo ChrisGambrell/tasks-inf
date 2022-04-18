@@ -77,7 +77,9 @@ const Task = ({
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['move-menu-body', 'toolbar-button'].some((id) => current.id && current.id === id)) return
+					if (['context-menu', 'move-menu-body', 'toolbar-button'].some((id) => current.id && current.id === id)) {
+						return
+					}
 					current = current.parentElement
 				}
 
@@ -106,7 +108,7 @@ const Task = ({
 			) : (
 				<div
 					className='flex items-center select-none'
-					onClick={() => dispatch({ type: 'set', payload: { selectedTask: [task.id] } })}
+					onClick={() => dispatch({ type: 'set', payload: { selectedTask: [task.id], moveType: 'task' } })}
 					onDoubleClick={() => dispatch({ type: 'set', payload: { open: task.id } })}>
 					<ContextMenu
 						task={task}

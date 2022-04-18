@@ -4,7 +4,8 @@ const initialState = {
 	open: -1,
 	contextedProject: -1,
 	contextedTask: -1,
-	move: -1,
+	moveType: null,
+	moveId: -1,
 }
 
 const reducer = (state, action) => {

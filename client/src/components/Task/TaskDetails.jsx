@@ -42,7 +42,7 @@ const TaskDetails = ({ task }) => {
 	)
 
 	const handleEditCompleted = () => {
-		if (task.completed === false) dispatch({ type: 'set', payload: { selectedTask: [] } })
+		if (task.completed === false) dispatch({ type: 'set', payload: { selectedTask: [], moveType: null, moveId: -1 } })
 		editTask({ taskId: task.id, data: { completed: !task.completed } })
 		dispatch({ type: 'set', payload: { open: -1 } })
 	}
