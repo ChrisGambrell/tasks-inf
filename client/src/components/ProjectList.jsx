@@ -1,15 +1,32 @@
 import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge } from '@mantine/core'
+import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useEditProject, useTasks } from '../hooks'
+import { useArea, useEditProject, useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
 import { DateSelect } from './Task'
 
+const WhenDisplay = ({ when }) => {
+	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
+		<FA className='ml-1 w-3 h-3 text-yellow-400' icon='star' />
+	) : when ? (
+		<Badge classNames={{ root: 'ml-1 px-1.5 text-gray-600 bg-gray-200' }} radius='sm'>
+			{when.toLocaleDateString(
+				'en-us',
+				when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+					? { weekday: 'short' }
+					: { month: 'short', day: 'numeric' }
+			)}
+		</Badge>
+	) : null
+}
+
 // TODO show when dates
-const Project = ({ project }) => {
+const Project = ({ project, showArea = false, showComplete = false, showWhen = false }) => {
 	const navigate = useNavigate()
+
+	const { data: area = {} } = useArea(project.area_id, Boolean(showArea && project.area_id))
 
 	const editProject = useEditProject().mutate
 
@@ -70,23 +87,38 @@ const Project = ({ project }) => {
 								className={`flex items-center w-full p-0.25 rounded-md ${
 									state.selectedProject.includes(project.id) && 'bg-blue-200'
 								} ${state.contextedProject === project.id && 'bg-gray-200'}`}>
-								<div className='flex items-center space-x-2 ml-1 mr-1'>
-									<FA className='text-blue-600' icon={project.icon || 'circle-notch'} />
-									<div
-										className={`${!project.title ? 'text-gray-400' : 'font-semibold text-gray-800'} ${
-											!project.title && 'font-light'
-										} truncate`}>
-										{project.title || 'New Project'}
+								<div className={`flex items-center space-x-1 ${!showComplete && 'ml-1'} mr-1`}>
+									{showComplete ? (
+										<Checkbox
+											className='ml-2 mr-1'
+											classNames={{ input: 'rounded-full border-2 border-blue-600' }}
+											size='xs'
+											onChange={() => console.log('TODO')}
+										/>
+									) : (
+										<FA className='text-blue-600' icon={project.icon || 'circle-notch'} />
+									)}
+									{showWhen && <WhenDisplay when={project.when} />}
+									<div className='flex flex-col'>
+										<div className='flex items-center'>
+											<div
+												className={`${!project.title ? 'text-gray-400' : 'font-semibold text-gray-800'} ${
+													!project.title && 'font-light'
+												} truncate`}>
+												{project.title || 'New Project'}
+											</div>
+											<Badge
+												classNames={{
+													root: `ml-1 py-0 px-1 border-1.5 border-gray-300 bg-transparent font-semibold text-gray-400 ${
+														state.selectedProject.includes(project.id) && 'border-gray-400 text-gray-500'
+													}`,
+												}}
+												radius='sm'>
+												{numTasks}
+											</Badge>
+										</div>
+										{showArea && area && <div className='text-xs text-gray-400 truncate'>{area.title}</div>}
 									</div>
-									<Badge
-										classNames={{
-											root: `ml-1 py-0 px-1 border-1.5 border-gray-300 bg-transparent font-semibold text-gray-400 ${
-												state.selectedProject.includes(project.id) && 'border-gray-400 text-gray-500'
-											}`,
-										}}
-										radius='sm'>
-										{numTasks}
-									</Badge>
 								</div>
 							</div>
 						</div>
@@ -97,8 +129,14 @@ const Project = ({ project }) => {
 	)
 }
 
-const ProjectList = ({ projects = [] }) => {
-	return projects.map((project) => <Project key={project.id} project={project} />)
+const ProjectList = ({ projects = [], ...options }) => {
+	return (
+		<div className='mt-8'>
+			{projects.map((project) => (
+				<Project key={project.id} project={project} {...options} />
+			))}
+		</div>
+	)
 }
 
 export default ProjectList

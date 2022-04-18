@@ -17,10 +17,8 @@ const Area = () => {
 		<View>
 			<View.Header title={area.title} icon='box' color='text-green-500' actionButton />
 			<View.Content>
-				<div className='mt-8'>
-					<ProjectList projects={projects} />
-					<TaskList tasks={tasks} />
-				</div>
+				<ProjectList projects={projects} />
+				<TaskList tasks={tasks} />
 			</View.Content>
 		</View>
 	) : (

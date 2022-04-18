@@ -3,7 +3,7 @@ import { useHeaders, useDeleteHeader } from '../../hooks'
 import { Dropdown } from '..'
 import { Task } from '.'
 
-const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, ...options }) => {
+const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, noMargin = false, ...options }) => {
 	const incompleteTasks = tasks.filter((task) => !task.completed)
 	const completedTasks = tasks.filter((task) => task.completed).sort((a, b) => b.completed_when - a.completed_when)
 
@@ -47,7 +47,7 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
 	return (
-		<div className='mt-8'>
+		<div className={`${!noMargin && 'mt-8'}`}>
 			<div>
 				{showHeaders ? (
 					Object.keys(headers)
