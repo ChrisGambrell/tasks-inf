@@ -73,7 +73,7 @@ const Task = ({
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'move-menu-body', 'toolbar-button'].some((id) => current.id === id)) {
+					if (['context-menu', 'date-select-body', 'move-menu-body', 'toolbar-button'].some((id) => current.id === id)) {
 						return
 					}
 					current = current.parentElement
@@ -110,42 +110,61 @@ const Task = ({
 						task={task}
 						target={
 							<div className='relative flex items-center w-full -translate-x-5 mt-1.5'>
-								<div className='-translate-x-1'>
-									<DateSelect
-										title='When'
-										value={task.when}
-										onChange={handleEditWhen}
-										target={<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />}
-									/>
-								</div>
-								<div
-									className={`flex items-center w-full p-0.25 rounded-md ${
-										state.selectedTask.includes(task.id) && 'bg-blue-200'
-									} ${state.contextedTask === task.id && 'bg-gray-200'}`}>
-									<Checkbox
-										className='ml-2 mr-1'
-										size='xs'
-										defaultChecked={task.completed}
-										onChange={() =>
-											editTask({
-												taskId: task.id,
-												data: { completed: !task.completed },
-											})
-										}
-									/>
-									{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
-									{showWhen && <WhenDisplay when={task.when} />}
-									<div className='ml-1 mr-1'>
-										<div
-											className={`${secondary || !task.title ? 'text-gray-400' : 'text-gray-800'} ${
-												!task.title && 'font-light'
-											} truncate`}>
-											{task.title || 'New To-Do'}
-										</div>
-										{showProject && project && <div className='text-xs text-gray-400 truncate'>{project.title}</div>}
-										{showHeader && header && <div className='text-xs text-gray-400 truncate'>{header.title}</div>}
+								<div className='flex grow'>
+									<div className='-translate-x-1'>
+										<DateSelect
+											title='When'
+											value={task.when}
+											onChange={handleEditWhen}
+											target={
+												<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />
+											}
+										/>
 									</div>
-									{showNotesIndicator && task.notes && <FA className='w-3 h-3 text-gray-400' icon='file' />}
+									<div
+										className={`flex items-center w-full p-0.25 rounded-md ${
+											state.selectedTask.includes(task.id) && 'bg-blue-200'
+										} ${state.contextedTask === task.id && 'bg-gray-200'}`}>
+										<div className='flex-grow flex items-center'>
+											<Checkbox
+												className='ml-2 mr-1'
+												size='xs'
+												defaultChecked={task.completed}
+												onChange={() =>
+													editTask({
+														taskId: task.id,
+														data: { completed: !task.completed },
+													})
+												}
+											/>
+											{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
+											{showWhen && <WhenDisplay when={task.when} />}
+											<div className='ml-1 mr-1'>
+												<div
+													className={`${secondary || !task.title ? 'text-gray-400' : 'text-gray-800'} ${
+														!task.title && 'font-light'
+													} truncate`}>
+													{task.title || 'New To-Do'}
+												</div>
+												{showProject && project && (
+													<div className='text-xs text-gray-400 truncate'>{project.title}</div>
+												)}
+												{showHeader && header && (
+													<div className='text-xs text-gray-400 truncate'>{header.title}</div>
+												)}
+											</div>
+											{showNotesIndicator && task.notes && <FA className='w-3 h-3 text-gray-400' icon='file' />}
+										</div>
+
+										{task.deadline && (
+											<div className='flex-none flex items-center space-x-1 mr-1 text-gray-500'>
+												<FA className='w-3 h-3' icon='flag' />
+												<div className='text-sm'>
+													{task.deadline.toLocaleDateString('en-us', { month: 'long', day: 'numeric' })}
+												</div>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						}

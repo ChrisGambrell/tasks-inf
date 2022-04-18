@@ -51,6 +51,10 @@ const TaskDetails = ({ task }) => {
 		editTask({ taskId: task.id, data: { when } })
 	}
 
+	const handleEditDeadline = (deadline) => {
+		editTask({ taskId: task.id, data: { deadline } })
+	}
+
 	// const Checklist = () => (
 	// 	<div className='mb-4' ref={clickOutsideChecklist}>
 	// 		{checklist.map((item, i) => (
@@ -79,6 +83,29 @@ const TaskDetails = ({ task }) => {
 	// 		))}
 	// 	</div>
 	// )
+
+	const SelectedDeadline = () => (
+		<div>
+			<DateSelect
+				title='Deadline'
+				value={task.deadline}
+				onChange={handleEditDeadline}
+				target={
+					<div className='group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+						<FA icon='flag' />
+						<div className='font-semibold pl-0.5'>
+							{task.deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'long', day: 'numeric' })}
+						</div>
+						<FA
+							className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+							icon='x'
+							onClick={() => handleEditDeadline(null)}
+						/>
+					</div>
+				}
+			/>
+		</div>
+	)
 
 	const SelectedWhen = () => (
 		<div>
@@ -165,6 +192,7 @@ const TaskDetails = ({ task }) => {
 				<div className='flex flex-col space-y-2'>
 					{/* {tags?.length > 0 && <Tags />} */}
 					{task.when && <SelectedWhen />}
+					{task.deadline && <SelectedDeadline />}
 				</div>
 				<div className='flex justify-end space-x-2'>
 					{!task.when && (
@@ -175,6 +203,17 @@ const TaskDetails = ({ task }) => {
 							target={<ToolbarButton label='When' icon='calendar-days' />}
 						/>
 					)}
+
+					{!task.deadline && (
+						<DateSelect
+							title='Deadline'
+							value={task.deadline}
+							onChange={handleEditDeadline}
+							hideQuickDates
+							target={<ToolbarButton label='Deadline' icon='flag' />}
+						/>
+					)}
+
 					{/* TODO:  */}
 					{/* {(!tags || tags?.length === 0) && showTagsInput ? (
 						<TextInput
@@ -191,11 +230,7 @@ const TaskDetails = ({ task }) => {
 					{(!checklist || checklist?.length === 0) && (
 						<ToolbarButton label='Checklist' icon='list-ul' onClick={() => console.log('TODO')} />
 					)}
-					<DateSelect
-						title='Deadline'
-						hideQuickDates
-						target={<ToolbarButton label='Deadline' icon='flag' onClick={() => console.log('TODO')} />}
-					/> */}
+					 */}
 				</div>
 			</div>
 		</div>
