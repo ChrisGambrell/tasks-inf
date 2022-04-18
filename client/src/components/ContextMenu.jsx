@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Modal, Popover } from '@mantine/core'
+import { Popover } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask, useProject } from '../hooks'
 import { TasksContext } from '../App'
@@ -56,7 +56,7 @@ const Submenu = ({ children, title, label }) => {
 }
 
 const ContextMenu = ({ project, task, target }) => {
-	const [state, dispatch] = useContext(TasksContext)
+	const [, dispatch] = useContext(TasksContext)
 
 	const { data: taskProject = {} } = useProject(task?.project_id, Boolean(task?.project_id))
 	const createProject = useCreateProject().mutate

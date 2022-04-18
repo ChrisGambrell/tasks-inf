@@ -15,7 +15,7 @@ const HotKeys = ({ className, keys = [], simple }) => (
 					key = simple ? '⇧' : 'Shift'
 					break
 				default:
-					key = key
+					break
 			}
 
 			return (

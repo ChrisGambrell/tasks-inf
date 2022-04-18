@@ -206,7 +206,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 
 	const navigate = useNavigate()
 
-	const [state, dispatch] = useContext(TasksContext)
+	const [, dispatch] = useContext(TasksContext)
 
 	const { data: project = {} } = useProject(spaceId, Boolean(space === 'project'))
 

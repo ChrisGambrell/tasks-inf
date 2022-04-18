@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from 'react'
 import { Badge, Checkbox } from '@mantine/core'
-import { useClickOutside, useHotkeys } from '@mantine/hooks'
+import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { TasksContext } from '../../App'
 import { useHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
@@ -77,7 +77,7 @@ const Task = ({
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'move-menu-body', 'toolbar-button'].some((id) => current.id && current.id === id)) {
+					if (['context-menu', 'move-menu-body', 'toolbar-button'].some((id) => current.id === id)) {
 						return
 					}
 					current = current.parentElement

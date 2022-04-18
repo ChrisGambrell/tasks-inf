@@ -1,9 +1,8 @@
 import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from '@mantine/core'
-import { useClickOutside } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useHeaders, useProject, useTasks } from '../hooks'
+import { useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
 import { DateSelect } from './Task'
@@ -23,7 +22,7 @@ const Project = ({ project }) => {
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'move-menu-body', 'toolbar-button'].some((id) => current.id && current.id === id)) {
+					if (['context-menu', 'move-menu-body', 'toolbar-button'].some((id) => current.id === id)) {
 						return
 					}
 					current = current.parentElement
