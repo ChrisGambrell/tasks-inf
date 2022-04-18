@@ -56,8 +56,6 @@ const View = ({ children }) => {
 					values['project_id'] =
 						window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'projects') + 1]
 
-				console.log(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1])
-
 				try {
 					let { id } = await createTask.mutateAsync(values)
 					dispatch({ type: 'set', payload: { selectedTask: [id], open: id, moveType: 'task' } })

@@ -91,8 +91,11 @@ const MoveMenu = () => {
 								color='text-green-500'
 								active={task.area_id === area.id}
 								data={
-									(project && { projectId: project.id, area_id: area.id }) ||
-									(task && { taskId: task.id, data: { area_id: area.id, project_id: null, header_id: null } }) ||
+									(state.moveType === 'project' && { projectId: project.id, area_id: area.id }) ||
+									(state.moveType === 'task' && {
+										taskId: task.id,
+										data: { area_id: area.id, project_id: null, header_id: null },
+									}) ||
 									{}
 								}
 							/>

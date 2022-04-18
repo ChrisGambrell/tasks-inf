@@ -8,7 +8,7 @@ const Area = () => {
 	const { areaId } = useParams()
 	const { data: area = {} } = useArea(Number(areaId))
 	const { data: projectsCollection = [] } = useProjects()
-	const { data: tasksCollection = [] } = useTasks()
+	const { data: tasksCollection = [] } = useTasks.all()
 
 	const projects = projectsCollection.filter((project) => project.area_id === area.id)
 	const tasks = tasksCollection.filter((task) => task.area_id === area.id)
@@ -18,7 +18,7 @@ const Area = () => {
 			<View.Header title={area.title} icon='box' color='text-green-500' actionButton />
 			<View.Content>
 				<ProjectList projects={projects} showWhen />
-				<TaskList tasks={tasks} />
+				<TaskList tasks={tasks} showLogged showWhen />
 			</View.Content>
 		</View>
 	) : (

@@ -9,7 +9,6 @@ const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false,
 	const [open, setOpen] = useState(false)
 
 	const handleOnChange = (date) => {
-		console.log('onchange')
 		setOpen(false)
 		onChange(date)
 	}
