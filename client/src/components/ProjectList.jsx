@@ -45,10 +45,6 @@ const Project = ({ project }) => {
 		if (state.selectedProject.includes(project.id)) dispatch({ type: 'reset' })
 	})
 
-	// const clickOutsideRef = useClickOutside(() => {
-	// 	if (state.selectedProject.includes(project.id)) dispatch({ type: 'reset' })
-	// })
-
 	return (
 		<div ref={clickOutsideRef}>
 			<div

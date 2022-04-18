@@ -158,10 +158,11 @@ const ContextMenu = ({ project, task, target }) => {
 				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
 				<DateSelect
+					title='Deadline'
 					value={(project && project.deadline) || (task && task.deadline)}
 					onChange={handleEditDeadline}
 					hideQuickDates
-					target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />}
+					target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} />}
 				/>
 				<Submenu label='Complete...'>
 					<Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={handleEditComplete} />

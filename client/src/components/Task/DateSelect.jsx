@@ -3,7 +3,6 @@ import { Popover } from '@mantine/core'
 import { Calendar } from '@mantine/dates'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 
-// TODO add support for updating the deadline
 const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false, target }) => {
 	const [open, setOpen] = useState(false)
 
