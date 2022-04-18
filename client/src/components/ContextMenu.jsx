@@ -85,6 +85,11 @@ const ContextMenu = ({ project, task, target }) => {
 		else if (task) editTask({ taskId: task.id, data: { when } })
 	}
 
+	const handleEditDeadline = (deadline) => {
+		if (project) console.log('ENHANCEMENT')
+		else if (task) editTask({ taskId: task.id, data: { deadline } })
+	}
+
 	const handleRemove = () => {
 		if (project) editProject({ projectId: project.id, data: { area_id: null } })
 		else if (task) editTask({ taskId: task.id, data: { project_id: null } })
@@ -137,7 +142,12 @@ const ContextMenu = ({ project, task, target }) => {
 				/>
 				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
-				<DateSelect target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />} />
+				<DateSelect
+					value={(project && project.deadline) || (task && task.deadline)}
+					onChange={handleEditDeadline}
+					hideQuickDates
+					target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />}
+				/>
 				<Submenu label='Complete...'>
 					<Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={handleEditComplete} />
 					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={() => console.log('TODO')} />
