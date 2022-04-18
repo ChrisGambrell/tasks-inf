@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Checkbox, Textarea, TextInput } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useEditTask } from '../../hooks'
+import { useEditTask, useProject } from '../../hooks'
 import { TasksContext } from '../../App'
 import { Tooltip } from '..'
 import { DateSelect } from '.'
@@ -18,9 +19,11 @@ const TaskDetails = ({ task }) => {
 	// const [newNotes, setNewNotes] = useState('')
 	// const [newCompleted, setNewCompleted] = useState(false)
 
-	const [state, dispatch] = useContext(TasksContext)
+	const navigate = useNavigate()
 
-	useEffect(() => console.log(state), [state, dispatch])
+	const [, dispatch] = useContext(TasksContext)
+
+	const { data: project = {} } = useProject(task.project_id, Boolean(task.project_id && !window.location.pathname.includes('/projects')))
 
 	const editTask = useEditTask().mutate
 
@@ -164,75 +167,86 @@ const TaskDetails = ({ task }) => {
 		)
 
 	return (
-		<div className='flex flex-col mt-8 mb-12 rounded p-4 space-y-1 border shadow-md'>
-			{/* Tooltips on toolbar buttons */}
-			<div className='flex space-x-2'>
-				<div className='flex-none'>
-					<Checkbox className='mt-2.5' size='xs' value={task.completed || false} onChange={handleEditCompleted} />
-				</div>
-				<div className='flex-grow flex flex-col'>
-					<TextInput
-						variant='unstyled'
-						type='text'
-						placeholder='New To-Do'
-						value={title || ''}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<Textarea
-						variant='unstyled'
-						placeholder='Notes'
-						value={notes || ''}
-						onChange={(e) => setNotes(e.target.value)}
-						autosize
-					/>
-					{/* {checklist?.length > 0 && <Checklist />} */}
-				</div>
-			</div>
-			<div className='flex justify-between items-end'>
-				<div className='flex flex-col space-y-2'>
-					{/* {tags?.length > 0 && <Tags />} */}
-					{task.when && <SelectedWhen />}
-					{task.deadline && <SelectedDeadline />}
-				</div>
-				<div className='flex justify-end space-x-2'>
-					{!task.when && (
-						<DateSelect
-							title='When'
-							value={task.when}
-							onChange={handleEditWhen}
-							target={<ToolbarButton label='When' icon='calendar-days' />}
-						/>
-					)}
-
-					{!task.deadline && (
-						<DateSelect
-							title='Deadline'
-							value={task.deadline}
-							onChange={handleEditDeadline}
-							hideQuickDates
-							target={<ToolbarButton label='Deadline' icon='flag' />}
-						/>
-					)}
-
-					{/* TODO:  */}
-					{/* {(!tags || tags?.length === 0) && showTagsInput ? (
+		<div className='mt-8 mb-12'>
+			<div className='flex flex-col rounded p-4 space-y-1 border shadow-md'>
+				{/* Tooltips on toolbar buttons */}
+				<div className='flex space-x-2'>
+					<div className='flex-none'>
+						<Checkbox className='mt-2.5' size='xs' value={task.completed || false} onChange={handleEditCompleted} />
+					</div>
+					<div className='flex-grow flex flex-col'>
 						<TextInput
-							classNames={{ input: 'border-none font-semibold' }}
-							variant='filled'
-							size='xs'
+							variant='unstyled'
 							type='text'
-							icon={<FA icon='tag' />}
-							placeholder='Tags'
+							placeholder='New To-Do'
+							value={title || ''}
+							onChange={(e) => setTitle(e.target.value)}
 						/>
-					) : (
-						<ToolbarButton label='Tags' icon='tag' onClick={() => setShowTagsInput(true)} />
-					)}
-					{(!checklist || checklist?.length === 0) && (
-						<ToolbarButton label='Checklist' icon='list-ul' onClick={() => console.log('TODO')} />
-					)}
-					 */}
+						<Textarea
+							variant='unstyled'
+							placeholder='Notes'
+							value={notes || ''}
+							onChange={(e) => setNotes(e.target.value)}
+							autosize
+						/>
+						{/* {checklist?.length > 0 && <Checklist />} */}
+					</div>
+				</div>
+				<div className='flex justify-between items-end'>
+					<div className='flex flex-col space-y-2'>
+						{/* {tags?.length > 0 && <Tags />} */}
+						{task.when && <SelectedWhen />}
+						{task.deadline && <SelectedDeadline />}
+					</div>
+					<div className='flex justify-end space-x-2'>
+						{!task.when && (
+							<DateSelect
+								title='When'
+								value={task.when}
+								onChange={handleEditWhen}
+								target={<ToolbarButton label='When' icon='calendar-days' />}
+							/>
+						)}
+
+						{!task.deadline && (
+							<DateSelect
+								title='Deadline'
+								value={task.deadline}
+								onChange={handleEditDeadline}
+								hideQuickDates
+								target={<ToolbarButton label='Deadline' icon='flag' />}
+							/>
+						)}
+
+						{/* TODO:  */}
+						{/* {(!tags || tags?.length === 0) && showTagsInput ? (
+					<TextInput
+						classNames={{ input: 'border-none font-semibold' }}
+						variant='filled'
+						size='xs'
+						type='text'
+						icon={<FA icon='tag' />}
+						placeholder='Tags'
+					/>
+				) : (
+					<ToolbarButton label='Tags' icon='tag' onClick={() => setShowTagsInput(true)} />
+				)}
+				{(!checklist || checklist?.length === 0) && (
+					<ToolbarButton label='Checklist' icon='list-ul' onClick={() => console.log('TODO')} />
+				)}
+				 */}
+					</div>
 				</div>
 			</div>
+			{task.project_id && !window.location.pathname.includes('/projects') && (
+				<div
+					className='flex items-center justify-end space-x-1 mt-1 mr-4 text-sm text-gray-400 hover:text-blue-400 select-none'
+					onClick={() => navigate(`/projects/${project.id}`)}>
+					<FA icon={project.icon} />
+					<div>{project.title}</div>
+					<FA icon='chevron-right' />
+				</div>
+			)}
 		</div>
 	)
 }
