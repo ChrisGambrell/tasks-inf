@@ -178,7 +178,6 @@ const View = ({ children }) => {
 			</div>
 
 			<div className='flex justify-center items-center h-10 px-2 border-t text-gray-500'>
-				{/* TODO */}
 				{toolbarButtons
 					.filter((button) => window.location.pathname.includes(button.show ? button.show : ''))
 					.map((button, i) => (
