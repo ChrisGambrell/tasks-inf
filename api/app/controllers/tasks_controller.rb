@@ -60,10 +60,13 @@ class TasksController < ApplicationController
       if params[:when]
         params[:when] = DateTime.parse(params[:when])
       end
+      if params[:deadline]
+        params[:deadline] = DateTime.parse(params[:deadline])
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def task_params
-      params.permit(:area_id, :project_id, :header_id, :title, :notes, :completed, :completed_when, :when)
+      params.permit(:area_id, :project_id, :header_id, :title, :notes, :completed, :completed_when, :when, :deadline)
     end
 end
