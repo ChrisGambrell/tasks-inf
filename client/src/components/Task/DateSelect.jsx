@@ -15,7 +15,6 @@ const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false,
 		<div>
 			<Popover
 				classNames={{ popover: 'bg-gray-800 text-gray-50', inner: 'p-1', root: 'w-full' }}
-				id='date-select'
 				target={<div onClick={() => setOpen(!open)}>{target}</div>}
 				radius='md'
 				shadow='xl'
@@ -37,7 +36,7 @@ const DateSelect = ({ title, value, onChange = () => {}, hideQuickDates = false,
 							</div>
 						</div>
 					)}
-					<div>
+					<div id='date-select'>
 						<Calendar
 							classNames={{
 								calendarHeaderControl: 'font-semibold text-gray-50 hover:bg-blue-500',

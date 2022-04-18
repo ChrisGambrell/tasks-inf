@@ -42,7 +42,7 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'date-select-body', 'move-menu-body', 'toolbar-button'].some((id) => current.id === id)) {
+					if (['context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) => current.id.includes(id))) {
 						return
 					}
 					current = current.parentElement
