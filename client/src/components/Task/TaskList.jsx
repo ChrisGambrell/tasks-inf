@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeaders, useDeleteHeader, useCreateProject, useTasks, useEditTask } from '../../hooks'
+import { TasksContext } from '../../App'
 import { Dropdown } from '..'
 import { Task } from '.'
 
 const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, noMargin = false, ...options }) => {
 	const navigate = useNavigate()
+
+	const [state, dispatch] = useContext(TasksContext)
 
 	const incompleteTasks = tasks.filter((task) => !task.completed)
 	const completedTasks = tasks.filter((task) => task.completed).sort((a, b) => b.completed_when - a.completed_when)
@@ -90,7 +93,13 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 											<Dropdown.Divider />
 
-											<Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />
+											<Dropdown.Item
+												label='Move'
+												icon='arrow-right'
+												onClick={() =>
+													dispatch({ type: 'set', payload: { moveType: 'header', moveId: Number(header_id) } })
+												}
+											/>
 											<Dropdown.Item
 												label='Convert to Project...'
 												icon='up-right-from-square'
