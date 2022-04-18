@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: %i[ show update destroy ]
+  before_action :parse_dates, only: [:create, :update]
 
   # GET /projects
   def index
@@ -44,6 +45,12 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:project_id])
     rescue ActiveRecord::RecordNotFound
       render json: { errors: ["Couldn't find Project with 'id'=#{params[:project_id]}"] }, status: :not_found
+    end
+
+    def parse_dates
+      if params[:when]
+        params[:when] = DateTime.parse(params[:when])
+      end
     end
 
     # Only allow a list of trusted parameters through.

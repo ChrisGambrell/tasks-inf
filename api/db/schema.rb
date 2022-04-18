@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_18_131416) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_18_143701) do
   create_table "areas", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -33,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_18_131416) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "area_id"
+    t.datetime "when"
     t.index ["area_id"], name: "index_projects_on_area_id"
   end
 
