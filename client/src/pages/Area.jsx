@@ -17,7 +17,7 @@ const Area = () => {
 		<View>
 			<View.Header title={area.title} icon='box' color='text-green-500' actionButton />
 			<View.Content>
-				<ProjectList projects={projects} />
+				<ProjectList projects={projects} showWhen />
 				<TaskList tasks={tasks} />
 			</View.Content>
 		</View>
