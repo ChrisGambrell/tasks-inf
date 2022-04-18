@@ -1,18 +1,19 @@
 import { useContext } from 'react'
 import { Modal } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useAreas, useProjects, useTask, useEditTask, useProject } from '../hooks'
+import { useAreas, useProjects, useTask, useEditTask, useProject, useEditProject } from '../hooks'
 import { TasksContext } from '../App'
 
 const Divider = () => <hr className='my-0.5 border-gray-600' />
 
 const Item = ({ label, icon, color = 'text-gray-300', active = false, data = {} }) => {
+	const editProject = useEditProject().mutate
 	const editTask = useEditTask().mutate
 
 	return (
 		<div
 			className='flex items-center space-x-2 px-1 rounded hover:bg-blue-500 select-none'
-			onClick={() => data.taskId && editTask(data)}>
+			onClick={() => (data.projectId && editProject(data)) || (data.taskId && editTask(data))}>
 			{icon && (
 				<div className='flex-none'>
 					<FA className={`w-4 h-4 ${color}`} icon={icon} />
@@ -46,33 +47,36 @@ const MoveMenu = () => {
 			id='move-menu'>
 			<div>
 				<div onClick={() => dispatch({ type: 'set', payload: { moveType: null, moveId: -1 } })}>
-					{state.moveType === 'task' && (
-						<div>
-							{/* TODO this will work when there is an inbox category */}
-							<Item label='Inbox' icon='inbox' active={task.category === 'inbox'} />
-							<Item
-								label={`No ${(task.area_id && 'Area') || (task.project_id && 'Project')}`}
-								icon='x'
-								active={!task.area_id && !task.project_id}
-								data={{ taskId: task.id, data: { area_id: null, project_id: null } }}
-							/>
+					{/* TODO this will work when there is an inbox category */}
+					{state.moveType === 'task' && <Item label='Inbox' icon='inbox' active={task.category === 'inbox'} />}
+					<Item
+						label={`No ${
+							(state.moveType === 'project' && 'Area') || (task.area_id && 'Area') || (task.project_id && 'Project')
+						}`}
+						icon='x'
+						active={!task.area_id && !task.project_id}
+						data={
+							(state.moveType === 'project' && { projectId: project.id, data: { area_id: null } }) ||
+							(state.moveType === 'task' && { taskId: task.id, data: { area_id: null, project_id: null } }) ||
+							{}
+						}
+					/>
 
-							<Divider />
+					<Divider />
 
-							{projects
-								.filter((project) => project.area_id === null)
-								.map((project) => (
-									<Item
-										key={project.id}
-										label={project.title}
-										icon={project.icon || 'circle'}
-										color='text-blue-400'
-										active={task.project_id === project.id}
-										data={{ taskId: task.id, data: { area_id: null, project_id: project.id, header_id: null } }}
-									/>
-								))}
-						</div>
-					)}
+					{state.moveType === 'task' &&
+						projects
+							.filter((project) => project.area_id === null)
+							.map((project) => (
+								<Item
+									key={project.id}
+									label={project.title}
+									icon={project.icon || 'circle'}
+									color='text-blue-400'
+									active={task.project_id === project.id}
+									data={{ taskId: task.id, data: { area_id: null, project_id: project.id, header_id: null } }}
+								/>
+							))}
 
 					{areas.map((area) => (
 						<div key={area.id}>
@@ -83,7 +87,11 @@ const MoveMenu = () => {
 								icon='box'
 								color='text-green-500'
 								active={task.area_id === area.id}
-								data={{ taskId: task.id, data: { area_id: area.id, project_id: null, header_id: null } }}
+								data={
+									(project && { projectId: project.id, area_id: area.id }) ||
+									(task && { taskId: task.id, data: { area_id: area.id, project_id: null, header_id: null } }) ||
+									{}
+								}
 							/>
 
 							{state.moveType === 'task' &&

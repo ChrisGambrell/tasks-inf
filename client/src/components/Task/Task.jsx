@@ -70,7 +70,7 @@ const Task = ({
 		['alt + T', () => handleHotKey(() => editTask({ taskId: task.id, data: { when: new Date() } }))],
 	])
 
-	function useOnClickOutside(ref, handler) {
+	const useOnClickOutside = (ref, handler) => {
 		useEffect(() => {
 			const listener = (event) => {
 				if (!ref.current || ref.current.contains(event.target)) return
