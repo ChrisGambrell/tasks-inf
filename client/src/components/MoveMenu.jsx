@@ -29,6 +29,7 @@ const Item = ({ label, icon, color = 'text-gray-300', active = false, data = {} 
 	)
 }
 
+// TODO move menu for headers
 const MoveMenu = () => {
 	const { data: areas = [] } = useAreas()
 	const { data: projects = [] } = useProjects()

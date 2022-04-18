@@ -25,7 +25,9 @@ const Dropdown = ({ color = 'text-gray-400', children, target }) => {
 			shadow='xl'
 			opened={open}
 			onClose={() => setOpen(false)}>
-			<div className='w-44 select-none text-sm'>{children}</div>
+			<div className='w-44 select-none text-sm' onClick={() => setOpen(false)}>
+				{children}
+			</div>
 		</Popover>
 	)
 }

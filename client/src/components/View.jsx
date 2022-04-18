@@ -206,6 +206,8 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 
 	const navigate = useNavigate()
 
+	const [state, dispatch] = useContext(TasksContext)
+
 	const { data: project = {} } = useProject(spaceId, Boolean(space === 'project'))
 
 	const editArea = useEditArea().mutate
@@ -273,7 +275,13 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 
 						<Dropdown.Divider />
 
-						{space === 'project' && <Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />}
+						{space === 'project' && (
+							<Dropdown.Item
+								label='Move'
+								icon='arrow-right'
+								onClick={() => dispatch({ type: 'set', payload: { moveType: 'project', moveId: project.id } })}
+							/>
+						)}
 						{space === 'project' && (
 							<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
 						)}
