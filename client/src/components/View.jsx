@@ -19,8 +19,11 @@ import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 const View = ({ children }) => {
+	const navigate = useNavigate()
+
 	const [state, dispatch] = useContext(TasksContext)
 
+	const createProject = useCreateProject()
 	const createHeader = useCreateHeader()
 	const createTask = useCreateTask()
 
@@ -98,7 +101,18 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Create a new project.</div>
 				</div>
 			),
-			onClick: () => console.log('TODO'),
+			onClick: async () => {
+				try {
+					let { id } = await createProject.mutateAsync({
+						area_id:
+							window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1],
+						icon: 'circle',
+					})
+					navigate(`/projects/${id}`)
+				} catch (err) {
+					console.error(err)
+				}
+			},
 			show: '/areas',
 		},
 		{
@@ -220,7 +234,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
 
 	const handleEditTitle = () => {
-		if (space === 'area') editArea({ area: spaceId, data: { title: debouncedTitle } })
+		if (space === 'area') editArea({ areaId: spaceId, data: { title: debouncedTitle } })
 		else if (space === 'project') editProject({ projectId: spaceId, data: { title: debouncedTitle } })
 	}
 
@@ -246,6 +260,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 							value={editableTitle}
 							onChange={(e) => setEditableTitle(e.target.value)}
 							placeholder={(space === 'area' && 'New Area') || (space === 'project' && 'New Project')}
+							autoFocus={editableTitle === ''}
 						/>
 					</div>
 				) : (

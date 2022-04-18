@@ -68,7 +68,7 @@ const Project = ({ project }) => {
 									state.selectedProject.includes(project.id) && 'bg-blue-200'
 								} ${state.contextedProject === project.id && 'bg-gray-200'}`}>
 								<div className='flex items-center space-x-2 ml-1 mr-1'>
-									<FA className='text-blue-600' icon={project.icon} />
+									<FA className='text-blue-600' icon={project.icon || 'circle-notch'} />
 									<div
 										className={`${!project.title ? 'text-gray-400' : 'font-semibold text-gray-800'} ${
 											!project.title && 'font-light'
