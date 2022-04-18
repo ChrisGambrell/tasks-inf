@@ -1,22 +1,50 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from '@mantine/core'
-import { useClickOutside } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useHeaders, useProject, useTasks } from '../hooks'
+import { useEditProject, useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
 import { DateSelect } from './Task'
 
+// TODO show when dates
 const Project = ({ project }) => {
 	const navigate = useNavigate()
+
+	const editProject = useEditProject().mutate
 
 	const { data: tasks = [] } = useTasks.all()
 	const numTasks = tasks.filter((task) => task.project_id === project.id).length
 
 	const [state, dispatch] = useContext(TasksContext)
 
-	const clickOutsideRef = useClickOutside(() => {
+	const useOnClickOutside = (ref, handler) => {
+		useEffect(() => {
+			const listener = (event) => {
+				if (!ref.current || ref.current.contains(event.target)) return
+
+				let current = event.srcElement
+				while (current.parentElement) {
+					if (['context-menu', 'date-select-body', 'move-menu-body', 'toolbar-button'].some((id) => current.id === id)) {
+						return
+					}
+					current = current.parentElement
+				}
+
+				handler(event)
+			}
+			document.addEventListener('mousedown', listener)
+			document.addEventListener('touchstart', listener)
+			return () => {
+				document.removeEventListener('mousedown', listener)
+				document.removeEventListener('touchstart', listener)
+			}
+		}, [ref, handler])
+	}
+
+	const clickOutsideRef = useRef()
+
+	useOnClickOutside(clickOutsideRef, () => {
 		if (state.selectedProject.includes(project.id)) dispatch({ type: 'reset' })
 	})
 
@@ -24,7 +52,7 @@ const Project = ({ project }) => {
 		<div ref={clickOutsideRef}>
 			<div
 				className='flex items-center select-none'
-				onClick={() => dispatch({ type: 'set', payload: { selectedProject: [project.id] } })}
+				onClick={() => dispatch({ type: 'set', payload: { selectedProject: [project.id], moveType: 'project' } })}
 				onDoubleClick={() => navigate(`/projects/${project.id}`)}>
 				<ContextMenu
 					project={project}
@@ -34,7 +62,7 @@ const Project = ({ project }) => {
 								<DateSelect
 									title='When'
 									value={project.when}
-									// TODO onChange={handleEditWhen}
+									onChange={(when) => editProject({ projectId: project.id, data: { when } })}
 									target={<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />}
 								/>
 							</div>
@@ -43,7 +71,7 @@ const Project = ({ project }) => {
 									state.selectedProject.includes(project.id) && 'bg-blue-200'
 								} ${state.contextedProject === project.id && 'bg-gray-200'}`}>
 								<div className='flex items-center space-x-2 ml-1 mr-1'>
-									<FA className='text-blue-600' icon={project.icon} />
+									<FA className='text-blue-600' icon={project.icon || 'circle-notch'} />
 									<div
 										className={`${!project.title ? 'text-gray-400' : 'font-semibold text-gray-800'} ${
 											!project.title && 'font-light'

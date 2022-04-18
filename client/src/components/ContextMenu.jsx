@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
-import { Modal, Popover } from '@mantine/core'
+import { Popover } from '@mantine/core'
+import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask, useProject } from '../hooks'
 import { TasksContext } from '../App'
@@ -56,7 +57,7 @@ const Submenu = ({ children, title, label }) => {
 }
 
 const ContextMenu = ({ project, task, target }) => {
-	const [, dispatch] = useContext(TasksContext)
+	const [state, dispatch] = useContext(TasksContext)
 
 	const { data: taskProject = {} } = useProject(task?.project_id, Boolean(task?.project_id))
 	const createProject = useCreateProject().mutate
@@ -80,8 +81,13 @@ const ContextMenu = ({ project, task, target }) => {
 	}
 
 	const handleEditWhen = (when) => {
-		if (project) console.log('ENHANCEMENT')
+		if (project) editProject({ projectId: project.id, data: { when } })
 		else if (task) editTask({ taskId: task.id, data: { when } })
+	}
+
+	const handleEditDeadline = (deadline) => {
+		if (project) console.log('ENHANCEMENT')
+		else if (task) editTask({ taskId: task.id, data: { deadline } })
 	}
 
 	const handleRemove = () => {
@@ -94,6 +100,29 @@ const ContextMenu = ({ project, task, target }) => {
 		else if (task) deleteTask(task.id)
 	}
 
+	const showMove = () => {
+		if (project) dispatch({ type: 'set', payload: { moveId: project.id } })
+		else if (task) dispatch({ type: 'set', payload: { moveId: task.id } })
+		setOpen(false)
+	}
+
+	const handleHotKey = (event) => {
+		return (project && state.contextedProject === project.id) || (task && state.contextedTask === task.id)
+			? event()
+			: (project && state.contextedProject === -1 && state.selectedProject.includes(project.id)) ||
+			  (task && state.contextedTask === -1 && state.selectedTask.includes(task.id))
+			? event()
+			: null
+	}
+
+	useHotkeys([
+		['alt + shift + M', () => state.moveType && showMove()],
+		['alt + D', () => handleHotKey(() => handleCreate())],
+		['alt + K', () => handleHotKey(() => handleEditComplete())],
+		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
+		['alt + T', () => handleHotKey(() => handleEditWhen(new Date()))],
+	])
+
 	return (
 		<Popover
 			classNames={{ body: 'w-60 border-gray-300', popover: 'bg-gray-100', inner: 'p-1', root: 'w-full' }}
@@ -103,7 +132,10 @@ const ContextMenu = ({ project, task, target }) => {
 						e.preventDefault()
 						dispatch({
 							type: 'set',
-							payload: (project && { contextedProject: project.id }) || (task && { contextedTask: task.id }) || {},
+							payload:
+								(project && { contextedProject: project.id, moveType: 'project' }) ||
+								(task && { contextedTask: task.id, moveType: 'task' }) ||
+								{},
 						})
 						setOpen(true)
 					}}>
@@ -117,15 +149,21 @@ const ContextMenu = ({ project, task, target }) => {
 				dispatch({ type: 'set', payload: (project && { contextedProject: -1 }) || (task && { contextedTask: -1 }) || {} })
 				setOpen(false)
 			}}>
-			<div className='flex flex-col select-none text-sm'>
+			<div className='flex flex-col select-none text-sm' id='context-menu'>
 				<DateSelect
 					value={(project && project.when) || (task && task.when)}
 					onChange={handleEditWhen}
 					target={<Item label='When...' hotKeys={['alt', 'S']} />}
 				/>
-				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={() => console.log('TODO')} />
+				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} />
-				<DateSelect target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} onClick={() => console.log('TODO')} />} />
+				<DateSelect
+					title='Deadline'
+					value={(project && project.deadline) || (task && task.deadline)}
+					onChange={handleEditDeadline}
+					hideQuickDates
+					target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} />}
+				/>
 				<Submenu label='Complete...'>
 					<Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={handleEditComplete} />
 					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={() => console.log('TODO')} />

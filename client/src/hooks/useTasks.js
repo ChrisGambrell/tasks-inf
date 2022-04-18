@@ -20,6 +20,7 @@ const useAll = () =>
 				...task,
 				when: task.when ? new Date(task.when) : null,
 				completed_when: task.completed_when ? new Date(task.completed_when) : null,
+				deadline: task.deadline ? new Date(task.deadline) : null,
 				created_at: new Date(task.created_at),
 				updated_at: new Date(task.updated_at),
 			}))
@@ -33,6 +34,7 @@ const useComplete = () =>
 				...task,
 				when: task.when ? new Date(task.when) : null,
 				completed_when: task.completed_when ? new Date(task.completed_when) : null,
+				deadline: task.deadline ? new Date(task.deadline) : null,
 				created_at: new Date(task.created_at),
 				updated_at: new Date(task.updated_at),
 			}))
@@ -46,6 +48,7 @@ const useIncomplete = () =>
 				...task,
 				when: task.when ? new Date(task.when) : null,
 				completed_when: task.completed_when ? new Date(task.completed_when) : null,
+				deadline: task.deadline ? new Date(task.deadline) : null,
 				created_at: new Date(task.created_at),
 				updated_at: new Date(task.updated_at),
 			}))

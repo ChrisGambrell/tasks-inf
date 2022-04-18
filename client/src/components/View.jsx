@@ -19,8 +19,11 @@ import { Dropdown, HotKeys, Tooltip } from '.'
 import { DateSelect } from './Task'
 
 const View = ({ children }) => {
-	const [, dispatch] = useContext(TasksContext)
+	const navigate = useNavigate()
 
+	const [state, dispatch] = useContext(TasksContext)
+
+	const createProject = useCreateProject()
 	const createHeader = useCreateHeader()
 	const createTask = useCreateTask()
 
@@ -57,7 +60,7 @@ const View = ({ children }) => {
 
 				try {
 					let { id } = await createTask.mutateAsync(values)
-					dispatch({ type: 'set', payload: { selectedTask: [id], open: id } })
+					dispatch({ type: 'set', payload: { selectedTask: [id], open: id, moveType: 'task' } })
 				} catch (err) {
 					console.error(err)
 				}
@@ -98,7 +101,18 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Create a new project.</div>
 				</div>
 			),
-			onClick: () => console.log('TODO'),
+			onClick: async () => {
+				try {
+					let { id } = await createProject.mutateAsync({
+						area_id:
+							window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1],
+						icon: 'circle',
+					})
+					navigate(`/projects/${id}`)
+				} catch (err) {
+					console.error(err)
+				}
+			},
 			show: '/areas',
 		},
 		{
@@ -119,7 +133,7 @@ const View = ({ children }) => {
 		},
 		{
 			icon: 'arrow-right',
-			disabled: true,
+			disabled: state.selectedProject.length === 0 && state.selectedTask.length === 0,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -131,7 +145,15 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Move selected items to another list.</div>
 				</div>
 			),
-			onClick: () => console.log('TODO'),
+			onClick: () =>
+				dispatch({
+					type: 'set',
+					payload: {
+						moveId:
+							(state.selectedProject.length > 0 && state.selectedProject[0]) ||
+							(state.selectedTask.length > 0 && state.selectedTask[0]),
+					},
+				}),
 		},
 		{
 			icon: 'magnifying-glass',
@@ -162,7 +184,7 @@ const View = ({ children }) => {
 				{toolbarButtons
 					.filter((button) => window.location.pathname.includes(button.show ? button.show : ''))
 					.map((button, i) => (
-						<div key={i}>
+						<div key={i} id='toolbar-button'>
 							{button.tooltip ? (
 								<Tooltip
 									className='w-64'
@@ -191,12 +213,14 @@ const View = ({ children }) => {
 	)
 }
 
-const Header = ({ title, description, actionButton = false, icon, color = 'text-gray-400' }) => {
+const Header = ({ title, description, when, actionButton = false, icon, color = 'text-gray-400' }) => {
 	const space =
 		(window.location.pathname.includes('/areas') && 'area') || (window.location.pathname.includes('/projects') && 'project') || null
 	const spaceId = Number(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === `${space}s`) + 1])
 
 	const navigate = useNavigate()
+
+	const [, dispatch] = useContext(TasksContext)
 
 	const { data: project = {} } = useProject(spaceId, Boolean(space === 'project'))
 
@@ -210,7 +234,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
 
 	const handleEditTitle = () => {
-		if (space === 'area') editArea({ area: spaceId, data: { title: debouncedTitle } })
+		if (space === 'area') editArea({ areaId: spaceId, data: { title: debouncedTitle } })
 		else if (space === 'project') editProject({ projectId: spaceId, data: { title: debouncedTitle } })
 	}
 
@@ -236,6 +260,7 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 							value={editableTitle}
 							onChange={(e) => setEditableTitle(e.target.value)}
 							placeholder={(space === 'area' && 'New Area') || (space === 'project' && 'New Project')}
+							autoFocus={editableTitle === ''}
 						/>
 					</div>
 				) : (
@@ -246,12 +271,12 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 						{space === 'project' && (
 							<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
 						)}
-						{/* TODO add date to send to DateSelect */}
-						{/* TODO send it a taskId */}
 						{space === 'project' && (
 							<DateSelect
 								title='When'
-								target={<Dropdown.Item label='When' icon='calendar-days' onClick={() => console.log('TODO')} />}
+								value={project.when}
+								onChange={(when) => editProject({ projectId: project.id, data: { when } })}
+								target={<Dropdown.Item label='When' icon='calendar-days' />}
 							/>
 						)}
 						<Dropdown.Item label='Add Tags' icon='tag' onClick={() => console.log('TODO')} />
@@ -265,7 +290,13 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 
 						<Dropdown.Divider />
 
-						{space === 'project' && <Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />}
+						{space === 'project' && (
+							<Dropdown.Item
+								label='Move'
+								icon='arrow-right'
+								onClick={() => dispatch({ type: 'set', payload: { moveType: 'project', moveId: project.id } })}
+							/>
+						)}
 						{space === 'project' && (
 							<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
 						)}
@@ -281,6 +312,50 @@ const Header = ({ title, description, actionButton = false, icon, color = 'text-
 					</Dropdown>
 				)}
 			</div>
+			{when && (
+				<div className='border-y py-0.5'>
+					<DateSelect
+						title='When'
+						value={project.when}
+						onChange={(when) => editProject({ projectId: project.id, data: { when } })}
+						target={
+							<div className='group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+								<FA
+									className={
+										project.when.toLocaleDateString() === new Date().toLocaleDateString()
+											? 'text-yellow-400'
+											: 'text-red-500'
+									}
+									icon={project.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
+								/>
+								<div className='font-semibold'>
+									{project.when.toLocaleDateString() === new Date().toLocaleDateString()
+										? 'Today'
+										: project.when.toLocaleDateString() ===
+										  new Date(
+												new Date().getFullYear(),
+												new Date().getMonth(),
+												new Date().getDate() + 1
+										  ).toLocaleDateString()
+										? 'Tomorrow'
+										: project.when.toLocaleDateString(
+												'en-us',
+												project.when <
+													new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+													? { weekday: 'long' }
+													: { weekday: 'short', month: 'long', day: 'numeric' }
+										  )}
+								</div>
+								<FA
+									className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+									icon='x'
+									onClick={() => editProject({ projectId: project.id, data: { when: null } })}
+								/>
+							</div>
+						}
+					/>
+				</div>
+			)}
 			{description && <div className='text-sm text-gray-700'>{description}</div>}
 		</div>
 	)

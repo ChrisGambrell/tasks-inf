@@ -24,7 +24,7 @@ const QuickFindWrapper = ({ children }) => {
 
 	return (
 		<SpotlightProvider
-			classNames={{ spotlight: 'w-80', overlayy: 'backdrop-filter-none opacity-0' }}
+			classNames={{ spotlight: 'w-80' }}
 			actions={menuItems.reduce(
 				(arr, menuItem) => arr.concat(menuItem.map((menuItem) => ({ ...menuItem, onTrigger: () => navigate(menuItem.url) }))),
 				[]
