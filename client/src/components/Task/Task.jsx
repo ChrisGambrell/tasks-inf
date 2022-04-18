@@ -64,10 +64,6 @@ const Task = ({
 	useHotkeys([
 		['backspace', () => handleHotKey(() => deleteTask(task.id))],
 		['escape', () => dispatch({ type: 'reset' })],
-		['alt + D', () => handleHotKey(() => createTask(task))],
-		['alt + K', () => handleHotKey(() => editTask({ taskId: task.id, data: { completed: true } }))],
-		['alt + R', () => handleHotKey(() => editTask({ taskId: task.id, data: { when: null } }))],
-		['alt + T', () => handleHotKey(() => editTask({ taskId: task.id, data: { when: new Date() } }))],
 	])
 
 	const useOnClickOutside = (ref, handler) => {

@@ -106,7 +106,22 @@ const ContextMenu = ({ project, task, target }) => {
 		setOpen(false)
 	}
 
-	useHotkeys([['alt + shift + M', () => state.moveType && showMove()]])
+	const handleHotKey = (event) => {
+		return (project && state.contextedProject === project.id) || (task && state.contextedTask === task.id)
+			? event()
+			: (project && state.contextedProject === -1 && state.selectedProject.includes(project.id)) ||
+			  (task && state.contextedTask === -1 && state.selectedTask.includes(task.id))
+			? event()
+			: null
+	}
+
+	useHotkeys([
+		['alt + shift + M', () => state.moveType && showMove()],
+		['alt + D', () => handleHotKey(() => handleCreate())],
+		['alt + K', () => handleHotKey(() => handleEditComplete())],
+		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
+		['alt + T', () => handleHotKey(() => handleEditWhen(new Date()))],
+	])
 
 	return (
 		<Popover
