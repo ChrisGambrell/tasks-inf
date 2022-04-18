@@ -46,6 +46,8 @@ const MoveMenu = () => {
 			withCloseButton={false}
 			id='move-menu'>
 			<div>
+				<div className='flex justify-center my-0.5 font-semibold text-sm text-gray-400'>Move</div>
+				{/* TODO search bar */}
 				<div onClick={() => dispatch({ type: 'set', payload: { moveType: null, moveId: -1 } })}>
 					{/* TODO this will work when there is an inbox category */}
 					{state.moveType === 'task' && <Item label='Inbox' icon='inbox' active={task.category === 'inbox'} />}

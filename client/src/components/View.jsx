@@ -119,7 +119,7 @@ const View = ({ children }) => {
 		},
 		{
 			icon: 'arrow-right',
-			disabled: state.selectedTask.length === 0,
+			disabled: state.selectedProject.length === 0 && state.selectedTask.length === 0,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -131,7 +131,15 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Move selected items to another list.</div>
 				</div>
 			),
-			onClick: () => dispatch({ type: 'set', payload: { moveId: state.selectedTask[0] } }),
+			onClick: () =>
+				dispatch({
+					type: 'set',
+					payload: {
+						moveId:
+							(state.selectedProject.length > 0 && state.selectedProject[0]) ||
+							(state.selectedTask.length > 0 && state.selectedTask[0]),
+					},
+				}),
 		},
 		{
 			icon: 'magnifying-glass',
