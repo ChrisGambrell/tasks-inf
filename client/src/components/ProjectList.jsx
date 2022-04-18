@@ -22,7 +22,6 @@ const WhenDisplay = ({ when }) => {
 	) : null
 }
 
-// TODO show when dates
 const Project = ({ project, showArea = false, showComplete = false, showWhen = false }) => {
 	const navigate = useNavigate()
 

@@ -1,14 +1,25 @@
-import { useState } from 'react'
-import { useHeaders, useDeleteHeader } from '../../hooks'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useHeaders, useDeleteHeader, useCreateProject, useTasks, useEditTask } from '../../hooks'
+import { TasksContext } from '../../App'
 import { Dropdown } from '..'
 import { Task } from '.'
 
 const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = false, noMargin = false, ...options }) => {
+	const navigate = useNavigate()
+
+	const [state, dispatch] = useContext(TasksContext)
+
 	const incompleteTasks = tasks.filter((task) => !task.completed)
 	const completedTasks = tasks.filter((task) => task.completed).sort((a, b) => b.completed_when - a.completed_when)
 
+	const createProject = useCreateProject().mutateAsync
+
 	const { data: headersCollection = [] } = useHeaders()
 	const headersForProject = headersCollection.filter((header) => header.project_id === projectId)
+
+	const { data: tasksCollection = [] } = useTasks()
+	const editTask = useEditTask().mutateAsync
 
 	const deleteHeader = useDeleteHeader().mutate
 
@@ -46,6 +57,20 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
+	const handleConvertToProject = async (headerId) => {
+		let header = headersCollection.find((header) => header.id == headerId)
+		let tasks = tasksCollection.filter((task) => task.header_id === header.id)
+
+		try {
+			let { id } = await createProject({ ...header, icon: 'circle' })
+			await tasks.forEach(async (task) => await editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
+			await deleteHeader(header.id)
+			navigate(`/projects/${id}`)
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
 	return (
 		<div className={`${!noMargin && 'mt-8'}`}>
 			<div>
@@ -68,11 +93,17 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 											<Dropdown.Divider />
 
-											<Dropdown.Item label='Move' icon='arrow-right' onClick={() => console.log('TODO')} />
+											<Dropdown.Item
+												label='Move'
+												icon='arrow-right'
+												onClick={() =>
+													dispatch({ type: 'set', payload: { moveType: 'header', moveId: Number(header_id) } })
+												}
+											/>
 											<Dropdown.Item
 												label='Convert to Project...'
 												icon='up-right-from-square'
-												onClick={() => console.log('TODO')}
+												onClick={() => handleConvertToProject(header_id)}
 											/>
 											<Dropdown.Item label='Delete' icon='trash' onClick={() => deleteHeader(Number(header_id))} />
 										</Dropdown>
