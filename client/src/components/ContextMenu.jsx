@@ -1,8 +1,20 @@
 import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useCreateProject, useEditProject, useDeleteProject, useCreateTask, useEditTask, useDeleteTask, useProject } from '../hooks'
+import {
+	useHeaders,
+	useCreateHeader,
+	useProject,
+	useCreateProject,
+	useEditProject,
+	useDeleteProject,
+	useTasks,
+	useCreateTask,
+	useEditTask,
+	useDeleteTask,
+} from '../hooks'
 import { TasksContext } from '../App'
 import { HotKeys } from '.'
 import { DateSelect } from './Task'
@@ -61,23 +73,52 @@ const Submenu = ({ children, title, label, disabled }) => {
 }
 
 const ContextMenu = ({ project, header, task, target }) => {
+	const navigate = useNavigate()
+
 	const [state, dispatch] = useContext(TasksContext)
 
 	const { data: taskProject = {} } = useProject(task?.project_id, Boolean(task?.project_id))
-	const createProject = useCreateProject().mutate
+	const createProject = useCreateProject().mutateAsync
 	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
 
+	const { data: headers = [] } = useHeaders()
+	const createHeader = useCreateHeader().mutateAsync
+
+	const { data: tasks = [] } = useTasks()
 	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
 
 	const [open, setOpen] = useState(false)
 
-	const handleCreate = () => {
-		if (project) createProject(project)
-		else if (header) console.log('todo')
-		else if (task) createTask(task)
+	const handleDuplicate = async () => {
+		if (project) {
+			try {
+				let { id: project_id } = await createProject(project)
+				tasks
+					.filter((task) => task.project_id === project.id && task.header_id === null)
+					.forEach((task) => createTask({ ...task, project_id }))
+
+				headers
+					.filter((header) => header.project_id === project.id)
+					.forEach(async (header) => {
+						let { id: header_id } = await createHeader({ ...header, project_id })
+						tasks
+							.filter((task) => task.project_id === project.id && task.header_id === header.id)
+							.forEach((task) => createTask({ ...task, project_id, header_id }))
+					})
+			} catch (err) {
+				console.error(err)
+			}
+		} else if (header) {
+			try {
+				let { id } = await createHeader(header)
+				tasks.filter((task) => task.header_id === header.id).forEach((task) => createTask({ ...task, header_id: id }))
+			} catch (err) {
+				console.error(err)
+			}
+		} else if (task) createTask(task)
 	}
 
 	const handleEditComplete = () => {
@@ -96,11 +137,16 @@ const ContextMenu = ({ project, header, task, target }) => {
 		else if (task) editTask({ taskId: task.id, data: { deadline } })
 	}
 
-	const handleConvertToProject = () => {
+	const handleConvertToProject = async () => {
 		if (header) console.log('todo')
 		else if (task) {
-			createProject({ ...task, description: task.notes, area_id: taskProject.area_id })
-			deleteTask(task.id)
+			try {
+				let { id } = await createProject({ ...task, description: task.notes, area_id: taskProject.area_id, icon: 'circle' })
+				deleteTask(task.id)
+				navigate(`/projects/${id}`)
+			} catch (err) {
+				console.error(err)
+			}
 		}
 	}
 
@@ -133,7 +179,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 
 	useHotkeys([
 		['alt + shift + M', () => state.moveType && showMove()],
-		['alt + D', () => handleHotKey(() => handleCreate())],
+		['alt + D', () => handleHotKey(() => handleDuplicate())],
 		['alt + K', () => handleHotKey(() => handleEditComplete())],
 		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
 		['alt + T', () => handleHotKey(() => handleEditWhen(new Date()))],
@@ -219,7 +265,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				<Item
 					label={`Duplicate ${(project && 'Project') || (header && 'Header') || (task && 'To-Do')}...`}
 					hotKeys={['alt', 'D']}
-					onClick={handleCreate}
+					onClick={handleDuplicate}
 				/>
 				{(header || task) && <Item label='Convert to Project...' onClick={handleConvertToProject} />}
 				<Item label={`Delete ${(project && 'Project') || (header && 'Heading') || (task && 'To-Do')}...`} onClick={handleDelete} />
