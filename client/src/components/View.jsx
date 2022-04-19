@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Modal, Radio, RadioGroup } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
 import AutoSizeInput from 'react-input-autosize'
@@ -359,7 +360,49 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 	)
 }
 
-const Content = ({ children }) => <>{children}</>
+const Content = ({ children }) => {
+	const [state, dispatch] = useContext(TasksContext)
+	const [remainingAction, setRemainingAction] = useState('complete')
+
+	const handleAction = () => {
+		console.log(remainingAction)
+		dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })
+	}
+
+	return (
+		<>
+			<Modal
+				id='complete-modal'
+				opened={state.completedMenuType && state.completedMenuId !== -1}
+				onClose={() => dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })}
+				withCloseButton={false}>
+				<div className='font-semibold'>Are you sure you want to archive this heading?</div>
+				<div className='mt-2 text-sm'>
+					This heading still contains TODO to-dos that you haven't completed. What would you like to do with them?
+				</div>
+				<div className='my-2'>
+					<RadioGroup value={remainingAction} onChange={setRemainingAction}>
+						<Radio value='complete' label='Mark remaining to-dos as completed' />
+						<Radio value='cancel' label='Mark remaining to-dos as canceled' />
+					</RadioGroup>
+				</div>
+				<div className='flex justify-end mt-6 space-x-2'>
+					<div
+						className='flex justify-center w-24 rounded border border-gray-200 select-none active:bg-gray-100'
+						onClick={() => dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })}>
+						Cancel
+					</div>
+					<div
+						className='flex justify-center w-24 rounded border border-gray-200 bg-blue-500 text-white select-none active:bg-blue-600'
+						onClick={handleAction}>
+						OK
+					</div>
+				</div>
+			</Modal>
+			{children}
+		</>
+	)
+}
 
 View.Header = Header
 View.Content = Content

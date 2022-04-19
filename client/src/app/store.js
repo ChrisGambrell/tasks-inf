@@ -8,6 +8,8 @@ const initialState = {
 	contextedTask: -1,
 	moveType: null,
 	moveId: -1,
+	completedMenuType: null,
+	completedMenuId: -1,
 }
 
 const reducer = (state, action) => {

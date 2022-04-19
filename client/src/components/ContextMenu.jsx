@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Popover } from '@mantine/core'
+import { Modal, Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import {
@@ -129,7 +129,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 
 	const handleEditComplete = () => {
 		if (project) console.log('ENHANCEMENT')
-		else if (header) console.log('todo')
+		else if (header) dispatch({ type: 'set', payload: { completedMenuType: 'header', completedMenuId: header.id } })
 		else if (task) editTask({ taskId: task.id, data: { completed: true } })
 	}
 

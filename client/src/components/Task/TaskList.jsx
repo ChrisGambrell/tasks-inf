@@ -57,6 +57,7 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 					return group
 				}, {})
 		  )
+	// console.log(headers)
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
@@ -84,7 +85,11 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) => current.id.includes(id))) {
+					if (
+						['complete-modal', 'context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) =>
+							current.id.includes(id)
+						)
+					) {
 						return
 					}
 					current = current.parentElement

@@ -73,9 +73,13 @@ const Task = ({
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) => current.id.includes(id))) {
+					if (
+						['complete-modal', 'context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) =>
+							current.id.includes(id)
+						)
+					)
 						return
-					}
+
 					current = current.parentElement
 				}
 
@@ -94,7 +98,9 @@ const Task = ({
 
 	useOnClickOutside(clickOutsideRef, () => {
 		if (state.selectedTask.includes(task.id) && state.open === task.id) dispatch({ type: 'set', payload: { open: -1 } })
-		else if (state.selectedTask.includes(task.id)) dispatch({ type: 'reset' })
+		else if (state.selectedTask.includes(task.id)) {
+			dispatch({ type: 'reset' })
+		}
 	})
 
 	return (
