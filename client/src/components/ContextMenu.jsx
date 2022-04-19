@@ -4,6 +4,7 @@ import { Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import {
+	useArea,
 	useHeaders,
 	useCreateHeader,
 	useProject,
@@ -78,15 +79,18 @@ const ContextMenu = ({ project, header, task, target }) => {
 	const [state, dispatch] = useContext(TasksContext)
 
 	const { data: taskProject = {} } = useProject(task?.project_id, Boolean(task?.project_id))
+	const { data: headerProject = {} } = useProject(header?.project_id, Boolean(header?.project_id))
 	const createProject = useCreateProject().mutateAsync
 	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
+
+	const { data: headerArea = {} } = useArea(headerProject?.area_id, Boolean(headerProject?.area_id))
 
 	const { data: headers = [] } = useHeaders()
 	const createHeader = useCreateHeader().mutateAsync
 
 	const { data: tasks = [] } = useTasks()
-	const createTask = useCreateTask().mutate
+	const createTask = useCreateTask()
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
 
@@ -98,7 +102,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				let { id: project_id } = await createProject(project)
 				tasks
 					.filter((task) => task.project_id === project.id && task.header_id === null)
-					.forEach((task) => createTask({ ...task, project_id }))
+					.forEach((task) => createTask.mutate({ ...task, project_id }))
 
 				headers
 					.filter((header) => header.project_id === project.id)
@@ -106,7 +110,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 						let { id: header_id } = await createHeader({ ...header, project_id })
 						tasks
 							.filter((task) => task.project_id === project.id && task.header_id === header.id)
-							.forEach((task) => createTask({ ...task, project_id, header_id }))
+							.forEach((task) => createTask.mutate({ ...task, project_id, header_id }))
 					})
 			} catch (err) {
 				console.error(err)
@@ -114,11 +118,11 @@ const ContextMenu = ({ project, header, task, target }) => {
 		} else if (header) {
 			try {
 				let { id } = await createHeader(header)
-				tasks.filter((task) => task.header_id === header.id).forEach((task) => createTask({ ...task, header_id: id }))
+				tasks.filter((task) => task.header_id === header.id).forEach((task) => createTask.mutate({ ...task, header_id: id }))
 			} catch (err) {
 				console.error(err)
 			}
-		} else if (task) createTask(task)
+		} else if (task) createTask.mutate(task)
 	}
 
 	const handleEditComplete = () => {
@@ -138,8 +142,17 @@ const ContextMenu = ({ project, header, task, target }) => {
 	}
 
 	const handleConvertToProject = async () => {
-		if (header) console.log('todo')
-		else if (task) {
+		if (header) {
+			try {
+				let { id } = await createProject({ ...header, icon: 'circle', area_id: headerArea.id ? headerArea.id : null })
+				await tasks
+					.filter((task) => task.header_id === header.id)
+					.forEach((task) => createTask.mutateAsync({ ...task, header_id: null, project_id: id }))
+				navigate(`/projects/${id}`)
+			} catch (err) {
+				console.error(err)
+			}
+		} else if (task) {
 			try {
 				let { id } = await createProject({ ...task, description: task.notes, area_id: taskProject.area_id, icon: 'circle' })
 				deleteTask(task.id)
