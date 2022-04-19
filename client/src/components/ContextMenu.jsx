@@ -7,6 +7,7 @@ import {
 	useArea,
 	useHeaders,
 	useCreateHeader,
+	useDeleteHeader,
 	useProject,
 	useCreateProject,
 	useEditProject,
@@ -88,6 +89,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 
 	const { data: headers = [] } = useHeaders()
 	const createHeader = useCreateHeader().mutateAsync
+	const deleteHeader = useDeleteHeader().mutate
 
 	const { data: tasks = [] } = useTasks()
 	const createTask = useCreateTask()
@@ -170,13 +172,13 @@ const ContextMenu = ({ project, header, task, target }) => {
 
 	const handleDelete = () => {
 		if (project) deleteProject(project.id)
-		else if (header) console.log('todo')
+		else if (header) deleteHeader(header.id)
 		else if (task) deleteTask(task.id)
 	}
 
 	const showMove = () => {
 		if (project) dispatch({ type: 'set', payload: { moveId: project.id } })
-		else if (header) console.log('todo')
+		else if (header) dispatch({ type: 'set', payload: { moveId: header.id } })
 		else if (task) dispatch({ type: 'set', payload: { moveId: task.id } })
 		setOpen(false)
 	}
