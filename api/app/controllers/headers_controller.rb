@@ -27,6 +27,12 @@ class HeadersController < ApplicationController
   # PATCH/PUT /headers/1
   def update
     if @header.update(header_params)
+      if params['completed'] and params['completed'] == true
+        @header.update(completed_when: Time.current)
+      elsif params['completed'] and params['completed'] == false
+        @header.update(completed_when: nil)
+      end
+
       render json: @header
     else
       render json: { errors: @header.errors.full_messages }, status: :unprocessable_entity
@@ -48,6 +54,6 @@ class HeadersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def header_params
-      params.permit(:project_id, :title)
+      params.permit(:project_id, :title, :completed)
     end
 end

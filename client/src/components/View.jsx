@@ -8,11 +8,15 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import {
 	useEditArea,
 	useDeleteArea,
+	useHeaders,
 	useCreateHeader,
+	useEditHeader,
 	useProject,
 	useCreateProject,
 	useEditProject,
+	useTasks,
 	useCreateTask,
+	useEditTask,
 	useDeleteProject,
 } from '../hooks'
 import { TasksContext } from '../App'
@@ -362,10 +366,23 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 
 const Content = ({ children }) => {
 	const [state, dispatch] = useContext(TasksContext)
+
+	const { data: headers = [] } = useHeaders()
+	const editHeader = useEditHeader().mutate
+
+	const { data: tasks = [] } = useTasks()
+	const editTask = useEditTask().mutate
+
 	const [remainingAction, setRemainingAction] = useState('complete')
 
 	const handleAction = () => {
-		console.log(remainingAction)
+		if (remainingAction === 'complete') {
+			editHeader({ headerId: state.completedMenuId, data: { completed: true } })
+			tasks
+				.filter((task) => task.header_id === state.completedMenuId)
+				.forEach((task) => editTask({ taskId: task.id, data: { completed: true } }))
+		} else if (remainingAction === 'cancel') console.log('todo')
+
 		dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })
 	}
 
