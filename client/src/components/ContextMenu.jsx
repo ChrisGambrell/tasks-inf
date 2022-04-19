@@ -149,7 +149,8 @@ const ContextMenu = ({ project, header, task, target }) => {
 				let { id } = await createProject({ ...header, icon: 'circle', area_id: headerArea.id ? headerArea.id : null })
 				await tasks
 					.filter((task) => task.header_id === header.id)
-					.forEach((task) => createTask.mutateAsync({ ...task, header_id: null, project_id: id }))
+					.forEach((task) => editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
+				await deleteHeader(header.id)
 				navigate(`/projects/${id}`)
 			} catch (err) {
 				console.error(err)

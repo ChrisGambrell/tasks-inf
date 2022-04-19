@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useHeaders, useDeleteHeader, useCreateProject, useTasks, useEditTask } from '../../hooks'
+import { useAreas, useHeaders, useDeleteHeader, useProject, useCreateProject, useTasks, useCreateTask, useEditTask } from '../../hooks'
 import { TasksContext } from '../../App'
 import { ContextMenu, Dropdown } from '..'
 import { Task } from '.'
@@ -13,6 +13,9 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 	const incompleteTasks = tasks.filter((task) => !task.completed)
 	const completedTasks = tasks.filter((task) => task.completed).sort((a, b) => b.completed_when - a.completed_when)
 
+	const { data: areasCollection = [] } = useAreas()
+
+	const { data: project = {} } = useProject(projectId, Boolean(projectId))
 	const createProject = useCreateProject().mutateAsync
 
 	const { data: headersCollection = [] } = useHeaders()
@@ -59,12 +62,15 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 	const handleConvertToProject = async (headerId) => {
 		let header = headersCollection.find((header) => header.id == headerId)
+		let area = areasCollection.find((area) => area.id === project.area_id)
 		let tasks = tasksCollection.filter((task) => task.header_id === header.id)
 
 		try {
-			let { id } = await createProject({ ...header, icon: 'circle' })
-			await tasks.forEach(async (task) => await editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
-			await deleteHeader(header.id)
+			let { id } = await createProject({ ...header, icon: 'circle', area_id: area?.id ? area.id : null })
+			await tasks
+				.filter((task) => task.header_id === header.id)
+				.forEach((task) => editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
+			await deleteHeader(headerId)
 			navigate(`/projects/${id}`)
 		} catch (err) {
 			console.error(err)
