@@ -26,6 +26,79 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 	const deleteHeader = useDeleteHeader().mutate
 
+	console.log(
+		headersForProject.reduce(
+			(group, header) => {
+				let { id, completed } = header
+				group[completed ? 'complete' : 'incomplete'][id] = []
+				return group
+			},
+			{ complete: {}, incomplete: {} }
+		)
+	)
+
+	console.log(
+		tasks.reduce(
+			(group, task) => {
+				let { header_id, completed } = task
+				header_id = header_id === null ? -1 : header_id
+				if (completed) {
+					if (headersForProject.find((header) => header.id === header_id)?.completed) {
+						group.complete[header_id] = group.complete[header_id] ?? []
+						group.complete[header_id].push(task)
+						return group
+					} else {
+						group.complete[-1] = group.complete[-1] ?? []
+						group.complete[-1].push(task)
+						return group
+					}
+				} else {
+					group.incomplete[header_id] = group.incomplete[header_id] ?? []
+					group.incomplete[header_id].push(task)
+					return group
+				}
+			},
+			headersForProject.reduce(
+				(group, header) => {
+					let { id, completed } = header
+					group[completed ? 'complete' : 'incomplete'][id] = []
+					return group
+				},
+				{ complete: {}, incomplete: {} }
+			)
+		)
+	)
+
+	// const headers = tasks.reduce(
+	// 	(group, task) => {
+	// 		let { header_id, completed } = task
+	// 		header_id = header_id === null ? -1 : header_id
+	// 		if (completed) {
+	// 			if (headersForProject.find((header) => header.id === header_id)?.completed) {
+	// 				group.complete[header_id] = group.complete[header_id] ?? []
+	// 				group.complete[header_id].push(task)
+	// 				return group
+	// 			} else {
+	// 				group.complete[-1] = group.complete[-1] ?? []
+	// 				group.complete[-1].push(task)
+	// 				return group
+	// 			}
+	// 		} else {
+	// 			group.incomplete[header_id] = group.incomplete[header_id] ?? []
+	// 			group.incomplete[header_id].push(task)
+	// 			return group
+	// 		}
+	// 	},
+	// 	headersForProject.reduce(
+	// 		(group, header) => {
+	// 			let { id, completed } = header
+	// 			group[completed ? 'complete' : 'incomplete'][id] = []
+	// 			return group
+	// 		},
+	// 		{ complete: {}, incomplete: {} }
+	// 	)
+	// )
+
 	const headers = showLogged
 		? incompleteTasks.reduce(
 				(group, task) => {
@@ -57,6 +130,7 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 					return group
 				}, {})
 		  )
+
 	// console.log(headers)
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
