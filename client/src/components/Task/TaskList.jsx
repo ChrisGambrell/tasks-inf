@@ -150,11 +150,20 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 													{headersCollection.find((header) => header.id === Number(header_id))?.title ||
 														'New Heading'}
 												</div>
+												{/* TODO restore button */}
 												<Dropdown targetColor='text-blue-600'>
 													<Dropdown.Item
 														label='Archive'
 														icon='check-to-slot'
-														onClick={() => console.log('TODO')}
+														onClick={() =>
+															dispatch({
+																type: 'set',
+																payload: {
+																	completedMenuType: 'header',
+																	completedMenuId: Number(header_id),
+																},
+															})
+														}
 													/>
 
 													<Dropdown.Divider />
