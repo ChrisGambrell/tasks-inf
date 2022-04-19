@@ -19,85 +19,14 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 	const createProject = useCreateProject().mutateAsync
 
 	const { data: headersCollection = [] } = useHeaders()
-	const headersForProject = headersCollection.filter((header) => header.project_id === projectId)
+	const headersForProject = headersCollection.filter(
+		(header) => header.project_id === projectId && options.secondary && !header.completed
+	)
 
 	const { data: tasksCollection = [] } = useTasks()
 	const editTask = useEditTask().mutateAsync
 
 	const deleteHeader = useDeleteHeader().mutate
-
-	console.log(
-		headersForProject.reduce(
-			(group, header) => {
-				let { id, completed } = header
-				group[completed ? 'complete' : 'incomplete'][id] = []
-				return group
-			},
-			{ complete: {}, incomplete: {} }
-		)
-	)
-
-	console.log(
-		tasks.reduce(
-			(group, task) => {
-				let { header_id, completed } = task
-				header_id = header_id === null ? -1 : header_id
-				if (completed) {
-					if (headersForProject.find((header) => header.id === header_id)?.completed) {
-						group.complete[header_id] = group.complete[header_id] ?? []
-						group.complete[header_id].push(task)
-						return group
-					} else {
-						group.complete[-1] = group.complete[-1] ?? []
-						group.complete[-1].push(task)
-						return group
-					}
-				} else {
-					group.incomplete[header_id] = group.incomplete[header_id] ?? []
-					group.incomplete[header_id].push(task)
-					return group
-				}
-			},
-			headersForProject.reduce(
-				(group, header) => {
-					let { id, completed } = header
-					group[completed ? 'complete' : 'incomplete'][id] = []
-					return group
-				},
-				{ complete: {}, incomplete: {} }
-			)
-		)
-	)
-
-	// const headers = tasks.reduce(
-	// 	(group, task) => {
-	// 		let { header_id, completed } = task
-	// 		header_id = header_id === null ? -1 : header_id
-	// 		if (completed) {
-	// 			if (headersForProject.find((header) => header.id === header_id)?.completed) {
-	// 				group.complete[header_id] = group.complete[header_id] ?? []
-	// 				group.complete[header_id].push(task)
-	// 				return group
-	// 			} else {
-	// 				group.complete[-1] = group.complete[-1] ?? []
-	// 				group.complete[-1].push(task)
-	// 				return group
-	// 			}
-	// 		} else {
-	// 			group.incomplete[header_id] = group.incomplete[header_id] ?? []
-	// 			group.incomplete[header_id].push(task)
-	// 			return group
-	// 		}
-	// 	},
-	// 	headersForProject.reduce(
-	// 		(group, header) => {
-	// 			let { id, completed } = header
-	// 			group[completed ? 'complete' : 'incomplete'][id] = []
-	// 			return group
-	// 		},
-	// 		{ complete: {}, incomplete: {} }
-	// 	)
-	// )
 
 	const headers = showLogged
 		? incompleteTasks.reduce(
@@ -118,20 +47,22 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 		: tasks.reduce(
 				(group, task) => {
 					let { header_id } = task
-					header_id = header_id === null ? -1 : header_id
+					header_id =
+						header_id === null ? -1 : headersCollection.find((header) => header.id === header_id)?.completed ? header_id : -1
 
-					group[header_id] = group[header_id] ?? []
+					if (!Object.keys(group).includes(String(header_id))) return group
+					group[header_id] = group[header_id]
 					group[header_id].push(task)
 					return group
 				},
-				headersForProject.reduce((group, header) => {
-					let { id } = header
+				headersCollection.reduce((group, header) => {
+					let { id, completed } = header
+					id = completed ? id : -1
+
 					group[id] = []
 					return group
 				}, {})
 		  )
-
-	// console.log(headers)
 
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
@@ -200,7 +131,9 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 										header={headersCollection.find((header) => header.id === Number(header_id))}
 										target={
 											<div
-												className={`flex justify-between items-center px-0.5 pb-0.5 border-b border-gray-200 text-blue-600 font-semibold select-none ${
+												className={`flex justify-between items-center px-0.5 pb-0.5 border-b border-gray-200 ${
+													options.secondary ? 'text-gray-400' : 'text-blue-600'
+												} font-semibold select-none ${
 													state.selectedHeader.includes(Number(header_id)) && 'rounded-md bg-blue-200'
 												} ${state.contextedHeader === Number(header_id) && 'rounded-md bg-gray-200'}`}
 												onClick={() =>
@@ -212,9 +145,9 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 												ref={clickOutsideRef}>
 												<div
 													className={`
-												${!headersForProject.find((header) => header.id === Number(header_id))?.title && 'text-blue-200'}
+												${!headersCollection.find((header) => header.id === Number(header_id))?.title && (options.secondary ? 'text-gray-200' : 'text-blue-200')}
 											`}>
-													{headersForProject.find((header) => header.id === Number(header_id))?.title ||
+													{headersCollection.find((header) => header.id === Number(header_id))?.title ||
 														'New Heading'}
 												</div>
 												<Dropdown targetColor='text-blue-600'>
@@ -277,7 +210,16 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 						onClick={() => setShowLoggedItems(!showLoggedItems)}>
 						{showLoggedItems ? 'Hide logged items' : `Show ${completedTasks.length} logged items`}
 					</button>
-					{showLoggedItems && <TaskList tasks={completedTasks} secondary showCompletedWhen showHeader />}
+					{showLoggedItems && (
+						<TaskList
+							tasks={completedTasks}
+							projectId={project.id || null}
+							showHeaders
+							secondary
+							showCompletedWhen
+							showHeader
+						/>
+					)}
 				</div>
 			)}
 		</div>
