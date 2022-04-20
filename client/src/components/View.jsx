@@ -274,7 +274,13 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 				{actionButton && (
 					<Dropdown>
 						{space === 'project' && (
-							<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
+							<Dropdown.Item
+								label='Complete Project'
+								icon='circle-check'
+								onClick={() =>
+									dispatch({ type: 'set', payload: { completedMenuType: 'project', completedMenuId: project.id } })
+								}
+							/>
 						)}
 						{space === 'project' && (
 							<DateSelect
@@ -367,6 +373,8 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 }
 
 const Content = ({ children }) => {
+	const navigate = useNavigate()
+
 	const [state, dispatch] = useContext(TasksContext)
 
 	const { data: project = {} } = useProject(
@@ -402,6 +410,9 @@ const Content = ({ children }) => {
 				.filter((task) => task.header_id === state.completedMenuId)
 				.forEach(async (task) => await editTask({ taskId: task.id, data: { completed: true } }))
 		}
+
+		if (window.location.pathname.includes(`/projects/${state.completedMenuId}`)) navigate('/inbox')
+		dispatch({ type: 'reset' })
 	}
 
 	const handleAction = () => {
