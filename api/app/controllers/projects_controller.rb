@@ -48,6 +48,9 @@ class ProjectsController < ApplicationController
     end
 
     def parse_dates
+      if params[:deadline]
+        params[:deadline] = DateTime.parse(params[:deadline])
+      end
       if params[:when]
         params[:when] = DateTime.parse(params[:when])
       end
@@ -55,6 +58,6 @@ class ProjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def project_params
-      params.permit(:area_id, :title, :description, :icon, :when)
+      params.permit(:area_id, :title, :description, :icon, :when, :deadline)
     end
 end
