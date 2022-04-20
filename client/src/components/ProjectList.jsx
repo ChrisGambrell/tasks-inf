@@ -135,7 +135,12 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 									</div>
 								</div>
 								{project.deadline && (
-									<div className='flex-none flex items-center space-x-1 mr-1 text-gray-500'>
+									<div
+										className={`flex-none flex items-center space-x-1 mr-1 ${
+											project.deadline.toLocaleDateString() === new Date().toLocaleDateString()
+												? 'text-red-500'
+												: 'text-gray-500'
+										}`}>
 										<FA className='w-3 h-3' icon='flag' />
 										<div className='text-sm'>
 											{project.deadline.toLocaleDateString('en-us', { month: 'long', day: 'numeric' })}

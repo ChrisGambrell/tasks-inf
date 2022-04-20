@@ -168,7 +168,12 @@ const Task = ({
 										</div>
 
 										{task.deadline && (
-											<div className='flex-none flex items-center space-x-1 mr-1 text-gray-500'>
+											<div
+												className={`flex-none flex items-center space-x-1 mr-1 ${
+													task.deadline.toLocaleDateString() === new Date().toLocaleDateString()
+														? 'text-red-500'
+														: 'text-gray-500'
+												}`}>
 												<FA className='w-3 h-3' icon='flag' />
 												<div className='text-sm'>
 													{task.deadline.toLocaleDateString('en-us', { month: 'long', day: 'numeric' })}

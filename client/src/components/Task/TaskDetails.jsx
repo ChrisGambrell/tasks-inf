@@ -94,7 +94,10 @@ const TaskDetails = ({ task }) => {
 				value={task.deadline}
 				onChange={handleEditDeadline}
 				target={
-					<div className='group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
+					<div
+						className={`group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm ${
+							task.deadline.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-red-500' : 'text-gray-800'
+						} hover:border-gray-300 active:bg-gray-300`}>
 						<FA icon='flag' />
 						<div className='font-semibold pl-0.5'>
 							{task.deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'long', day: 'numeric' })}
