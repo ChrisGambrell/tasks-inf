@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAreas, useHeaders, useDeleteHeader, useProject, useCreateProject, useTasks, useEditTask } from '../../hooks'
+import { useAreas, useHeaders, useEditHeader, useDeleteHeader, useProject, useCreateProject, useTasks, useEditTask } from '../../hooks'
 import { TasksContext } from '../../App'
 import { ContextMenu, Dropdown } from '..'
 import { Task } from '.'
@@ -20,11 +20,11 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 	const { data: headersCollection = [] } = useHeaders()
 	const headersForProject = headersCollection.filter((header) => header.project_id === projectId)
+	const editHeader = useEditHeader().mutate
+	const deleteHeader = useDeleteHeader().mutate
 
 	const { data: tasksCollection = [] } = useTasks()
 	const editTask = useEditTask().mutateAsync
-
-	const deleteHeader = useDeleteHeader().mutate
 
 	const headers = showLogged
 		? incompleteTasks.reduce(
@@ -158,13 +158,15 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 														}
 														icon='check-to-slot'
 														onClick={() =>
-															dispatch({
-																type: 'set',
-																payload: {
-																	completedMenuType: 'header',
-																	completedMenuId: Number(header_id),
-																},
-															})
+															headersCollection.find((header) => header.id === Number(header_id))?.completed
+																? editHeader({ headerId: header_id, data: { completed: false } })
+																: dispatch({
+																		type: 'set',
+																		payload: {
+																			completedMenuType: 'header',
+																			completedMenuId: Number(header_id),
+																		},
+																  })
 														}
 													/>
 
