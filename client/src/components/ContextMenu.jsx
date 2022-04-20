@@ -19,7 +19,6 @@ import {
 } from '../hooks'
 import { TasksContext } from '../App'
 import { HotKeys } from '.'
-import { DateSelect } from './Task'
 
 const Divider = () => <hr className='my-1 border-gray-300' />
 
@@ -97,6 +96,18 @@ const ContextMenu = ({ project, header, task, target }) => {
 	const deleteTask = useDeleteTask().mutate
 
 	const [open, setOpen] = useState(false)
+
+	const handleOpenDateSelect = (attr) => {
+		dispatch({
+			type: 'set',
+			payload: {
+				dateSelectType: (project && 'project') || (task && 'task'),
+				dateSelectId: (project && project.id) || (task && task.id),
+				dateSelectAttr: attr,
+			},
+		})
+		setOpen(false)
+	}
 
 	const handleDuplicate = async () => {
 		if (project) {
@@ -231,19 +242,14 @@ const ContextMenu = ({ project, header, task, target }) => {
 				setOpen(false)
 			}}>
 			<div className='flex flex-col select-none text-sm' id='context-menu'>
-				<DateSelect
-					value={(project && project.when) || (task && task.when)}
-					onChange={handleEditWhen}
-					target={<Item label='When...' hotKeys={['alt', 'S']} disabled={header} />}
-				/>
+				<Item label='When...' hotKeys={['alt', 'S']} disabled={header} onClick={() => handleOpenDateSelect('when')} />
 				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} disabled={header} />
-				<DateSelect
-					title='Deadline'
-					value={(project && project.deadline) || (task && task.deadline)}
-					onChange={handleEditDeadline}
-					hideQuickDates
-					target={<Item label='Deadline...' hotKeys={['alt', 'shift', 'D']} disabled={header} />}
+				<Item
+					label='Deadline...'
+					hotKeys={['alt', 'shift', 'D']}
+					disabled={header}
+					onClick={() => handleOpenDateSelect('deadline')}
 				/>
 				<Submenu label='Complete...'>
 					<Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={handleEditComplete} />

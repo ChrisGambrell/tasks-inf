@@ -5,7 +5,7 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { TasksContext } from '../../App'
 import { useHeader, useEditHeader, useProject, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
-import { DateSelect, TaskDetails } from '.'
+import { TaskDetails } from '.'
 
 const CompletedWhenDisplay = ({ when }) => {
 	return (
@@ -67,10 +67,6 @@ const Task = ({
 		})
 	}
 
-	const handleEditWhen = (when) => {
-		editTask({ taskId: task.id, data: { when } })
-	}
-
 	useHotkeys([
 		['backspace', () => handleHotKey(() => deleteTask(task.id))],
 		['escape', () => dispatch({ type: 'reset' })],
@@ -128,12 +124,14 @@ const Task = ({
 							<div className='relative flex items-center w-full -translate-x-5 mt-1.5'>
 								<div className='flex grow'>
 									<div className='-translate-x-1'>
-										<DateSelect
-											title='When'
-											value={task.when}
-											onChange={handleEditWhen}
-											target={
-												<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />
+										<FA
+											className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400'
+											icon='calendar-days'
+											onClick={() =>
+												dispatch({
+													type: 'set',
+													payload: { dateSelectType: 'task', dateSelectId: task.id, dateSelectAttr: 'when' },
+												})
 											}
 										/>
 									</div>

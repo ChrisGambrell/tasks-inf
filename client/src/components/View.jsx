@@ -242,6 +242,17 @@ const Header = ({ title, description, when, deadline, actionButton = false, icon
 	const [editableTitle, setEditableTitle] = useState(title || '')
 	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
 
+	const handleOpenDateSelect = (attr) => {
+		dispatch({
+			type: 'set',
+			payload: {
+				dateSelectType: 'project',
+				dateSelectId: spaceId,
+				dateSelectAttr: attr,
+			},
+		})
+	}
+
 	const handleEditTitle = () => {
 		if (space === 'area') editArea({ areaId: spaceId, data: { title: debouncedTitle } })
 		else if (space === 'project') editProject({ projectId: spaceId, data: { title: debouncedTitle } })
@@ -309,22 +320,11 @@ const Header = ({ title, description, when, deadline, actionButton = false, icon
 							/>
 						)}
 						{space === 'project' && (
-							<DateSelect
-								title='When'
-								value={project.when}
-								onChange={(when) => editProject({ projectId: project.id, data: { when } })}
-								target={<Dropdown.Item label='When' icon='calendar-days' />}
-							/>
+							<Dropdown.Item label='When' icon='calendar-days' onClick={() => handleOpenDateSelect('when')} />
 						)}
 						<Dropdown.Item label='Add Tags' icon='tag' onClick={() => console.log('TODO')} />
 						{space === 'project' && (
-							<DateSelect
-								title='Deadline'
-								value={project.deadline}
-								onChange={(deadline) => editProject({ projectId: project.id, data: { deadline } })}
-								hideQuickDates
-								target={<Dropdown.Item label='Add Deadline' icon='flag' />}
-							/>
+							<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => handleOpenDateSelect('deadline')} />
 						)}
 
 						<Dropdown.Divider />
@@ -351,75 +351,60 @@ const Header = ({ title, description, when, deadline, actionButton = false, icon
 			<div className='border-t'>
 				{when && (
 					<div className='border-b py-0.5'>
-						<DateSelect
-							title='When'
-							value={project.when}
-							onChange={(when) => editProject({ projectId: project.id, data: { when } })}
-							target={
-								<div className='group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
-									<FA
-										className={
-											project.when.toLocaleDateString() === new Date().toLocaleDateString()
-												? 'text-yellow-400'
-												: 'text-red-500'
-										}
-										icon={
-											project.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'
-										}
-									/>
-									<div className='font-semibold'>
-										{project.when.toLocaleDateString() === new Date().toLocaleDateString()
-											? 'Today'
-											: project.when.toLocaleDateString() ===
-											  new Date(
-													new Date().getFullYear(),
-													new Date().getMonth(),
-													new Date().getDate() + 1
-											  ).toLocaleDateString()
-											? 'Tomorrow'
-											: project.when.toLocaleDateString(
-													'en-us',
-													project.when <
-														new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
-														? { weekday: 'long' }
-														: { weekday: 'short', month: 'long', day: 'numeric' }
-											  )}
-									</div>
-									<FA
-										className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
-										icon='x'
-										onClick={() => editProject({ projectId: project.id, data: { when: null } })}
-									/>
-								</div>
-							}
-						/>
+						<div
+							className='group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => handleOpenDateSelect('when')}>
+							<FA
+								className={
+									project.when.toLocaleDateString() === new Date().toLocaleDateString()
+										? 'text-yellow-400'
+										: 'text-red-500'
+								}
+								icon={project.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
+							/>
+							<div className='font-semibold'>
+								{project.when.toLocaleDateString() === new Date().toLocaleDateString()
+									? 'Today'
+									: project.when.toLocaleDateString() ===
+									  new Date(
+											new Date().getFullYear(),
+											new Date().getMonth(),
+											new Date().getDate() + 1
+									  ).toLocaleDateString()
+									? 'Tomorrow'
+									: project.when.toLocaleDateString(
+											'en-us',
+											project.when <
+												new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+												? { weekday: 'long' }
+												: { weekday: 'short', month: 'long', day: 'numeric' }
+									  )}
+							</div>
+							<FA
+								className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+								icon='x'
+								onClick={() => editProject({ projectId: project.id, data: { when: null } })}
+							/>
+						</div>
 					</div>
 				)}
 				{deadline && (
 					<div className='border-b py-0.5'>
-						<DateSelect
-							title='Deadline'
-							value={project.deadline}
-							hideQuickDates
-							onChange={(deadline) => editProject({ projectId: project.id, data: { deadline } })}
-							target={
-								<div
-									className={`group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm ${
-										deadline.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-red-500' : 'text-gray-800'
-									} hover:border-gray-300 active:bg-gray-300`}>
-									<FA icon='flag' />
-									<div className='font-semibold'>
-										Deadline:{' '}
-										{deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'short', day: 'numeric' })}
-									</div>
-									<FA
-										className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
-										icon='x'
-										onClick={() => editProject({ projectId: project.id, data: { deadline: null } })}
-									/>
-								</div>
-							}
-						/>
+						<div
+							className={`group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm ${
+								deadline.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-red-500' : 'text-gray-800'
+							} hover:border-gray-300 active:bg-gray-300`}
+							onClick={() => handleOpenDateSelect('deadline')}>
+							<FA icon='flag' />
+							<div className='font-semibold'>
+								Deadline: {deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'short', day: 'numeric' })}
+							</div>
+							<FA
+								className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+								icon='x'
+								onClick={() => editProject({ projectId: project.id, data: { deadline: null } })}
+							/>
+						</div>
 					</div>
 				)}
 			</div>
@@ -480,6 +465,7 @@ const Content = ({ children }) => {
 
 	return (
 		<>
+			<DateSelect />
 			<Modal
 				id='complete-modal'
 				opened={state.completedMenuType && state.completedMenuId !== -1}

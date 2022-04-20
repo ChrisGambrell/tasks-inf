@@ -6,7 +6,6 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useEditTask, useProject } from '../../hooks'
 import { TasksContext } from '../../App'
 import { Tooltip } from '..'
-import { DateSelect } from '.'
 
 const TaskDetails = ({ task }) => {
 	// const [checklist, setChecklist] = useState(defaultChecklist)
@@ -43,6 +42,18 @@ const TaskDetails = ({ task }) => {
 			debouncedNotes !== task.notes && debouncedNotes.trim() !== '' && editTask({ taskId: task.id, data: { notes: debouncedNotes } }),
 		[debouncedNotes]
 	)
+
+	const handleOpenDateSelect = (attr) => {
+		console.log('testing')
+		dispatch({
+			type: 'set',
+			payload: {
+				dateSelectType: 'task',
+				dateSelectId: task.id,
+				dateSelectAttr: attr,
+			},
+		})
+	}
 
 	const handleEditCompleted = () => {
 		if (task.completed === false) dispatch({ type: 'set', payload: { selectedTask: [], moveType: null, moveId: -1 } })
@@ -88,86 +99,78 @@ const TaskDetails = ({ task }) => {
 	// )
 
 	const SelectedDeadline = () => (
-		<div>
-			<DateSelect
-				title='Deadline'
-				value={task.deadline}
-				onChange={handleEditDeadline}
-				target={
-					<div
-						className={`group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm ${
-							task.deadline.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-red-500' : 'text-gray-800'
-						} hover:border-gray-300 active:bg-gray-300`}>
-						<FA icon='flag' />
-						<div className='font-semibold pl-0.5'>
-							{task.deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'long', day: 'numeric' })}
-						</div>
-						<FA
-							className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
-							icon='x'
-							onClick={() => handleEditDeadline(null)}
-						/>
-					</div>
-				}
+		<div
+			className={`group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm ${
+				task.deadline.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-red-500' : 'text-gray-800'
+			} hover:border-gray-300 active:bg-gray-300`}
+			id='date-select'
+			onClick={() => handleOpenDateSelect('deadline')}>
+			<FA icon='flag' />
+			<div className='font-semibold pl-0.5'>
+				{task.deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'long', day: 'numeric' })}
+			</div>
+			{/* TODO fix where clear button opens DateSelect */}
+			<FA
+				className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+				icon='x'
+				onClick={() => handleEditDeadline(null)}
 			/>
 		</div>
 	)
 
 	const SelectedWhen = () => (
-		<div>
-			<DateSelect
-				title='When'
-				value={task.when}
-				onChange={handleEditWhen}
-				target={
-					<div className='group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
-						<FA
-							className={
-								task.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-yellow-400' : 'text-red-500'
-							}
-							icon={task.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
-						/>
-						<div className='font-semibold'>
-							{task.when.toLocaleDateString() === new Date().toLocaleDateString()
-								? 'Today'
-								: task.when.toLocaleDateString() ===
-								  new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1).toLocaleDateString()
-								? 'Tomorrow'
-								: task.when.toLocaleDateString(
-										'en-us',
-										task.when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
-											? { weekday: 'long' }
-											: { month: 'long', day: 'numeric' }
-								  )}
-						</div>
-						<FA
-							className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
-							icon='x'
-							onClick={() => handleEditWhen(null)}
-						/>
-					</div>
-				}
+		<div
+			className='group flex items-center space-x-1 pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'
+			id='date-select'
+			onClick={() => handleOpenDateSelect('when')}>
+			<FA
+				className={task.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-yellow-400' : 'text-red-500'}
+				icon={task.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
+			/>
+			<div className='font-semibold'>
+				{task.when.toLocaleDateString() === new Date().toLocaleDateString()
+					? 'Today'
+					: task.when.toLocaleDateString() ===
+					  new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1).toLocaleDateString()
+					? 'Tomorrow'
+					: task.when.toLocaleDateString(
+							'en-us',
+							task.when < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+								? { weekday: 'long' }
+								: { month: 'long', day: 'numeric' }
+					  )}
+			</div>
+			{/* TODO fix where clear button opens DateSelect */}
+			<FA
+				className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+				icon='x'
+				onClick={() => handleEditWhen(null)}
 			/>
 		</div>
 	)
 
-	const ToolbarButton = ({ label, icon = 'circle-question', onClick = () => {} }) =>
-		label ? (
-			<Tooltip
-				target={
-					<button
-						className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
-						onClick={onClick}>
-						<FA icon={icon} />
-					</button>
-				}>
-				<div>{label}</div>
-			</Tooltip>
-		) : (
-			<button className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300' onClick={onClick}>
-				<FA icon={icon} />
-			</button>
-		)
+	const ToolbarButton = ({ id, label, icon = 'circle-question', onClick = () => {} }) => (
+		<div id={id}>
+			{label ? (
+				<Tooltip
+					target={
+						<button
+							className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+							onClick={onClick}>
+							<FA icon={icon} />
+						</button>
+					}>
+					<div>{label}</div>
+				</Tooltip>
+			) : (
+				<button
+					className='px-1 rounded border border-white text-gray-400 hover:border-gray-300 active:bg-gray-300'
+					onClick={onClick}>
+					<FA icon={icon} />
+				</button>
+			)}
+		</div>
+	)
 
 	return (
 		<div className='mt-8 mb-12'>
@@ -203,22 +206,15 @@ const TaskDetails = ({ task }) => {
 					</div>
 					<div className='flex justify-end space-x-2'>
 						{!task.when && (
-							<DateSelect
-								title='When'
-								value={task.when}
-								onChange={handleEditWhen}
-								target={<ToolbarButton label='When' icon='calendar-days' />}
+							<ToolbarButton
+								id='date-select'
+								label='When'
+								icon='calendar-days'
+								onClick={() => handleOpenDateSelect('when')}
 							/>
 						)}
-
 						{!task.deadline && (
-							<DateSelect
-								title='Deadline'
-								value={task.deadline}
-								onChange={handleEditDeadline}
-								hideQuickDates
-								target={<ToolbarButton label='Deadline' icon='flag' />}
-							/>
+							<ToolbarButton id='date-select' label='Deadline' icon='flag' onClick={() => handleOpenDateSelect('deadline')} />
 						)}
 
 						{/* TODO:  */}

@@ -5,7 +5,6 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useArea, useHeaders, useDeleteHeader, useEditProject, useDeleteProject, useTasks, useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
-import { DateSelect } from './Task'
 
 const WhenDisplay = ({ when }) => {
 	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
@@ -85,11 +84,19 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 					target={
 						<div className='relative flex items-center w-full -translate-x-5 mt-1.5'>
 							<div className='-translate-x-1'>
-								<DateSelect
-									title='When'
-									value={project.when}
-									onChange={(when) => editProject({ projectId: project.id, data: { when } })}
-									target={<FA className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400' icon='calendar-days' />}
+								<FA
+									className='opacity-0 hover:opacity-100 w-3 h-3 text-gray-400'
+									icon='calendar-days'
+									onClick={() =>
+										dispatch({
+											type: 'set',
+											payload: {
+												dateSelectType: 'project',
+												dateSelectId: project.id,
+												dateSelectAttr: 'when',
+											},
+										})
+									}
 								/>
 							</div>
 							<div
