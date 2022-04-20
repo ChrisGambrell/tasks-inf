@@ -3,7 +3,7 @@ import { Badge, Checkbox } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { TasksContext } from '../../App'
-import { useHeader, useEditHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
+import { useHeader, useEditHeader, useProject, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect, TaskDetails } from '.'
 
@@ -46,7 +46,6 @@ const Task = ({
 	const { data: header = {} } = useHeader(task.header_id, Boolean(showHeader && task.header_id))
 	const editHeader = useEditHeader().mutate
 
-	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
 

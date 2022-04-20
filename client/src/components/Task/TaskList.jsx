@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAreas, useHeaders, useDeleteHeader, useProject, useCreateProject, useTasks, useCreateTask, useEditTask } from '../../hooks'
+import { useAreas, useHeaders, useDeleteHeader, useProject, useCreateProject, useTasks, useEditTask } from '../../hooks'
 import { TasksContext } from '../../App'
 import { ContextMenu, Dropdown } from '..'
 import { Task } from '.'
@@ -20,7 +20,6 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 
 	const { data: headersCollection = [] } = useHeaders()
 	const headersForProject = headersCollection.filter((header) => header.project_id === projectId)
-	console.log(headersForProject)
 
 	const { data: tasksCollection = [] } = useTasks()
 	const editTask = useEditTask().mutateAsync
@@ -52,7 +51,6 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 						header_id === null ? -1 : headersCollection.find((header) => header.id === header_id)?.completed ? header_id : -1
 
 					if (!Object.keys(group).includes(String(header_id))) return group
-					group[header_id] = group[header_id]
 					group[header_id].push(task)
 					return group
 				},
@@ -68,7 +66,7 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 	const [showLoggedItems, setShowLoggedItems] = useState(false)
 
 	const handleConvertToProject = async (headerId) => {
-		let header = headersCollection.find((header) => header.id == headerId)
+		let header = headersCollection.find((header) => header.id === Number(headerId))
 		let area = areasCollection.find((area) => area.id === project.area_id)
 		let tasks = tasksCollection.filter((task) => task.header_id === header.id)
 
