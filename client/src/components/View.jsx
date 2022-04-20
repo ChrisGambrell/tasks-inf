@@ -395,7 +395,8 @@ const Content = ({ children }) => {
 				withCloseButton={false}>
 				<div className='font-semibold'>Are you sure you want to archive this heading?</div>
 				<div className='mt-2 text-sm'>
-					This heading still contains TODO to-dos that you haven't completed. What would you like to do with them?
+					This heading still contains {tasks.filter((task) => task.header_id === state.completedMenuId && !task.completed).length}{' '}
+					to-dos that you haven't completed. What would you like to do with them?
 				</div>
 				<div className='my-2'>
 					<RadioGroup value={remainingAction} onChange={setRemainingAction}>
