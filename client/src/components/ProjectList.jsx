@@ -40,16 +40,6 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 
 	const [state, dispatch] = useContext(TasksContext)
 
-	const handleComplete = async () => {
-		try {
-			await tasks.forEach(async (task) => await deleteTask(task.id))
-			await headers.forEach(async (header) => await deleteHeader(header.id))
-			deleteProject(project.id)
-		} catch (err) {
-			console.error(err)
-		}
-	}
-
 	const useOnClickOutside = (ref, handler) => {
 		useEffect(() => {
 			const listener = (event) => {
@@ -112,7 +102,12 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 											className='ml-2 mr-1'
 											classNames={{ input: 'rounded-full border-2 border-blue-600' }}
 											size='xs'
-											onChange={handleComplete}
+											onChange={() =>
+												dispatch({
+													type: 'set',
+													payload: { completedMenuType: 'project', completedMenuId: project.id },
+												})
+											}
 										/>
 									) : (
 										<FA className='text-blue-600' icon={project.icon || 'circle-notch'} />

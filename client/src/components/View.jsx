@@ -18,6 +18,8 @@ import {
 	useCreateTask,
 	useEditTask,
 	useDeleteProject,
+	useDeleteTask,
+	useDeleteHeader,
 } from '../hooks'
 import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
@@ -367,21 +369,44 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 const Content = ({ children }) => {
 	const [state, dispatch] = useContext(TasksContext)
 
+	const { data: project = {} } = useProject(
+		state.completedMenuId,
+		Boolean(state.completedMenuType === 'project' && state.completedMenuId !== -1)
+	)
+	const deleteProject = useDeleteProject().mutate
+
 	const { data: headers = [] } = useHeaders()
-	const editHeader = useEditHeader().mutate
+	const editHeader = useEditHeader().mutateAsync
+	const deleteHeader = useDeleteHeader().mutateAsync
 
 	const { data: tasks = [] } = useTasks()
-	const editTask = useEditTask().mutate
+	const editTask = useEditTask().mutateAsync
+	const deleteTask = useDeleteTask().mutateAsync
 
 	const [remainingAction, setRemainingAction] = useState('complete')
 
-	const handleAction = () => {
-		if (remainingAction === 'complete') {
-			editHeader({ headerId: state.completedMenuId, data: { completed: true } })
-			tasks
+	const handleComplete = async () => {
+		if (state.completedMenuType === 'project') {
+			try {
+				await tasks.filter((task) => task.project_id === state.completedMenuId).forEach(async (task) => await deleteTask(task.id))
+				await headers
+					.filter((header) => header.project_id === state.completedMenuId)
+					.forEach(async (header) => await deleteHeader(header.id))
+				deleteProject(project.id)
+			} catch (err) {
+				console.error(err)
+			}
+		} else if (state.completedMenuType === 'header') {
+			await editHeader({ headerId: state.completedMenuId, data: { completed: true } })
+			await tasks
 				.filter((task) => task.header_id === state.completedMenuId)
-				.forEach((task) => editTask({ taskId: task.id, data: { completed: true } }))
-		} else if (remainingAction === 'cancel') console.log('todo')
+				.forEach(async (task) => await editTask({ taskId: task.id, data: { completed: true } }))
+		}
+	}
+
+	const handleAction = () => {
+		if (remainingAction === 'complete') handleComplete()
+		else if (remainingAction === 'cancel') console.log('todo')
 
 		dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })
 	}

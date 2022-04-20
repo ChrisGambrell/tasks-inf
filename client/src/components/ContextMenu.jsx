@@ -130,7 +130,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 	}
 
 	const handleEditComplete = () => {
-		if (project) console.log('ENHANCEMENT')
+		if (project) dispatch({ type: 'set', payload: { completedMenuType: 'project', completedMenuId: project.id } })
 		else if (header) dispatch({ type: 'set', payload: { completedMenuType: 'header', completedMenuId: header.id } })
 		else if (task) editTask({ taskId: task.id, data: { completed: true } })
 	}
