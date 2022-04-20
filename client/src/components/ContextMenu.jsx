@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Modal, Popover } from '@mantine/core'
+import { Popover } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import {
@@ -102,17 +102,17 @@ const ContextMenu = ({ project, header, task, target }) => {
 		if (project) {
 			try {
 				let { id: project_id } = await createProject(project)
-				tasks
+				await tasks
 					.filter((task) => task.project_id === project.id && task.header_id === null)
-					.forEach((task) => createTask.mutate({ ...task, project_id }))
+					.forEach(async (task) => await createTask.mutateAsync({ ...task, project_id }))
 
-				headers
+				await headers
 					.filter((header) => header.project_id === project.id)
 					.forEach(async (header) => {
 						let { id: header_id } = await createHeader({ ...header, project_id })
-						tasks
+						await tasks
 							.filter((task) => task.project_id === project.id && task.header_id === header.id)
-							.forEach((task) => createTask.mutate({ ...task, project_id, header_id }))
+							.forEach(async (task) => await createTask.mutateAsync({ ...task, project_id, header_id }))
 					})
 			} catch (err) {
 				console.error(err)
@@ -120,11 +120,13 @@ const ContextMenu = ({ project, header, task, target }) => {
 		} else if (header) {
 			try {
 				let { id } = await createHeader(header)
-				tasks.filter((task) => task.header_id === header.id).forEach((task) => createTask.mutate({ ...task, header_id: id }))
+				await tasks
+					.filter((task) => task.header_id === header.id)
+					.forEach(async (task) => await createTask.mutateAsync({ ...task, header_id: id }))
 			} catch (err) {
 				console.error(err)
 			}
-		} else if (task) createTask.mutate(task)
+		} else if (task) await createTask.mutateAsync(task)
 	}
 
 	const handleEditComplete = () => {
@@ -149,7 +151,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				let { id } = await createProject({ ...header, icon: 'circle', area_id: headerArea.id ? headerArea.id : null })
 				await tasks
 					.filter((task) => task.header_id === header.id)
-					.forEach((task) => editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
+					.forEach(async (task) => await editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
 				await deleteHeader(header.id)
 				navigate(`/projects/${id}`)
 			} catch (err) {

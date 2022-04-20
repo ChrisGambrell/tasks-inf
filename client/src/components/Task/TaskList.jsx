@@ -19,9 +19,8 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 	const createProject = useCreateProject().mutateAsync
 
 	const { data: headersCollection = [] } = useHeaders()
-	const headersForProject = headersCollection.filter(
-		(header) => header.project_id === projectId && options.secondary && !header.completed
-	)
+	const headersForProject = headersCollection.filter((header) => header.project_id === projectId)
+	console.log(headersForProject)
 
 	const { data: tasksCollection = [] } = useTasks()
 	const editTask = useEditTask().mutateAsync
@@ -38,11 +37,13 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 					group[header_id].push(task)
 					return group
 				},
-				headersForProject.reduce((group, header) => {
-					let { id } = header
-					group[id] = []
-					return group
-				}, {})
+				headersForProject
+					.filter((header) => !header.completed)
+					.reduce((group, header) => {
+						let { id } = header
+						group[id] = []
+						return group
+					}, {})
 		  )
 		: tasks.reduce(
 				(group, task) => {
@@ -75,7 +76,7 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 			let { id } = await createProject({ ...header, icon: 'circle', area_id: area?.id ? area.id : null })
 			await tasks
 				.filter((task) => task.header_id === header.id)
-				.forEach((task) => editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
+				.forEach(async (task) => await editTask({ taskId: task.id, data: { project_id: id, header_id: null } }))
 			await deleteHeader(headerId)
 			navigate(`/projects/${id}`)
 		} catch (err) {
@@ -150,10 +151,13 @@ const TaskList = ({ tasks = [], projectId, showHeaders = false, showLogged = fal
 													{headersCollection.find((header) => header.id === Number(header_id))?.title ||
 														'New Heading'}
 												</div>
-												{/* TODO restore button */}
 												<Dropdown targetColor='text-blue-600'>
 													<Dropdown.Item
-														label='Archive'
+														label={
+															headersCollection.find((header) => header.id === Number(header_id))?.completed
+																? 'Restore'
+																: 'Archive'
+														}
 														icon='check-to-slot'
 														onClick={() =>
 															dispatch({
