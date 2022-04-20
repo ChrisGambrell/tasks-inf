@@ -228,12 +228,16 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 	const [, dispatch] = useContext(TasksContext)
 
 	const { data: project = {} } = useProject(spaceId, Boolean(space === 'project'))
+	const { data: headers = [] } = useHeaders()
+	const { data: tasks = [] } = useTasks()
 
 	const editArea = useEditArea().mutate
 	const deleteArea = useDeleteArea().mutate
-	const createProject = useCreateProject().mutate
+	const createProject = useCreateProject().mutateAsync
 	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
+	const createHeader = useCreateHeader().mutateAsync
+	const createTask = useCreateTask().mutateAsync
 
 	const [editableTitle, setEditableTitle] = useState(title || '')
 	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
@@ -241,6 +245,28 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 	const handleEditTitle = () => {
 		if (space === 'area') editArea({ areaId: spaceId, data: { title: debouncedTitle } })
 		else if (space === 'project') editProject({ projectId: spaceId, data: { title: debouncedTitle } })
+	}
+
+	const handleDuplicateProject = async () => {
+		try {
+			let { id: project_id } = await createProject(project)
+			await tasks
+				.filter((task) => task.project_id === project.id && !task.header_id)
+				.forEach(async (task) => await createTask({ ...task, project_id }))
+
+			await headers
+				.filter((header) => header.project_id === project.id)
+				.forEach(async (header) => {
+					let { id: header_id } = await createHeader({ ...header, project_id })
+					await tasks
+						.filter((task) => task.project_id === project.id && task.header_id === header.id)
+						.forEach(async (task) => await createTask({ ...task, project_id, header_id }))
+				})
+
+			navigate(`/projects/${project_id}`)
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleDelete = () => {
@@ -311,10 +337,7 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 						{space === 'project' && (
 							<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
 						)}
-						{space === 'project' && (
-							// TODO should also duplicate all tasks and headers
-							<Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => createProject(project)} />
-						)}
+						{space === 'project' && <Dropdown.Item label='Duplicate Project' icon='copy' onClick={handleDuplicateProject} />}
 						<Dropdown.Item
 							label={`Delete ${(space === 'area' && 'Area') || (space === 'project' && 'Project')}`}
 							icon='trash'
