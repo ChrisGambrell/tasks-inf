@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useArea, useEditProject, useTasks } from '../hooks'
+import { useArea, useHeaders, useDeleteHeader, useEditProject, useDeleteProject, useTasks, useDeleteTask } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
 import { DateSelect } from './Task'
@@ -27,12 +27,28 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 
 	const { data: area = {} } = useArea(project.area_id, Boolean(showArea && project.area_id))
 
-	const editProject = useEditProject().mutate
+	const { data: headersCollection = [] } = useHeaders()
+	const headers = headersCollection.filter((header) => header.project_id === project.id)
+	const deleteHeader = useDeleteHeader().mutateAsync
 
-	const { data: tasks = [] } = useTasks.all()
-	const numTasks = tasks.filter((task) => task.project_id === project.id).length
+	const editProject = useEditProject().mutate
+	const deleteProject = useDeleteProject().mutate
+
+	const { data: tasksCollection = [] } = useTasks.all()
+	const tasks = tasksCollection.filter((task) => task.project_id === project.id)
+	const deleteTask = useDeleteTask().mutateAsync
 
 	const [state, dispatch] = useContext(TasksContext)
+
+	const handleComplete = async () => {
+		try {
+			await tasks.forEach(async (task) => await deleteTask(task.id))
+			await headers.forEach(async (header) => await deleteHeader(header.id))
+			deleteProject(project.id)
+		} catch (err) {
+			console.error(err)
+		}
+	}
 
 	const useOnClickOutside = (ref, handler) => {
 		useEffect(() => {
@@ -96,7 +112,7 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 											className='ml-2 mr-1'
 											classNames={{ input: 'rounded-full border-2 border-blue-600' }}
 											size='xs'
-											onChange={() => console.log('TODO')}
+											onChange={handleComplete}
 										/>
 									) : (
 										<FA className='text-blue-600' icon={project.icon || 'circle-notch'} />
@@ -117,7 +133,7 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 													}`,
 												}}
 												radius='sm'>
-												{numTasks}
+												{tasks.length}
 											</Badge>
 										</div>
 										{showArea && area && <div className='text-xs text-gray-400 truncate'>{area.title}</div>}
