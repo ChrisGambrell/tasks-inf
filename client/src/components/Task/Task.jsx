@@ -160,7 +160,7 @@ const Task = ({
 												{showProject && project && (
 													<div className='text-xs text-gray-400 truncate'>{project.title}</div>
 												)}
-												{showHeader && header && (
+												{showHeader && header && !header.completed && (
 													<div className='text-xs text-gray-400 truncate'>{header.title}</div>
 												)}
 											</div>
