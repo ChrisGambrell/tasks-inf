@@ -18,6 +18,7 @@ const useProject = (projectId, enabled) =>
 	useProjectQuery(
 		(data) => ({
 			...data,
+			deadline: data.deadline ? new Date(data.deadline) : null,
 			when: data.when ? new Date(data.when) : null,
 			created_at: new Date(data.created_at),
 			updated_at: new Date(data.updated_at),

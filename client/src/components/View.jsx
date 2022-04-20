@@ -320,8 +320,10 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 						{space === 'project' && (
 							<DateSelect
 								title='Deadline'
+								value={project.deadline}
+								onChange={(deadline) => editProject({ projectId: project.id, data: { deadline } })}
 								hideQuickDates
-								target={<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => console.log('TODO')} />}
+								target={<Dropdown.Item label='Add Deadline' icon='flag' />}
 							/>
 						)}
 

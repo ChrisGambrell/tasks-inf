@@ -19,6 +19,7 @@ const useProjects = () =>
 			.map((project) => ({
 				...project,
 				when: project.when ? new Date(project.when) : null,
+				deadline: project.deadline ? new Date(project.deadline) : null,
 				created_at: new Date(data.created_at),
 				updated_at: new Date(data.updated_at),
 			}))
