@@ -96,7 +96,7 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 								className={`flex items-center w-full p-0.25 rounded-md ${
 									state.selectedProject.includes(project.id) && 'bg-blue-200'
 								} ${state.contextedProject === project.id && 'bg-gray-200'}`}>
-								<div className={`flex items-center space-x-1 ${!showComplete && 'ml-1'} mr-1`}>
+								<div className={`flex-grow flex items-center space-x-1 ${!showComplete && 'ml-1'} mr-1`}>
 									{showComplete ? (
 										<Checkbox
 											className='ml-2 mr-1'
@@ -134,6 +134,14 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 										{showArea && area && <div className='text-xs text-gray-400 truncate'>{area.title}</div>}
 									</div>
 								</div>
+								{project.deadline && (
+									<div className='flex-none flex items-center space-x-1 mr-1 text-gray-500'>
+										<FA className='w-3 h-3' icon='flag' />
+										<div className='text-sm'>
+											{project.deadline.toLocaleDateString('en-us', { month: 'long', day: 'numeric' })}
+										</div>
+									</div>
+								)}
 							</div>
 						</div>
 					}
