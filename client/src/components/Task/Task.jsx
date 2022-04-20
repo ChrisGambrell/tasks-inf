@@ -3,7 +3,7 @@ import { Badge, Checkbox } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { TasksContext } from '../../App'
-import { useHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
+import { useHeader, useEditHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect, TaskDetails } from '.'
 
@@ -42,7 +42,10 @@ const Task = ({
 	showWhen = false,
 }) => {
 	const { data: project = {} } = useProject(task.project_id, Boolean(showProject && task.project_id))
+
 	const { data: header = {} } = useHeader(task.header_id, Boolean(showHeader && task.header_id))
+	const editHeader = useEditHeader().mutate
+
 	const createTask = useCreateTask().mutate
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
@@ -55,6 +58,14 @@ const Task = ({
 			: state.contextedTask === -1 && state.selectedTask.includes(task.id)
 			? event()
 			: null
+	}
+
+	const handleEditCompleted = () => {
+		if (header) editHeader({ headerId: header.id, data: { completed: false } })
+		editTask({
+			taskId: task.id,
+			data: { completed: !task.completed },
+		})
 	}
 
 	const handleEditWhen = (when) => {
@@ -136,12 +147,7 @@ const Task = ({
 												className='ml-2 mr-1'
 												size='xs'
 												defaultChecked={task.completed}
-												onChange={() =>
-													editTask({
-														taskId: task.id,
-														data: { completed: !task.completed },
-													})
-												}
+												onChange={handleEditCompleted}
 											/>
 											{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
 											{showWhen && <WhenDisplay when={task.when} />}
