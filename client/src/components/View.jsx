@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Modal, Radio, RadioGroup } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { openSpotlight } from '@mantine/spotlight'
 import AutoSizeInput from 'react-input-autosize'
@@ -7,11 +8,15 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import {
 	useEditArea,
 	useDeleteArea,
+	useHeaders,
 	useCreateHeader,
+	useEditHeader,
 	useProject,
 	useCreateProject,
 	useEditProject,
+	useTasks,
 	useCreateTask,
+	useEditTask,
 	useDeleteProject,
 } from '../hooks'
 import { TasksContext } from '../App'
@@ -131,7 +136,7 @@ const View = ({ children }) => {
 		},
 		{
 			icon: 'arrow-right',
-			disabled: state.selectedProject.length === 0 && state.selectedTask.length === 0,
+			disabled: state.selectedProject.length === 0 && state.selectedHeader.length === 0 && state.selectedTask.length === 0,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -149,6 +154,7 @@ const View = ({ children }) => {
 					payload: {
 						moveId:
 							(state.selectedProject.length > 0 && state.selectedProject[0]) ||
+							(state.selectedHeader.length > 0 && state.selectedHeader[0]) ||
 							(state.selectedTask.length > 0 && state.selectedTask[0]),
 					},
 				}),
@@ -358,7 +364,63 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 	)
 }
 
-const Content = ({ children }) => <>{children}</>
+const Content = ({ children }) => {
+	const [state, dispatch] = useContext(TasksContext)
+
+	const { data: headers = [] } = useHeaders()
+	const editHeader = useEditHeader().mutate
+
+	const { data: tasks = [] } = useTasks()
+	const editTask = useEditTask().mutate
+
+	const [remainingAction, setRemainingAction] = useState('complete')
+
+	const handleAction = () => {
+		if (remainingAction === 'complete') {
+			editHeader({ headerId: state.completedMenuId, data: { completed: true } })
+			tasks
+				.filter((task) => task.header_id === state.completedMenuId)
+				.forEach((task) => editTask({ taskId: task.id, data: { completed: true } }))
+		} else if (remainingAction === 'cancel') console.log('todo')
+
+		dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })
+	}
+
+	return (
+		<>
+			<Modal
+				id='complete-modal'
+				opened={state.completedMenuType && state.completedMenuId !== -1}
+				onClose={() => dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })}
+				withCloseButton={false}>
+				<div className='font-semibold'>Are you sure you want to archive this heading?</div>
+				<div className='mt-2 text-sm'>
+					This heading still contains {tasks.filter((task) => task.header_id === state.completedMenuId && !task.completed).length}{' '}
+					to-dos that you haven't completed. What would you like to do with them?
+				</div>
+				<div className='my-2'>
+					<RadioGroup value={remainingAction} onChange={setRemainingAction}>
+						<Radio value='complete' label='Mark remaining to-dos as completed' />
+						<Radio value='cancel' label='Mark remaining to-dos as canceled' />
+					</RadioGroup>
+				</div>
+				<div className='flex justify-end mt-6 space-x-2'>
+					<div
+						className='flex justify-center w-24 rounded border border-gray-200 select-none active:bg-gray-100'
+						onClick={() => dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })}>
+						Cancel
+					</div>
+					<div
+						className='flex justify-center w-24 rounded border border-gray-200 bg-blue-500 text-white select-none active:bg-blue-600'
+						onClick={handleAction}>
+						OK
+					</div>
+				</div>
+			</Modal>
+			{children}
+		</>
+	)
+}
 
 View.Header = Header
 View.Content = Content

@@ -3,7 +3,7 @@ import { Badge, Checkbox } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { TasksContext } from '../../App'
-import { useHeader, useProject, useCreateTask, useEditTask, useDeleteTask } from '../../hooks'
+import { useHeader, useEditHeader, useProject, useEditTask, useDeleteTask } from '../../hooks'
 import { ContextMenu } from '..'
 import { DateSelect, TaskDetails } from '.'
 
@@ -42,8 +42,10 @@ const Task = ({
 	showWhen = false,
 }) => {
 	const { data: project = {} } = useProject(task.project_id, Boolean(showProject && task.project_id))
+
 	const { data: header = {} } = useHeader(task.header_id, Boolean(showHeader && task.header_id))
-	const createTask = useCreateTask().mutate
+	const editHeader = useEditHeader().mutate
+
 	const editTask = useEditTask().mutate
 	const deleteTask = useDeleteTask().mutate
 
@@ -55,6 +57,14 @@ const Task = ({
 			: state.contextedTask === -1 && state.selectedTask.includes(task.id)
 			? event()
 			: null
+	}
+
+	const handleEditCompleted = () => {
+		if (header) editHeader({ headerId: header.id, data: { completed: false } })
+		editTask({
+			taskId: task.id,
+			data: { completed: !task.completed },
+		})
 	}
 
 	const handleEditWhen = (when) => {
@@ -73,9 +83,13 @@ const Task = ({
 
 				let current = event.srcElement
 				while (current.parentElement) {
-					if (['context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) => current.id.includes(id))) {
+					if (
+						['complete-modal', 'context-menu', 'date-select', 'move-menu', 'toolbar-button'].some((id) =>
+							current.id.includes(id)
+						)
+					)
 						return
-					}
+
 					current = current.parentElement
 				}
 
@@ -94,7 +108,9 @@ const Task = ({
 
 	useOnClickOutside(clickOutsideRef, () => {
 		if (state.selectedTask.includes(task.id) && state.open === task.id) dispatch({ type: 'set', payload: { open: -1 } })
-		else if (state.selectedTask.includes(task.id)) dispatch({ type: 'reset' })
+		else if (state.selectedTask.includes(task.id)) {
+			dispatch({ type: 'reset' })
+		}
 	})
 
 	return (
@@ -130,12 +146,7 @@ const Task = ({
 												className='ml-2 mr-1'
 												size='xs'
 												defaultChecked={task.completed}
-												onChange={() =>
-													editTask({
-														taskId: task.id,
-														data: { completed: !task.completed },
-													})
-												}
+												onChange={handleEditCompleted}
 											/>
 											{showCompletedWhen && <CompletedWhenDisplay when={task.completed_when} />}
 											{showWhen && <WhenDisplay when={task.when} />}
@@ -149,7 +160,7 @@ const Task = ({
 												{showProject && project && (
 													<div className='text-xs text-gray-400 truncate'>{project.title}</div>
 												)}
-												{showHeader && header && (
+												{showHeader && header && !header.completed && (
 													<div className='text-xs text-gray-400 truncate'>{header.title}</div>
 												)}
 											</div>
