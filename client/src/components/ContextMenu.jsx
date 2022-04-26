@@ -109,6 +109,11 @@ const ContextMenu = ({ project, header, task, target }) => {
 		setOpen(false)
 	}
 
+	const handleCancel = () => {
+		if (project) deleteProject(project.id)
+		else if (task) deleteTask(task.id)
+	}
+
 	const handleDuplicate = async () => {
 		if (project) {
 			try {
@@ -253,7 +258,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				/>
 				<Submenu label='Complete...'>
 					<Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={handleEditComplete} />
-					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={() => console.log('TODO')} disabled={header} />
+					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={handleCancel} disabled={header} />
 				</Submenu>
 				<Submenu title='When' label='Shortcuts...' disabled={header}>
 					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date())} />

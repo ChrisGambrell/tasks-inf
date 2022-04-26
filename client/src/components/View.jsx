@@ -8,6 +8,7 @@ import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import {
 	useEditArea,
 	useDeleteArea,
+	useHeader,
 	useHeaders,
 	useCreateHeader,
 	useEditHeader,
@@ -424,6 +425,10 @@ const Content = ({ children }) => {
 	)
 	const deleteProject = useDeleteProject().mutate
 
+	const { data: header = {} } = useHeader(
+		state.completedMenuId,
+		Boolean(state.completedMenuType === 'header' && state.completedMenuId !== -1)
+	)
 	const { data: headers = [] } = useHeaders()
 	const editHeader = useEditHeader().mutateAsync
 	const deleteHeader = useDeleteHeader().mutateAsync
@@ -456,9 +461,17 @@ const Content = ({ children }) => {
 		dispatch({ type: 'reset' })
 	}
 
+	const handleCancel = async () => {
+		if (state.completedMenuType === 'project') handleComplete()
+		else if (state.completedMenuType === 'header') {
+			await tasks.filter((task) => task.header_id === state.completedMenuId).forEach(async (task) => await deleteTask(task.id))
+			await deleteHeader(header.id)
+		}
+	}
+
 	const handleAction = () => {
 		if (remainingAction === 'complete') handleComplete()
-		else if (remainingAction === 'cancel') console.log('todo')
+		else if (remainingAction === 'cancel') handleCancel()
 
 		dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })
 	}
