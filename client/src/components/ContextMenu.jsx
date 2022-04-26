@@ -259,7 +259,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				<Submenu title='When' label='Shortcuts...' disabled={header}>
 					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date().setHours(0))} />
 					{/* TODO hotkey */}
-					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => console.log('TODO')} />
+					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => handleEditWhen(new Date().setHours(18, 0, 0, 0))} />
 					{/* TODO hotkey */}
 					<Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
 					<Item label='Clear' hotKeys={['alt', 'R']} onClick={() => handleEditWhen(null)} />
