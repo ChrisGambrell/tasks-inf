@@ -52,6 +52,11 @@ const DateSelect = () => {
 		dispatch({ type: 'set', payload: { dateSelectType: null, dateSelectId: -1, dateSelectAttr: null } })
 	}
 
+	const handleEditCategory = (category) => {
+		if (state.dateSelectType === 'project') editProject({ projectId: state.dateSelectId, data: { category } })
+		else if (state.dateSelectType === 'task') editTask({ taskId: state.dateSelectId, data: { category } })
+	}
+
 	return (
 		<div>
 			<Modal
@@ -111,7 +116,9 @@ const DateSelect = () => {
 					</div>
 					{state.dateSelectAttr === 'when' && (
 						<div>
-							<div className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500' onClick={() => console.log('TODO')}>
+							<div
+								className='flex items-center p-1 space-x-1 rounded hover:bg-blue-500'
+								onClick={() => handleEditCategory('someday')}>
 								<FA className='text-yellow-600' icon='archive' />
 								<div>Someday</div>
 							</div>

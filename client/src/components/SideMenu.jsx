@@ -5,7 +5,7 @@ import { useHotkeys } from '@mantine/hooks'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useAreas, useCreateArea, useProjects, useCreateProject } from '../hooks'
 import { HotKeys, Menu, Tooltip } from '.'
-import { Inbox, Logbook, Placeholder, Today, Upcoming } from '../pages'
+import { Inbox, Logbook, Placeholder, Someday, Today, Upcoming } from '../pages'
 
 export const menuItems = [
 	[{ title: 'Inbox', icon: 'inbox', color: 'text-blue-400', url: '/inbox', component: Inbox }],
@@ -19,7 +19,7 @@ export const menuItems = [
 		},
 		{ title: 'Upcoming', icon: 'calendar-days', color: 'text-red-600', url: '/upcoming', component: Upcoming },
 		{ title: 'Anytime', icon: 'layer-group', color: 'text-teal-600', url: '/anytime', component: Placeholder },
-		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', url: '/someday', component: Placeholder },
+		{ title: 'Someday', icon: 'archive', color: 'text-yellow-600', url: '/someday', component: Someday },
 	],
 	[
 		{ title: 'Logbook', icon: 'book', color: 'text-green-600', url: '/logbook', component: Logbook },

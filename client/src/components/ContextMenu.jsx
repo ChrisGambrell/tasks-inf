@@ -156,6 +156,11 @@ const ContextMenu = ({ project, header, task, target }) => {
 		else if (task) editTask({ taskId: task.id, data: { when } })
 	}
 
+	const handleEditCategory = (category) => {
+		if (project) editProject({ projectId: project.id, data: { category } })
+		else if (task) editTask({ taskId: task.id, data: { category } })
+	}
+
 	const handleConvertToProject = async () => {
 		if (header) {
 			try {
@@ -206,12 +211,25 @@ const ContextMenu = ({ project, header, task, target }) => {
 			: null
 	}
 
+	// TODO deadline is only changing task without header at top
+
 	useHotkeys([
+		['alt + shift + D', () => handleOpenDateSelect('deadline')],
+		['alt + shift + K', () => handleCancel()],
 		['alt + shift + M', () => state.moveType && showMove()],
 		['alt + D', () => handleHotKey(() => handleDuplicate())],
 		['alt + E', () => handleHotKey(() => handleEditWhen(new Date().setHours(18)))],
 		['alt + K', () => handleHotKey(() => handleEditComplete())],
-		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
+		['alt + O', () => handleHotKey(() => handleEditCategory('someday'))],
+		[
+			'alt + R',
+			() =>
+				handleHotKey(() => {
+					handleEditWhen(null)
+					handleEditCategory(null)
+				}),
+		],
+		['alt + S', () => handleHotKey(() => handleOpenDateSelect('when'))],
 		['alt + T', () => handleHotKey(() => handleEditWhen(new Date().setHours(0)))],
 	])
 
@@ -243,7 +261,6 @@ const ContextMenu = ({ project, header, task, target }) => {
 				setOpen(false)
 			}}>
 			<div className='flex flex-col select-none text-sm' id='context-menu'>
-				{/* TODO all hotkeys */}
 				<Item label='When...' hotKeys={['alt', 'S']} disabled={header} onClick={() => handleOpenDateSelect('when')} />
 				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} disabled={header} />
@@ -260,8 +277,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				<Submenu title='When' label='Shortcuts...' disabled={header}>
 					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date().setHours(0))} />
 					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => handleEditWhen(new Date().setHours(18))} />
-					{/* TODO hotkey */}
-					<Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
+					<Item label='Someday' hotKeys={['alt', 'O']} onClick={() => handleEditCategory('someday')} />
 					<Item label='Clear' hotKeys={['alt', 'R']} onClick={() => handleEditWhen(null)} />
 				</Submenu>
 

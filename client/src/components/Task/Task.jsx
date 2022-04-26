@@ -146,6 +146,7 @@ const Task = ({
 										<div className='flex-grow flex items-center'>
 											<Checkbox
 												className='ml-2 mr-1'
+												classNames={task.category === 'someday' && { input: 'border-dashed' }}
 												size='xs'
 												defaultChecked={task.completed}
 												onChange={handleEditCompleted}

@@ -52,11 +52,12 @@ const View = ({ children }) => {
 			),
 			onClick: async () => {
 				let values = {}
-				if (window.location.pathname.includes('today')) values['when'] = new Date().setHours(0)
+				if (window.location.pathname.includes('inbox')) values['category'] = 'inbox'
+				else if (window.location.pathname.includes('today')) values['when'] = new Date().setHours(0)
 				else if (window.location.pathname.includes('upcoming'))
 					values['when'] = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
 				// TODO anytime
-				// TODO someday
+				else if (window.location.pathname.includes('someday')) values['category'] = 'someday'
 				else if (window.location.pathname.includes('areas/'))
 					values['area_id'] =
 						window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === 'areas') + 1]
@@ -123,7 +124,7 @@ const View = ({ children }) => {
 		},
 		{
 			icon: 'calendar-days',
-			disabled: true,
+			disabled: state.selectedProject.length === 0 && state.selectedTask.length === 0,
 			tooltip: (
 				<div className='flex flex-col p-2'>
 					<div className='flex justify-between'>
@@ -135,7 +136,17 @@ const View = ({ children }) => {
 					<div className='flex-wrap'>Decide when to start. Today or later?</div>
 				</div>
 			),
-			onClick: () => console.log('TODO'),
+			onClick: () =>
+				dispatch({
+					type: 'set',
+					payload: {
+						dateSelectType: (state.selectedProject.length > 0 && 'project') || (state.selectedTask.length > 0 && 'task'),
+						dateSelectId:
+							(state.selectedProject.length > 0 && state.selectedProject[0]) ||
+							(state.selectedTask.length > 0 && state.selectedTask[0]),
+						dateSelectAttr: 'when',
+					},
+				}),
 		},
 		{
 			icon: 'arrow-right',

@@ -55,10 +55,18 @@ class ProjectsController < ApplicationController
 
     def parse_dates
       if params[:deadline]
-        params[:deadline] = Time.at(params[:deadline] / 1000)
+        begin
+          params[:deadline] = Time.at(params[:deadline] / 1000)
+        rescue
+          params[:deadline] = DateTime.parse(params[:deadline])
+        end
       end
       if params[:when]
-        params[:when] = Time.at(params[:when] / 1000)
+        begin
+          params[:when] = Time.at(params[:when] / 1000)
+        rescue
+          params[:deadline] = DateTime.parse(params[:when])
+        end
       end
     end
 
