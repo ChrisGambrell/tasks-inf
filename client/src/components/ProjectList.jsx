@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Checkbox } from '@mantine/core'
 import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
-import { useArea, useHeaders, useDeleteHeader, useEditProject, useDeleteProject, useTasks, useDeleteTask } from '../hooks'
+import { useArea, useTasks } from '../hooks'
 import { TasksContext } from '../App'
 import { ContextMenu } from '.'
 
@@ -26,16 +26,8 @@ const Project = ({ project, showArea = false, showComplete = false, showWhen = f
 
 	const { data: area = {} } = useArea(project.area_id, Boolean(showArea && project.area_id))
 
-	const { data: headersCollection = [] } = useHeaders()
-	const headers = headersCollection.filter((header) => header.project_id === project.id)
-	const deleteHeader = useDeleteHeader().mutateAsync
-
-	const editProject = useEditProject().mutate
-	const deleteProject = useDeleteProject().mutate
-
 	const { data: tasksCollection = [] } = useTasks.all()
 	const tasks = tasksCollection.filter((task) => task.project_id === project.id)
-	const deleteTask = useDeleteTask().mutateAsync
 
 	const [state, dispatch] = useContext(TasksContext)
 

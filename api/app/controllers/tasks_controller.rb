@@ -32,6 +32,18 @@ class TasksController < ApplicationController
         @task.update(completed_when: Time.current)
       elsif params['completed'] and params['completed'] == false
         @task.update(completed_when: nil)
+      elsif params['category'] and params['category'] == 'inbox'
+        @task.update(area_id: nil, project_id: nil, header_id: nil, when: nil)
+      elsif params['category'] and params['category'] == 'someday'
+        @task.update(when: nil)
+      elsif params['area_id'] and params['area_id'] != nil
+        @task.update(category: nil)
+      elsif params['project_id'] and params['project_id'] != nil
+        @task.update(category: nil)
+      elsif params['header_id'] and params['header_id'] != nil
+        @task.update(category: nil)
+      elsif params['when'] and params['when'] != nil
+        @task.update(category: nil)
       end
 
       render json: @task
@@ -55,15 +67,23 @@ class TasksController < ApplicationController
 
     def parse_dates
       if params[:when]
-        params[:when] = DateTime.parse(params[:when])
+        begin
+          params[:when] = Time.at(params[:when] / 1000)
+        rescue
+          params[:when] = DateTime.parse(params[:when])
+        end
       end
       if params[:deadline]
-        params[:deadline] = DateTime.parse(params[:deadline])
+        begin
+          params[:deadline] = Time.at(params[:deadline] / 1000)
+        rescue
+          params[:when] = DateTime.parse(params[:deadline])
+        end
       end
     end
 
     # Only allow a list of trusted parameters through.
     def task_params
-      params.permit(:area_id, :project_id, :header_id, :title, :notes, :completed, :when, :deadline)
+      params.permit(:area_id, :project_id, :header_id, :title, :notes, :completed, :when, :deadline, :category)
     end
 end

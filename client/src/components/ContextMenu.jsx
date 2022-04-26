@@ -109,6 +109,11 @@ const ContextMenu = ({ project, header, task, target }) => {
 		setOpen(false)
 	}
 
+	const handleCancel = () => {
+		if (project) deleteProject(project.id)
+		else if (task) deleteTask(task.id)
+	}
+
 	const handleDuplicate = async () => {
 		if (project) {
 			try {
@@ -151,9 +156,9 @@ const ContextMenu = ({ project, header, task, target }) => {
 		else if (task) editTask({ taskId: task.id, data: { when } })
 	}
 
-	const handleEditDeadline = (deadline) => {
-		if (project) editProject({ projectId: project.id, data: { deadline } })
-		else if (task) editTask({ taskId: task.id, data: { deadline } })
+	const handleEditCategory = (category) => {
+		if (project) editProject({ projectId: project.id, data: { category } })
+		else if (task) editTask({ taskId: task.id, data: { category } })
 	}
 
 	const handleConvertToProject = async () => {
@@ -206,12 +211,26 @@ const ContextMenu = ({ project, header, task, target }) => {
 			: null
 	}
 
+	// TODO deadline is only changing task without header at top
+
 	useHotkeys([
+		['alt + shift + D', () => handleOpenDateSelect('deadline')],
+		['alt + shift + K', () => handleCancel()],
 		['alt + shift + M', () => state.moveType && showMove()],
 		['alt + D', () => handleHotKey(() => handleDuplicate())],
+		['alt + E', () => handleHotKey(() => handleEditWhen(new Date().setHours(18)))],
 		['alt + K', () => handleHotKey(() => handleEditComplete())],
-		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
-		['alt + T', () => handleHotKey(() => handleEditWhen(new Date()))],
+		['alt + O', () => handleHotKey(() => handleEditCategory('someday'))],
+		[
+			'alt + R',
+			() =>
+				handleHotKey(() => {
+					handleEditWhen(null)
+					handleEditCategory(null)
+				}),
+		],
+		['alt + S', () => handleHotKey(() => handleOpenDateSelect('when'))],
+		['alt + T', () => handleHotKey(() => handleEditWhen(new Date().setHours(0)))],
 	])
 
 	return (
@@ -253,14 +272,12 @@ const ContextMenu = ({ project, header, task, target }) => {
 				/>
 				<Submenu label='Complete...'>
 					<Item label='Mark as Completed' hotKeys={['alt', 'K']} onClick={handleEditComplete} />
-					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={() => console.log('TODO')} disabled={header} />
+					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={handleCancel} disabled={header} />
 				</Submenu>
 				<Submenu title='When' label='Shortcuts...' disabled={header}>
-					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date())} />
-					{/* TODO hotkey */}
-					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => console.log('TODO')} />
-					{/* TODO hotkey */}
-					<Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
+					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date().setHours(0))} />
+					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => handleEditWhen(new Date().setHours(18))} />
+					<Item label='Someday' hotKeys={['alt', 'O']} onClick={() => handleEditCategory('someday')} />
 					<Item label='Clear' hotKeys={['alt', 'R']} onClick={() => handleEditWhen(null)} />
 				</Submenu>
 

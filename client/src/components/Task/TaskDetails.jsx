@@ -44,7 +44,6 @@ const TaskDetails = ({ task }) => {
 	)
 
 	const handleOpenDateSelect = (attr) => {
-		console.log('testing')
 		dispatch({
 			type: 'set',
 			payload: {
@@ -109,7 +108,6 @@ const TaskDetails = ({ task }) => {
 			<div className='font-semibold pl-0.5'>
 				{task.deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'long', day: 'numeric' })}
 			</div>
-			{/* TODO fix where clear button opens DateSelect */}
 			<FA
 				className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
 				icon='x'
@@ -140,7 +138,6 @@ const TaskDetails = ({ task }) => {
 								: { month: 'long', day: 'numeric' }
 					  )}
 			</div>
-			{/* TODO fix where clear button opens DateSelect */}
 			<FA
 				className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
 				icon='x'

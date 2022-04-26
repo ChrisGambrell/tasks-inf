@@ -19,7 +19,10 @@ const CompletedWhenDisplay = ({ when }) => {
 
 const WhenDisplay = ({ when }) => {
 	return when?.toLocaleDateString() === new Date().toLocaleDateString() ? (
-		<FA className='ml-1 w-3 h-3 text-yellow-400' icon='star' />
+		<FA
+			className={`ml-1 w-3 h-3 ${when.getHours() === 18 ? 'text-blue-400' : 'text-yellow-400'}`}
+			icon={when.getHours() === 18 ? 'moon' : 'star'}
+		/>
 	) : when ? (
 		<Badge classNames={{ root: 'ml-1 px-1.5 text-gray-600 bg-gray-200' }} radius='sm'>
 			{when.toLocaleDateString(
@@ -32,6 +35,7 @@ const WhenDisplay = ({ when }) => {
 	) : null
 }
 
+// TODO show project should also show area if it belongs to area but no project
 const Task = ({
 	task,
 	secondary = false,
@@ -142,6 +146,7 @@ const Task = ({
 										<div className='flex-grow flex items-center'>
 											<Checkbox
 												className='ml-2 mr-1'
+												classNames={task.category === 'someday' && { input: 'border-dashed' }}
 												size='xs'
 												defaultChecked={task.completed}
 												onChange={handleEditCompleted}

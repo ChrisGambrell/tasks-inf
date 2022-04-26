@@ -28,6 +28,12 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   def update
     if @project.update(project_params)
+      if params['category'] and params['category'] != nil
+        @task.update(when: nil)
+      elsif params['when'] and params['when'] != nil
+        @task.update(category: nil)
+      end
+
       render json: @project
     else
       render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
@@ -49,15 +55,23 @@ class ProjectsController < ApplicationController
 
     def parse_dates
       if params[:deadline]
-        params[:deadline] = DateTime.parse(params[:deadline])
+        begin
+          params[:deadline] = Time.at(params[:deadline] / 1000)
+        rescue
+          params[:deadline] = DateTime.parse(params[:deadline])
+        end
       end
       if params[:when]
-        params[:when] = DateTime.parse(params[:when])
+        begin
+          params[:when] = Time.at(params[:when] / 1000)
+        rescue
+          params[:deadline] = DateTime.parse(params[:when])
+        end
       end
     end
 
     # Only allow a list of trusted parameters through.
     def project_params
-      params.permit(:area_id, :title, :description, :icon, :when, :deadline)
+      params.permit(:area_id, :title, :description, :icon, :when, :deadline, :category)
     end
 end
