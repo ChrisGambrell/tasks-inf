@@ -12,6 +12,7 @@ const Inbox = () => {
 	const { data: tasksCollection = [] } = useTasks.all()
 
 	const tasks = tasksCollection.filter((task) => !task.area_id && !task.project_id)
+	// TODO
 
 	return tasks.length > 0 ? (
 		<View>

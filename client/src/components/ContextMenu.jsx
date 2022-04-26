@@ -209,6 +209,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 	useHotkeys([
 		['alt + shift + M', () => state.moveType && showMove()],
 		['alt + D', () => handleHotKey(() => handleDuplicate())],
+		['alt + E', () => handleHotKey(() => handleEditWhen(new Date().setHours(18)))],
 		['alt + K', () => handleHotKey(() => handleEditComplete())],
 		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
 		['alt + T', () => handleHotKey(() => handleEditWhen(new Date().setHours(0)))],
@@ -258,8 +259,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				</Submenu>
 				<Submenu title='When' label='Shortcuts...' disabled={header}>
 					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date().setHours(0))} />
-					{/* TODO hotkey */}
-					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => handleEditWhen(new Date().setHours(18, 0, 0, 0))} />
+					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => handleEditWhen(new Date().setHours(18))} />
 					{/* TODO hotkey */}
 					<Item label='Someday' hotKeys={['alt', 'O']} onClick={() => console.log('TODO')} />
 					<Item label='Clear' hotKeys={['alt', 'R']} onClick={() => handleEditWhen(null)} />

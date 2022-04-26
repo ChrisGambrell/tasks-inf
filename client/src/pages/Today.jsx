@@ -1,3 +1,4 @@
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome'
 import { useProjects, useTasks } from '../hooks'
 import { View } from '../components'
 import { ProjectList } from '../components'
@@ -14,14 +15,26 @@ const Today = () => {
 	const { data: tasksCollection = [] } = useTasks.incomplete()
 
 	const projects = projectsCollection.filter((project) => project.when?.toLocaleDateString() === new Date().toLocaleDateString())
+
 	const tasks = tasksCollection.filter((task) => task.when?.toLocaleDateString() === new Date().toLocaleDateString())
+	const dayTasks = tasks.filter((task) => task.when.getHours() === 0)
+	const eveningTasks = tasks.filter((task) => task.when.getHours() === 18)
 
 	return tasks.length > 0 ? (
 		<View>
 			<View.Header title={menuItem.title} icon={menuItem.icon} color={menuItem.color} />
 			<View.Content>
 				<ProjectList projects={projects} showArea showComplete />
-				<TaskList tasks={tasks} showProject noMargin />
+				<TaskList tasks={dayTasks} showProject noMargin />
+
+				{/* Evening tasks */}
+				<div>
+					<div className='flex items-center space-x-2 pb-1 border-b'>
+						<FA className='text-blue-400' icon='moon' />
+						<div className='font-semibold'>This Evening</div>
+					</div>
+					<TaskList tasks={eveningTasks} showProject noMargin />
+				</div>
 			</View.Content>
 		</View>
 	) : (
