@@ -55,10 +55,10 @@ class TasksController < ApplicationController
 
     def parse_dates
       if params[:when]
-        params[:when] = DateTime.parse(params[:when])
+        params[:when] = Time.at(params[:when] / 1000)
       end
       if params[:deadline]
-        params[:deadline] = DateTime.parse(params[:deadline])
+        params[:deadline] = Time.at(params[:deadline] / 1000)
       end
     end
 
