@@ -52,7 +52,7 @@ const View = ({ children }) => {
 			),
 			onClick: async () => {
 				let values = {}
-				if (window.location.pathname.includes('today')) values['when'] = new Date()
+				if (window.location.pathname.includes('today')) values['when'] = new Date().setHours(0)
 				else if (window.location.pathname.includes('upcoming'))
 					values['when'] = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
 				// TODO anytime

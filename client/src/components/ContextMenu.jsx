@@ -216,7 +216,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 		['alt + D', () => handleHotKey(() => handleDuplicate())],
 		['alt + K', () => handleHotKey(() => handleEditComplete())],
 		['alt + R', () => handleHotKey(() => handleEditWhen(null))],
-		['alt + T', () => handleHotKey(() => handleEditWhen(new Date()))],
+		['alt + T', () => handleHotKey(() => handleEditWhen(new Date().setHours(0)))],
 	])
 
 	return (
@@ -247,6 +247,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 				setOpen(false)
 			}}>
 			<div className='flex flex-col select-none text-sm' id='context-menu'>
+				{/* TODO all hotkeys */}
 				<Item label='When...' hotKeys={['alt', 'S']} disabled={header} onClick={() => handleOpenDateSelect('when')} />
 				<Item label='Move...' hotKeys={['alt', 'shift', 'M']} onClick={showMove} />
 				<Item label='Tags...' hotKeys={['alt', 'shift', 'T']} onClick={() => console.log('TODO')} disabled={header} />
@@ -261,7 +262,7 @@ const ContextMenu = ({ project, header, task, target }) => {
 					<Item label='Mark as Canceled' hotKeys={['alt', 'shift', 'K']} onClick={handleCancel} disabled={header} />
 				</Submenu>
 				<Submenu title='When' label='Shortcuts...' disabled={header}>
-					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date())} />
+					<Item label='Today' hotKeys={['alt', 'T']} onClick={() => handleEditWhen(new Date().setHours(0))} />
 					{/* TODO hotkey */}
 					<Item label='This Evening' hotKeys={['alt', 'E']} onClick={() => console.log('TODO')} />
 					{/* TODO hotkey */}
