@@ -28,13 +28,15 @@ const Today = () => {
 				<TaskList tasks={dayTasks} showProject noMargin />
 
 				{/* Evening tasks */}
-				<div>
-					<div className='flex items-center space-x-2 pb-1 border-b'>
-						<FA className='text-blue-400' icon='moon' />
-						<div className='font-semibold'>This Evening</div>
+				{eveningTasks.length > 0 && (
+					<div>
+						<div className='flex items-center space-x-2 pb-1 border-b'>
+							<FA className='text-blue-400' icon='moon' />
+							<div className='font-semibold'>This Evening</div>
+						</div>
+						<TaskList tasks={eveningTasks} showProject noMargin />
 					</div>
-					<TaskList tasks={eveningTasks} showProject noMargin />
-				</div>
+				)}
 			</View.Content>
 		</View>
 	) : (
