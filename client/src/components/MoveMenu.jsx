@@ -66,13 +66,20 @@ const MoveMenu = () => {
 				{/* TODO search bar */}
 				<div onClick={() => dispatch({ type: 'set', payload: { moveType: null, moveId: -1 } })}>
 					{/* TODO this will work when there is an inbox category */}
-					{state.moveType === 'task' && <Item label='Inbox' icon='inbox' active={task.category === 'inbox'} />}
+					{state.moveType === 'task' && (
+						<Item
+							label='Inbox'
+							icon='inbox'
+							active={task.category === 'inbox'}
+							data={{ taskId: task.id, data: { category: 'inbox' } }}
+						/>
+					)}
 					<Item
 						label={`No ${
 							(state.moveType === 'project' && 'Area') || (task.area_id && 'Area') || (task.project_id && 'Project')
 						}`}
 						icon='x'
-						active={!task.area_id && !task.project_id}
+						active={!task.area_id && !task.project_id && task.category !== 'inbox'}
 						data={
 							(state.moveType === 'project' && { projectId: project.id, data: { area_id: null } }) ||
 							(state.moveType === 'task' && { taskId: task.id, data: { area_id: null, project_id: null } }) ||
