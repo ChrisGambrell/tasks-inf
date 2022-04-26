@@ -33,7 +33,7 @@ class TasksController < ApplicationController
       elsif params['completed'] and params['completed'] == false
         @task.update(completed_when: nil)
       elsif params['category'] and params['category'] != nil
-        @task.update(area_id: nil, project_id: nil, header_id: nil)
+        @task.update(area_id: nil, project_id: nil, header_id: nil, when: nil)
       end
 
       render json: @task
