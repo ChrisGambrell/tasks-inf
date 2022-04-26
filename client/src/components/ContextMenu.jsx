@@ -156,11 +156,6 @@ const ContextMenu = ({ project, header, task, target }) => {
 		else if (task) editTask({ taskId: task.id, data: { when } })
 	}
 
-	const handleEditDeadline = (deadline) => {
-		if (project) editProject({ projectId: project.id, data: { deadline } })
-		else if (task) editTask({ taskId: task.id, data: { deadline } })
-	}
-
 	const handleConvertToProject = async () => {
 		if (header) {
 			try {
