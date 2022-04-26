@@ -32,6 +32,8 @@ class TasksController < ApplicationController
         @task.update(completed_when: Time.current)
       elsif params['completed'] and params['completed'] == false
         @task.update(completed_when: nil)
+      elsif params['category'] and params['category'] != nil
+        @task.update(area_id: nil, project_id: nil, header_id: nil)
       end
 
       render json: @task
@@ -64,6 +66,6 @@ class TasksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def task_params
-      params.permit(:area_id, :project_id, :header_id, :title, :notes, :completed, :when, :deadline)
+      params.permit(:area_id, :project_id, :header_id, :title, :notes, :completed, :when, :deadline, :category)
     end
 end
