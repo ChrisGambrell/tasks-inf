@@ -5,6 +5,7 @@ import store from './app/store'
 import { MoveMenu, QuickFindWrapper, SideMenu } from './components'
 import { menuItems } from './components/SideMenu'
 import { Area, Project } from './pages'
+import { NewDateSelect } from './components/Task'
 
 export const TasksContext = createContext()
 

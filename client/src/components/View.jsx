@@ -18,6 +18,8 @@ import {
 	useCreateTask,
 	useEditTask,
 	useDeleteProject,
+	useDeleteTask,
+	useDeleteHeader,
 } from '../hooks'
 import { TasksContext } from '../App'
 import { Dropdown, HotKeys, Tooltip } from '.'
@@ -216,7 +218,7 @@ const View = ({ children }) => {
 	)
 }
 
-const Header = ({ title, description, when, actionButton = false, icon, color = 'text-gray-400' }) => {
+const Header = ({ title, description, when, deadline, actionButton = false, icon, color = 'text-gray-400' }) => {
 	const space =
 		(window.location.pathname.includes('/areas') && 'area') || (window.location.pathname.includes('/projects') && 'project') || null
 	const spaceId = Number(window.location.pathname.split('/')[window.location.pathname.split('/').findIndex((i) => i === `${space}s`) + 1])
@@ -226,19 +228,56 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 	const [, dispatch] = useContext(TasksContext)
 
 	const { data: project = {} } = useProject(spaceId, Boolean(space === 'project'))
+	const { data: headers = [] } = useHeaders()
+	const { data: tasks = [] } = useTasks()
 
 	const editArea = useEditArea().mutate
 	const deleteArea = useDeleteArea().mutate
-	const createProject = useCreateProject().mutate
+	const createProject = useCreateProject().mutateAsync
 	const editProject = useEditProject().mutate
 	const deleteProject = useDeleteProject().mutate
+	const createHeader = useCreateHeader().mutateAsync
+	const createTask = useCreateTask().mutateAsync
 
 	const [editableTitle, setEditableTitle] = useState(title || '')
 	const [debouncedTitle] = useDebouncedValue(editableTitle, 200)
 
+	const handleOpenDateSelect = (attr) => {
+		dispatch({
+			type: 'set',
+			payload: {
+				dateSelectType: 'project',
+				dateSelectId: spaceId,
+				dateSelectAttr: attr,
+			},
+		})
+	}
+
 	const handleEditTitle = () => {
 		if (space === 'area') editArea({ areaId: spaceId, data: { title: debouncedTitle } })
 		else if (space === 'project') editProject({ projectId: spaceId, data: { title: debouncedTitle } })
+	}
+
+	const handleDuplicateProject = async () => {
+		try {
+			let { id: project_id } = await createProject(project)
+			await tasks
+				.filter((task) => task.project_id === project.id && !task.header_id)
+				.forEach(async (task) => await createTask({ ...task, project_id }))
+
+			await headers
+				.filter((header) => header.project_id === project.id)
+				.forEach(async (header) => {
+					let { id: header_id } = await createHeader({ ...header, project_id })
+					await tasks
+						.filter((task) => task.project_id === project.id && task.header_id === header.id)
+						.forEach(async (task) => await createTask({ ...task, project_id, header_id }))
+				})
+
+			navigate(`/projects/${project_id}`)
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleDelete = () => {
@@ -272,23 +311,20 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 				{actionButton && (
 					<Dropdown>
 						{space === 'project' && (
-							<Dropdown.Item label='Complete Project' icon='circle-check' onClick={() => console.log('TODO')} />
+							<Dropdown.Item
+								label='Complete Project'
+								icon='circle-check'
+								onClick={() =>
+									dispatch({ type: 'set', payload: { completedMenuType: 'project', completedMenuId: project.id } })
+								}
+							/>
 						)}
 						{space === 'project' && (
-							<DateSelect
-								title='When'
-								value={project.when}
-								onChange={(when) => editProject({ projectId: project.id, data: { when } })}
-								target={<Dropdown.Item label='When' icon='calendar-days' />}
-							/>
+							<Dropdown.Item label='When' icon='calendar-days' onClick={() => handleOpenDateSelect('when')} />
 						)}
 						<Dropdown.Item label='Add Tags' icon='tag' onClick={() => console.log('TODO')} />
 						{space === 'project' && (
-							<DateSelect
-								title='Deadline'
-								hideQuickDates
-								target={<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => console.log('TODO')} />}
-							/>
+							<Dropdown.Item label='Add Deadline' icon='flag' onClick={() => handleOpenDateSelect('deadline')} />
 						)}
 
 						<Dropdown.Divider />
@@ -303,10 +339,7 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 						{space === 'project' && (
 							<Dropdown.Item label='Repeat' icon='arrow-rotate-right' onClick={() => console.log('TODO')} />
 						)}
-						{space === 'project' && (
-							// TODO should also duplicate all tasks and headers
-							<Dropdown.Item label='Duplicate Project' icon='copy' onClick={() => createProject(project)} />
-						)}
+						{space === 'project' && <Dropdown.Item label='Duplicate Project' icon='copy' onClick={handleDuplicateProject} />}
 						<Dropdown.Item
 							label={`Delete ${(space === 'area' && 'Area') || (space === 'project' && 'Project')}`}
 							icon='trash'
@@ -315,79 +348,124 @@ const Header = ({ title, description, when, actionButton = false, icon, color = 
 					</Dropdown>
 				)}
 			</div>
-			{when && (
-				<div className='border-y py-0.5'>
-					<DateSelect
-						title='When'
-						value={project.when}
-						onChange={(when) => editProject({ projectId: project.id, data: { when } })}
-						target={
-							<div className='group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'>
-								<FA
-									className={
-										project.when.toLocaleDateString() === new Date().toLocaleDateString()
-											? 'text-yellow-400'
-											: 'text-red-500'
-									}
-									icon={project.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
-								/>
-								<div className='font-semibold'>
-									{project.when.toLocaleDateString() === new Date().toLocaleDateString()
-										? 'Today'
-										: project.when.toLocaleDateString() ===
-										  new Date(
-												new Date().getFullYear(),
-												new Date().getMonth(),
-												new Date().getDate() + 1
-										  ).toLocaleDateString()
-										? 'Tomorrow'
-										: project.when.toLocaleDateString(
-												'en-us',
-												project.when <
-													new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
-													? { weekday: 'long' }
-													: { weekday: 'short', month: 'long', day: 'numeric' }
-										  )}
-								</div>
-								<FA
-									className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
-									icon='x'
-									onClick={() => editProject({ projectId: project.id, data: { when: null } })}
-								/>
+			<div className='border-t'>
+				{when && (
+					<div className='border-b py-0.5'>
+						<div
+							className='group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm text-gray-800 hover:border-gray-300 active:bg-gray-300'
+							onClick={() => handleOpenDateSelect('when')}>
+							<FA
+								className={
+									project.when.toLocaleDateString() === new Date().toLocaleDateString()
+										? 'text-yellow-400'
+										: 'text-red-500'
+								}
+								icon={project.when.toLocaleDateString() === new Date().toLocaleDateString() ? 'star' : 'calendar-days'}
+							/>
+							<div className='font-semibold'>
+								{project.when.toLocaleDateString() === new Date().toLocaleDateString()
+									? 'Today'
+									: project.when.toLocaleDateString() ===
+									  new Date(
+											new Date().getFullYear(),
+											new Date().getMonth(),
+											new Date().getDate() + 1
+									  ).toLocaleDateString()
+									? 'Tomorrow'
+									: project.when.toLocaleDateString(
+											'en-us',
+											project.when <
+												new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)
+												? { weekday: 'long' }
+												: { weekday: 'short', month: 'long', day: 'numeric' }
+									  )}
 							</div>
-						}
-					/>
-				</div>
-			)}
+							<FA
+								className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+								icon='x'
+								onClick={() => editProject({ projectId: project.id, data: { when: null } })}
+							/>
+						</div>
+					</div>
+				)}
+				{deadline && (
+					<div className='border-b py-0.5'>
+						<div
+							className={`group flex items-center space-x-1 max-w-fit pl-1 rounded border select-none border-white text-sm ${
+								deadline.toLocaleDateString() === new Date().toLocaleDateString() ? 'text-red-500' : 'text-gray-800'
+							} hover:border-gray-300 active:bg-gray-300`}
+							onClick={() => handleOpenDateSelect('deadline')}>
+							<FA icon='flag' />
+							<div className='font-semibold'>
+								Deadline: {deadline.toLocaleDateString('en-us', { weekday: 'short', month: 'short', day: 'numeric' })}
+							</div>
+							<FA
+								className='w-2.5 h-2.5 p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-200'
+								icon='x'
+								onClick={() => editProject({ projectId: project.id, data: { deadline: null } })}
+							/>
+						</div>
+					</div>
+				)}
+			</div>
 			{description && <div className='text-sm text-gray-700'>{description}</div>}
 		</div>
 	)
 }
 
 const Content = ({ children }) => {
+	const navigate = useNavigate()
+
 	const [state, dispatch] = useContext(TasksContext)
 
+	const { data: project = {} } = useProject(
+		state.completedMenuId,
+		Boolean(state.completedMenuType === 'project' && state.completedMenuId !== -1)
+	)
+	const deleteProject = useDeleteProject().mutate
+
 	const { data: headers = [] } = useHeaders()
-	const editHeader = useEditHeader().mutate
+	const editHeader = useEditHeader().mutateAsync
+	const deleteHeader = useDeleteHeader().mutateAsync
 
 	const { data: tasks = [] } = useTasks()
-	const editTask = useEditTask().mutate
+	const editTask = useEditTask().mutateAsync
+	const deleteTask = useDeleteTask().mutateAsync
 
 	const [remainingAction, setRemainingAction] = useState('complete')
 
-	const handleAction = () => {
-		if (remainingAction === 'complete') {
-			editHeader({ headerId: state.completedMenuId, data: { completed: true } })
-			tasks
+	const handleComplete = async () => {
+		if (state.completedMenuType === 'project') {
+			try {
+				await tasks.filter((task) => task.project_id === state.completedMenuId).forEach(async (task) => await deleteTask(task.id))
+				await headers
+					.filter((header) => header.project_id === state.completedMenuId)
+					.forEach(async (header) => await deleteHeader(header.id))
+				deleteProject(project.id)
+			} catch (err) {
+				console.error(err)
+			}
+		} else if (state.completedMenuType === 'header') {
+			await editHeader({ headerId: state.completedMenuId, data: { completed: true } })
+			await tasks
 				.filter((task) => task.header_id === state.completedMenuId)
-				.forEach((task) => editTask({ taskId: task.id, data: { completed: true } }))
-		} else if (remainingAction === 'cancel') console.log('todo')
+				.forEach(async (task) => await editTask({ taskId: task.id, data: { completed: true } }))
+		}
+
+		if (window.location.pathname.includes(`/projects/${state.completedMenuId}`)) navigate('/inbox')
+		dispatch({ type: 'reset' })
+	}
+
+	const handleAction = () => {
+		if (remainingAction === 'complete') handleComplete()
+		else if (remainingAction === 'cancel') console.log('todo')
 
 		dispatch({ type: 'set', payload: { completedMenuType: null, completedMenuId: -1 } })
 	}
 
 	return (
 		<>
+			<DateSelect />
 			<Modal
 				id='complete-modal'
 				opened={state.completedMenuType && state.completedMenuId !== -1}

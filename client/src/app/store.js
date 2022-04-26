@@ -10,6 +10,9 @@ const initialState = {
 	moveId: -1,
 	completedMenuType: null,
 	completedMenuId: -1,
+	dateSelectType: null,
+	dateSelectId: -1,
+	dateSelectAttr: null,
 }
 
 const reducer = (state, action) => {
